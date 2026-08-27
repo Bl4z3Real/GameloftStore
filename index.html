@@ -34,7 +34,7 @@
   }
 
   .phone {
-    max-width: 480px;
+    max-width: 560px;
     margin: 0 auto;
     background: #ffffff;
     min-height: 100vh;
@@ -566,6 +566,33 @@
     color: #9a9a9a;
     line-height: 1.5;
   }
+  /* ============================================================
+     VERSIONE MOBILE PIÙ "ZOOMATA": su schermi di telefono reali
+     (stretti) tutto viene ingrandito per non sembrare piccolo/perso
+     al centro dello schermo.
+     ============================================================ */
+  @media (max-width: 640px) {
+    .phone { max-width: 100%; }
+    .market-header { padding: 12px 14px; }
+    .bag-icon { height: 38px; }
+    .market-word { font-size: 15px; margin-top: 15px; padding-left: 10px; }
+    .search-icon { width: 40px; height: 40px; padding: 8px; }
+    .tab { padding: 14px 4px 12px; font-size: 15px; }
+    .section-label { font-size: 14px; padding: 9px 14px; }
+    .app-row { padding: 14px 12px; }
+    .app-icon { width: 58px; height: 58px; font-size: 26px; margin-right: 14px; }
+    .app-name { font-size: 17px; }
+    .app-dev { font-size: 14px; }
+    .stars { font-size: 13px; }
+    .app-price { font-size: 15px; }
+    .detail-icon { width: 88px; height: 88px; font-size: 40px; }
+    .detail-title { font-size: 21px; }
+    .detail-dev { font-size: 15px; }
+    .download-btn { font-size: 16px; padding: 13px 30px; }
+    .detail-section p { font-size: 15px; }
+    .info-grid b { font-size: 15px; }
+    .screenshot-strip img { height: 160px; }
+  }
 </style>
 </head>
 <body>
@@ -580,7 +607,7 @@
   <!-- HEADER -->
   <div class="market-header">
     <div class="market-logo">
-      <img class="bag-icon" src="https://static.wikia.nocookie.net/logopedia/images/2/27/Gameloft_Logo_%282010%3B_White_Version%3B_Horizontal_Version%29.png/revision/latest?cb=20151129131656" alt="Gameloft">
+      <img class="bag-icon" src="https://web.archive.org/web/20250725224727/https://static.wikia.nocookie.net/logopedia/images/4/48/Gameloft_Logo_%282010%3B_White_Version%3B_Reflective_Version%3B_Horizontal_Version%29.png/revision/latest/scale-to-width-down/200?cb=20151130061432" alt="Gameloft">
       <span class="market-word" id="market-word">store</span>
     </div>
     <svg class="search-icon" id="search-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -714,192 +741,9 @@
 
 </div>
 
+<script src="shared.js"></script>
+<script src="games-data.js"></script>
 <script>
-/* ============================================================
-   AGGIUNGI QUI I TUOI GIOCHI
-   - icon: emoji/lettera, oppure un link http a un'immagine (verrà mostrata come icona)
-   - color: colore di sfondo dell'icona (hex) - ignorato se icon è un link immagine
-   - price: "FREE" oppure un prezzo tipo "€2,99" (mostra badge rosso se non FREE)
-   - link: link diretto al file (Google Drive, archive.org, ecc.) - se lasci "#" il pulsante risulta disabilitato
-   - trailer: ID del video YouTube del trailer (la parte dopo "v=" nell'URL) - lascia "" se non disponibile
-   - screenshots: array di link immagine mostrati nella galleria della scheda di dettaglio - lascia [] se non disponibili
-   - category: lascia sempre "games" (il sito mostra solo giochi, niente app)
-   ============================================================ */
-const APPS = [
-  {
-    name: "Asphalt 8: Airborne",
-    dev: "Gameloft",
-    icon: "https://static.wikia.nocookie.net/asphalt/images/5/5b/A8_v2.0_icon.png/revision/latest?cb=20200704065107",
-    color: "#1a1a1a",
-    rating: 5,
-    price: "FREE",
-    category: "games",
-    size: "1.5 GB",
-    version: "2.0",
-    genre: "Corse",
-    desc: "LEAVE GRAVITY IN THE DUST The best arcade racing game series reaches a new turning point! Perform dynamic, high-speed aerial stunts in an intense driving experience powered by a brand-new physics engine! LUXURY DREAM CARS • More than 95 high-performance cars (80% NEW!) • Top licensed manufacturers and models like the Lamborghini Veneno, Bugatti Veyron, Ferrari FXX, Lamborghini Aventador and Pagani Zonda R • Newly recorded high-fidelity car motor sounds for realistic audio immersion GET AIRBORNE • Hit the ramps and take the race above • Perform barrel rolls and wild 360º jumps • Maneuver through the air, pulling stunts while racing NEW EXOTIC LOCATIONS • Race in 13 different settings like Venice, French Guiana, Iceland, the Nevada Desert, Dubai and other exciting locations! • All tracks available in original and mirror variations in Career mode • Discover plenty of hidden shortcuts NEW FEATURES FOR SPEED FREAKS • 9 seasons & more than 300 events in Career mode • Stunning visuals thanks to next-gen shaders, real-time geometry reflection & other amazing effects for a new simulation of speed! • A detailed damage system like nothing you've seen before • Check out the new Infected and Drift Gate game modes SIMULTANEOUS MULTIPLAYER & GHOST CHALLENGES • Simultaneous multiplayer action for up to 12 real opponents! • Dare friends to asynchronous races in your favorite cars • Compare scores on the new leaderboards with friends and drivers around the world • Share your racing achievements and prove that you're the ultimate speed machine MUSIC TO REV YOUR SOUL • A heart-thumping mix of amazing licensed music for your game • Featuring real tracks from Bloc Party, Mutemath & The Crystal Method! A game for fans of extreme arcade racing, with real dream cars and phenomenal graphics that will also please racing simulation enthusiasts.",
-    screenshots: [
-      "https://web.archive.org/web/20151022214342im_/https://store-images.microsoft.com/image/apps.11182.9007199266242715.6955419d-1916-4572-bbd0-e623f8b00789.10e8ed5b-b04f-4d0d-950a-9ac972e3d856?w=712&h=400&mode=letterbox&background=black",
-      "https://web.archive.org/web/20151022214342im_/https://store-images.microsoft.com/image/apps.51606.9007199266242715.a9fc72ba-6594-49b6-b54d-155b4162ff0d.6f7367e3-92ad-4402-953d-20d2482507f9?w=712&h=400&mode=letterbox&background=black",
-      "https://web.archive.org/web/20151022214344im_/https://store-images.microsoft.com/image/apps.1539.9007199266242715.36363ed4-0436-4d62-b95a-169b0f908a78.281f3449-0ba1-417d-a677-af43ecf9a144?w=712&h=400&mode=letterbox&background=black",
-      "https://web.archive.org/web/20151022214345im_/https://store-images.microsoft.com/image/apps.45546.9007199266242715.0080bc67-a61c-4842-80e7-1fb1bd18ad31.ed46c6b4-37bd-4904-b98a-870c0dced13f?w=712&h=400&mode=letterbox&background=black"
-    ],
-    link: "https://archive.org/download/asphalt-8-v-2.0.0e.apk/Asphalt_8_v2.0.0e.apk.zip/Asphalt_8_v2.0.0e.apk",
-    trailer: ""
-  },
-  {
-    name: "Bonsai Blast",
-    dev: "Glu Mobile",
-    icon: "🌳",
-    color: "#4caf50",
-    rating: 5,
-    price: "FREE",
-    category: "games",
-    size: "2.1 MB",
-    version: "1.4.2",
-    genre: "Arcade",
-    desc: "Fai esplodere le sfere colorate in questo classico puzzle arcade. Punta, mira e libera il bonsai!",
-    link: "#",
-    trailer: ""
-  },
-  {
-    name: "Asphalt 6: Adrenaline HD",
-    dev: "Gameloft",
-    icon: "🏎️",
-    color: "#c0392b",
-    rating: 5,
-    price: "FREE",
-    category: "games",
-    size: "24 MB",
-    version: "1.0.0",
-    genre: "Corse",
-    desc: "Corse ad alta velocità su supercar in quindici città reali di tutto il mondo.",
-    link: "#",
-    trailer: ""
-  },
-  {
-    name: "The Oregon Trail HD",
-    dev: "Gameloft",
-    icon: "🐎",
-    color: "#8d6e63",
-    rating: 4,
-    price: "FREE",
-    category: "games",
-    size: "18 MB",
-    version: "1.0.3",
-    genre: "Avventura",
-    desc: "Guida la tua carovana lungo lo storico Oregon Trail affrontando ogni pericolo del viaggio.",
-    link: "#",
-    trailer: ""
-  },
-  {
-    name: "Modern Combat 3: Fallen Nation",
-    dev: "Gameloft",
-    icon: "🔫",
-    color: "#37474f",
-    rating: 4,
-    price: "FREE",
-    category: "games",
-    size: "29 MB",
-    version: "1.1.0",
-    genre: "Sparatutto",
-    desc: "Combatti sul campo di battaglia globale in questo sparatutto in prima persona.",
-    link: "#",
-    trailer: ""
-  }
-];
-
-/* ============================================================
-   MULTILINGUA: la lingua viene rilevata automaticamente dal
-   dispositivo/browser del visitatore (navigator.language).
-   Per aggiungere una lingua, copia un blocco e traduci i valori.
-   ============================================================ */
-const translations = {
-  it: {
-    storeWord: "store", searchPlaceholder: "Cerca giochi...",
-    tabGames: "Giochi", tabTrailer: "Trailer", tabDownloads: "Download",
-    sectionGames: "Featured", sectionTrailer: "Guarda i trailer", sectionDownloads: "Tutti i download",
-    back: "store", install: "INSTALL", noLink: "LINK NON DISPONIBILE", trailerBtn: "TRAILER",
-    infoTitle: "Info", descTitle: "Descrizione", sizeLabel: "Dimensione", versionLabel: "Versione", categoryLabel: "Categoria",
-    free: "GRATIS", installed: "Installato",
-    noGames: "Nessun gioco trovato", noTrailers: "Nessun trailer disponibile",
-    trailerOfficial: "Trailer ufficiale", trailerMissing: "trailer non ancora aggiunto",
-    downloadHistory: "Cronologia download", downloading: "Download in corso...", completed: "Download completato",
-    connecting: "Connessione al server...", fallbackMsg: "Download avviato nel browser",
-    footerNote: "Il file verrà scaricato dal tuo browser. Controlla la barra delle notifiche per aprirlo al termine."
-  },
-  en: {
-    storeWord: "store", searchPlaceholder: "Search games...",
-    tabGames: "Games", tabTrailer: "Trailers", tabDownloads: "Downloads",
-    sectionGames: "Featured", sectionTrailer: "Watch trailers", sectionDownloads: "All downloads",
-    back: "store", install: "INSTALL", noLink: "LINK UNAVAILABLE", trailerBtn: "TRAILER",
-    infoTitle: "Info", descTitle: "Description", sizeLabel: "Size", versionLabel: "Version", categoryLabel: "Category",
-    free: "FREE", installed: "Installed",
-    noGames: "No games found", noTrailers: "No trailers available",
-    trailerOfficial: "Official trailer", trailerMissing: "trailer not added yet",
-    downloadHistory: "Download history", downloading: "Downloading...", completed: "Download complete",
-    connecting: "Connecting to server...", fallbackMsg: "Download started in browser",
-    footerNote: "The file will be downloaded by your browser. Check your notification bar to open it once finished."
-  },
-  es: {
-    storeWord: "store", searchPlaceholder: "Buscar juegos...",
-    tabGames: "Juegos", tabTrailer: "Tráilers", tabDownloads: "Descargas",
-    sectionGames: "Destacados", sectionTrailer: "Ver tráilers", sectionDownloads: "Todas las descargas",
-    back: "store", install: "INSTALAR", noLink: "ENLACE NO DISPONIBLE", trailerBtn: "TRÁILER",
-    infoTitle: "Info", descTitle: "Descripción", sizeLabel: "Tamaño", versionLabel: "Versión", categoryLabel: "Categoría",
-    free: "GRATIS", installed: "Instalado",
-    noGames: "No se encontraron juegos", noTrailers: "No hay tráilers disponibles",
-    trailerOfficial: "Tráiler oficial", trailerMissing: "tráiler aún no añadido",
-    downloadHistory: "Historial de descargas", downloading: "Descargando...", completed: "Descarga completada",
-    connecting: "Conectando con el servidor...", fallbackMsg: "Descarga iniciada en el navegador",
-    footerNote: "El archivo se descargará con tu navegador. Revisa la barra de notificaciones para abrirlo al terminar."
-  },
-  fr: {
-    storeWord: "store", searchPlaceholder: "Rechercher des jeux...",
-    tabGames: "Jeux", tabTrailer: "Bandes-annonces", tabDownloads: "Téléchargements",
-    sectionGames: "En vedette", sectionTrailer: "Voir les bandes-annonces", sectionDownloads: "Tous les téléchargements",
-    back: "store", install: "INSTALLER", noLink: "LIEN INDISPONIBLE", trailerBtn: "BANDE-ANNONCE",
-    infoTitle: "Infos", descTitle: "Description", sizeLabel: "Taille", versionLabel: "Version", categoryLabel: "Catégorie",
-    free: "GRATUIT", installed: "Installé",
-    noGames: "Aucun jeu trouvé", noTrailers: "Aucune bande-annonce disponible",
-    trailerOfficial: "Bande-annonce officielle", trailerMissing: "bande-annonce pas encore ajoutée",
-    downloadHistory: "Historique des téléchargements", downloading: "Téléchargement en cours...", completed: "Téléchargement terminé",
-    connecting: "Connexion au serveur...", fallbackMsg: "Téléchargement démarré dans le navigateur",
-    footerNote: "Le fichier sera téléchargé par votre navigateur. Consultez la barre de notifications pour l'ouvrir une fois terminé."
-  },
-  de: {
-    storeWord: "store", searchPlaceholder: "Spiele suchen...",
-    tabGames: "Spiele", tabTrailer: "Trailer", tabDownloads: "Downloads",
-    sectionGames: "Empfohlen", sectionTrailer: "Trailer ansehen", sectionDownloads: "Alle Downloads",
-    back: "store", install: "INSTALLIEREN", noLink: "LINK NICHT VERFÜGBAR", trailerBtn: "TRAILER",
-    infoTitle: "Info", descTitle: "Beschreibung", sizeLabel: "Größe", versionLabel: "Version", categoryLabel: "Kategorie",
-    free: "KOSTENLOS", installed: "Installiert",
-    noGames: "Keine Spiele gefunden", noTrailers: "Keine Trailer verfügbar",
-    trailerOfficial: "Offizieller Trailer", trailerMissing: "Trailer noch nicht hinzugefügt",
-    downloadHistory: "Downloadverlauf", downloading: "Wird heruntergeladen...", completed: "Download abgeschlossen",
-    connecting: "Verbindung zum Server...", fallbackMsg: "Download im Browser gestartet",
-    footerNote: "Die Datei wird von deinem Browser heruntergeladen. Prüfe die Benachrichtigungsleiste, um sie zu öffnen."
-  },
-  pt: {
-    storeWord: "store", searchPlaceholder: "Buscar jogos...",
-    tabGames: "Jogos", tabTrailer: "Trailers", tabDownloads: "Downloads",
-    sectionGames: "Em destaque", sectionTrailer: "Ver trailers", sectionDownloads: "Todos os downloads",
-    back: "store", install: "INSTALAR", noLink: "LINK INDISPONÍVEL", trailerBtn: "TRAILER",
-    infoTitle: "Info", descTitle: "Descrição", sizeLabel: "Tamanho", versionLabel: "Versão", categoryLabel: "Categoria",
-    free: "GRÁTIS", installed: "Instalado",
-    noGames: "Nenhum jogo encontrado", noTrailers: "Nenhum trailer disponível",
-    trailerOfficial: "Trailer oficial", trailerMissing: "trailer ainda não adicionado",
-    downloadHistory: "Histórico de downloads", downloading: "Baixando...", completed: "Download concluído",
-    connecting: "Conectando ao servidor...", fallbackMsg: "Download iniciado no navegador",
-    footerNote: "O arquivo será baixado pelo seu navegador. Verifique a barra de notificações para abri-lo ao terminar."
-  }
-};
-
-const detectedLang = (navigator.language || 'it').slice(0, 2).toLowerCase();
-const LANG = translations[detectedLang] ? detectedLang : 'en';
-const T = translations[LANG];
-document.documentElement.lang = LANG;
-
 function applyTranslations() {
   document.getElementById('market-word').textContent = T.storeWord;
   document.getElementById('search-input').placeholder = T.searchPlaceholder;
@@ -935,30 +779,10 @@ let currentApp = null;
 
 applyTranslations();
 
-function starMarkup(n) {
-  let s = '';
-  for (let i = 0; i < 5; i++) s += i < n ? '★' : '<span class="empty">★</span>';
-  return s;
-}
-
 function priceMarkup(price) {
   if (price === 'FREE') return `<div class="app-price free">${T.free}</div>`;
   if (price === 'Installed') return `<div class="app-price installed">${T.installed}</div>`;
   return `<div class="app-price">${price}</div>`;
-}
-
-function iconMarkup(app) {
-  if (app.icon && app.icon.startsWith('http')) {
-    return `<img src="${app.icon}" alt="${app.name}">`;
-  }
-  return app.icon;
-}
-function iconBg(app) {
-  if (app.icon && app.icon.startsWith('http')) return '#e6e6e6';
-  return app.color === '#ffffff' ? '#ffffff' : app.color;
-}
-function iconFg(app) {
-  return app.color === '#ffffff' ? '#4caf50' : '#fff';
 }
 
 function renderList(filter) {
@@ -1232,39 +1056,14 @@ document.getElementById('p-fullscreen').addEventListener('click', () => {
 
 /* ============================================================
    SCHERMATA DI DOWNLOAD IN-PAGE (niente nuova scheda del browser)
-   Il download è REALE: usa fetch + ReadableStream per leggere i
-   byte man mano che arrivano dal server e mostrare l'avanzamento
-   vero (come la barra di download di Chrome), non simulato.
+   La barra si basa sulla dimensione che imposti nel campo "size"
+   di ogni gioco (es. "38 MB"): la velocità è simulata in modo
+   realistico, poi a fine animazione parte il download vero del file.
    ============================================================ */
 const downloadView = document.getElementById('download-view');
-let dlAbortController = null;
+let dlInterval = null;
 
-function guessFilename(url) {
-  try {
-    const clean = url.split('?')[0].split('#')[0];
-    const parts = clean.split('/').filter(Boolean);
-    return decodeURIComponent(parts[parts.length - 1] || 'file.apk');
-  } catch (e) { return 'file.apk'; }
-}
-function guessDomain(url) {
-  try { return new URL(url).hostname; } catch (e) { return url; }
-}
-function fmtBytes(n) {
-  if (!n || n <= 0) return '0 KB';
-  if (n < 1024 * 1024) return (n / 1024).toFixed(0) + ' KB';
-  return (n / (1024 * 1024)).toFixed(1) + ' MB';
-}
-function parseSizeToBytes(str) {
-  if (!str) return 0;
-  const m = String(str).match(/([\d.]+)\s*(KB|MB|GB)/i);
-  if (!m) return 0;
-  const num = parseFloat(m[1]);
-  const unit = m[2].toUpperCase();
-  const mult = unit === 'GB' ? 1024 ** 3 : unit === 'MB' ? 1024 ** 2 : 1024;
-  return Math.round(num * mult);
-}
-
-async function startDownload(app) {
+function startDownload(app) {
   if (!app || !app.link || app.link === '#') return;
 
   document.getElementById('dl-icon').style.background = iconBg(app);
@@ -1278,7 +1077,10 @@ async function startDownload(app) {
   fill.classList.remove('indeterminate');
   fill.style.width = '0%';
   status.classList.remove('done');
-  status.textContent = T.connecting;
+
+  // dimensione dichiarata nel campo "size" del gioco (es. "38 MB").
+  // se non è impostata o non è leggibile, usa 20 MB come valore di default.
+  const total = parseSizeToBytes(app.size) || (20 * 1024 * 1024);
 
   listView.classList.add('hidden');
   detailView.classList.remove('active');
@@ -1286,72 +1088,37 @@ async function startDownload(app) {
   downloadView.classList.add('active');
   window.scrollTo(0, 0);
 
-  if (dlAbortController) dlAbortController.abort();
-  dlAbortController = new AbortController();
+  clearInterval(dlInterval);
 
-  try {
-    const response = await fetch(app.link, { signal: dlAbortController.signal });
-    if (!response.ok || !response.body) throw new Error('Risposta non valida dal server');
+  // velocità di download simulata, casuale ma realistica (tra ~2 e ~7 MB/s)
+  const speedBytesPerTick = (2 + Math.random() * 5) * 1024 * 1024 * 0.2; // per tick da 200ms
+  let received = 0;
 
-    const declaredLength = parseInt(response.headers.get('Content-Length') || '0', 10);
-    const estimatedTotal = parseSizeToBytes(app.size);
-    const total = declaredLength || estimatedTotal;
+  dlInterval = setInterval(() => {
+    received += speedBytesPerTick * (0.7 + Math.random() * 0.6); // piccola variazione realistica
+    if (received >= total) {
+      received = total;
+      clearInterval(dlInterval);
 
-    if (!total) fill.classList.add('indeterminate');
+      fill.style.width = '100%';
+      status.classList.add('done');
+      status.textContent = `${T.completed} — ${fmtBytes(total)}`;
 
-    const reader = response.body.getReader();
-    const chunks = [];
-    let received = 0;
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      chunks.push(value);
-      received += value.length;
-
-      if (total) {
-        const pct = Math.min(100, (received / total) * 100);
-        fill.style.width = pct.toFixed(1) + '%';
-        status.textContent = `${T.downloading} ${Math.floor(pct)}% (${fmtBytes(received)} / ${fmtBytes(total)})`;
-      } else {
-        status.textContent = `${T.downloading} ${fmtBytes(received)}`;
-      }
+      // a fine animazione parte il download reale del file, restando su questa pagina
+      const a = document.createElement('a');
+      a.href = app.link;
+      a.download = guessFilename(app.link);
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      return;
     }
 
-    fill.classList.remove('indeterminate');
-    fill.style.width = '100%';
-
-    // assembla il file scaricato e lo consegna al browser (resta su questa pagina)
-    const blob = new Blob(chunks);
-    const blobUrl = URL.createObjectURL(blob);
-    const filename = guessFilename(app.link);
-    const a = document.createElement('a');
-    a.href = blobUrl;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
-
-    status.classList.add('done');
-    status.textContent = `${T.completed} — ${fmtBytes(received)}`;
-  } catch (err) {
-    if (err.name === 'AbortError') return;
-    // il server non permette la lettura via fetch (niente CORS): avvia comunque
-    // il download reale del file lasciando fare al browser, senza barra di progresso
-    fill.classList.remove('indeterminate');
-    fill.style.width = '100%';
-    status.classList.add('done');
-    status.textContent = T.fallbackMsg;
-
-    const a = document.createElement('a');
-    a.href = app.link;
-    a.download = guessFilename(app.link);
-    a.rel = 'noopener';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }
+    const pct = (received / total) * 100;
+    fill.style.width = pct.toFixed(1) + '%';
+    status.textContent = `${T.downloading} ${Math.floor(pct)}% (${fmtBytes(received)} / ${fmtBytes(total)})`;
+  }, 200);
 }
 
 document.getElementById('d-download-btn').addEventListener('click', (e) => {
@@ -1361,7 +1128,7 @@ document.getElementById('d-download-btn').addEventListener('click', (e) => {
 });
 
 document.getElementById('download-back-btn').addEventListener('click', () => {
-  if (dlAbortController) dlAbortController.abort();
+  clearInterval(dlInterval);
   downloadView.classList.remove('active');
   listView.classList.remove('hidden');
   window.scrollTo(0, 0);

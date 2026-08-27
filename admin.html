@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameloft Store — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #eceeec;
+    font-family: "Roboto", Arial, sans-serif;
+    color: #2b2b2b;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 0 60px; }
+
+  header {
+    background: linear-gradient(#3a3a3a, #1c1c1c);
+    padding: 16px 18px;
+  }
+  header h1 { margin: 0; color: #fff; font-size: 18px; font-weight: 500; }
+  header p { margin: 4px 0 0; color: #aaa; font-size: 12.5px; }
+
+  .panel {
+    background: #fff;
+    margin: 16px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    overflow: hidden;
+  }
+  .panel-title {
+    background: linear-gradient(#e2544a, #a02219);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+  }
+  .panel-body { padding: 16px; }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin: 14px 0 5px;
+  }
+  label:first-child { margin-top: 0; }
+  label .hint { text-transform: none; font-weight: 400; color: #999; font-size: 11px; }
+
+  input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    padding: 9px 10px;
+    font-size: 14px;
+    font-family: "Roboto", Arial, sans-serif;
+    border: 1px solid #c7c7c5;
+    border-radius: 4px;
+    background: #fff;
+    color: #333;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #c0392b;
+    box-shadow: 0 0 0 2px rgba(192,57,43,0.15);
+  }
+  textarea { resize: vertical; min-height: 70px; font-family: "Roboto", Arial, sans-serif; }
+
+  .row2 { display: flex; gap: 12px; }
+  .row2 > div { flex: 1; }
+
+  input[type="color"] {
+    width: 54px; height: 38px;
+    padding: 2px;
+    border: 1px solid #c7c7c5;
+    border-radius: 4px;
+    background: #fff;
+  }
+  .icon-row { display: flex; gap: 12px; align-items: flex-end; }
+  .icon-row > div:first-child { flex: 1; }
+
+  .btn {
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    font-family: "Roboto", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 11px 20px;
+    border-radius: 5px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.15);
+  }
+  .btn-primary {
+    background: linear-gradient(#a8d64a 0%, #8ec02a 48%, #7fae1e 50%, #729c19 100%);
+    border: 1px solid #5c7e12;
+    color: #fff;
+    margin-top: 18px;
+    width: 100%;
+  }
+  .btn-primary:active { opacity: 0.85; }
+
+  .btn-secondary {
+    background: linear-gradient(#5a5a5a,#2b2b2b);
+    border: 1px solid #111;
+    color: #fff;
+  }
+  .btn-danger {
+    background: linear-gradient(#e2544a, #a02219);
+    border: 1px solid #7a180f;
+    color: #fff;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  /* lista giochi aggiunti */
+  .game-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e6e6e4;
+  }
+  .game-card:last-child { border-bottom: none; }
+  .gc-icon {
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #fff;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.15);
+  }
+  .gc-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .gc-info { flex: 1; min-width: 0; }
+  .gc-name { font-weight: 500; font-size: 14px; margin: 0; }
+  .gc-meta { font-size: 12px; color: #888; margin: 2px 0 0; }
+  .empty-note { padding: 20px; text-align: center; color: #999; font-size: 13px; }
+
+  #code-output {
+    width: 100%;
+    min-height: 220px;
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    background: #1c1c1c;
+    color: #9cdc6b;
+    border: 1px solid #000;
+    border-radius: 4px;
+    padding: 12px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .copy-row { display: flex; gap: 10px; margin-top: 10px; }
+  .copy-row .btn { flex: 1; }
+  .copied-msg {
+    display: none;
+    color: #6ea100;
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-top: 8px;
+  }
+
+  ol.howto { font-size: 13px; line-height: 1.7; padding-left: 20px; margin: 0; color: #444; }
+  ol.howto b { color: #c0392b; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Gameloft Store — Pannello Admin</h1>
+  <p>Aggiungi giochi e trailer senza scrivere codice a mano.</p>
+</header>
+
+<div class="wrap">
+
+  <div class="panel">
+    <div class="panel-title">Come funziona</div>
+    <div class="panel-body">
+      <ol class="howto">
+        <li>Compila il modulo qui sotto per ogni gioco e premi <b>"Aggiungi gioco alla lista"</b>.</li>
+        <li>Ripeti per tutti i giochi che vuoi aggiungere.</li>
+        <li>In fondo alla pagina trovi il <b>codice generato automaticamente</b>: premi "Copia codice".</li>
+        <li>Apri <b>games-data.js</b> (il file condiviso da index.html e desktop.html), trova la riga <code>const APPS = [</code> e incolla il codice copiato subito dopo quella riga (oppure sostituisci l'intero array se vuoi ripartire da zero).</li>
+        <li>Salva il file: i nuovi giochi compariranno automaticamente sia nella versione mobile che in quella desktop.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Nuovo gioco</div>
+    <div class="panel-body">
+
+      <label>Nome del gioco</label>
+      <input type="text" id="f-name" placeholder="Es. Asphalt 8: Airborne">
+
+      <label>Sviluppatore</label>
+      <input type="text" id="f-dev" placeholder="Es. Gameloft" value="Gameloft">
+
+      <label>Icona <span class="hint">— emoji (es. 🏎️) oppure link diretto a un'immagine</span></label>
+      <div class="icon-row">
+        <div><input type="text" id="f-icon" placeholder="🏎️ oppure https://..."></div>
+        <div>
+          <input type="color" id="f-color" value="#c0392b">
+        </div>
+      </div>
+      <p style="font-size:11px;color:#999;margin:4px 0 0;">Il colore viene usato solo se l'icona è un'emoji, non un link immagine.</p>
+
+      <div class="row2">
+        <div>
+          <label>Prezzo <span class="hint">— "FREE" o es. €2,99</span></label>
+          <input type="text" id="f-price" value="FREE">
+        </div>
+        <div>
+          <label>Valutazione</label>
+          <select id="f-rating">
+            <option value="5">★★★★★ (5)</option>
+            <option value="4">★★★★☆ (4)</option>
+            <option value="3">★★★☆☆ (3)</option>
+            <option value="2">★★☆☆☆ (2)</option>
+            <option value="1">★☆☆☆☆ (1)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label>Dimensione <span class="hint">— controlla la barra della finta schermata di download</span></label>
+          <input type="text" id="f-size" placeholder="Es. 38 MB">
+        </div>
+        <div>
+          <label>Versione</label>
+          <input type="text" id="f-version" placeholder="Es. 1.0.0">
+        </div>
+      </div>
+
+      <label>Genere / Categoria</label>
+      <input type="text" id="f-genre" placeholder="Es. Corse, Sparatutto, Arcade...">
+
+      <label>Descrizione</label>
+      <textarea id="f-desc" placeholder="Descrizione del gioco..."></textarea>
+
+      <label>Screenshot <span class="hint">— un link immagine per riga, opzionale</span></label>
+      <textarea id="f-screenshots" placeholder="https://...
+https://...
+https://..."></textarea>
+
+      <label>Link di download <span class="hint">— Google Drive, archive.org, ecc.</span></label>
+      <input type="text" id="f-link" placeholder="https://...">
+
+      <label>ID trailer YouTube <span class="hint">— la parte dopo "v=" nel link YouTube, opzionale</span></label>
+      <input type="text" id="f-trailer" placeholder="Es. dQw4w9WgXcQ">
+
+      <button class="btn btn-primary" id="btn-add">+ Aggiungi gioco alla lista</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Giochi aggiunti in questa sessione (<span id="count">0</span>)</div>
+    <div id="game-list">
+      <div class="empty-note">Nessun gioco aggiunto ancora</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Codice da incollare in games-data.js</div>
+    <div class="panel-body">
+      <textarea id="code-output" readonly></textarea>
+      <div class="copy-row">
+        <button class="btn btn-secondary" id="btn-copy" style="flex:1;">Copia codice</button>
+        <button class="btn btn-danger" id="btn-clear" style="flex:1;">Svuota lista</button>
+      </div>
+      <p class="copied-msg" id="copied-msg">✓ Codice copiato negli appunti</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const STORAGE_KEY = 'gameloft_admin_games';
+let games = [];
+
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) games = JSON.parse(saved);
+} catch (e) { games = []; }
+
+const listEl = document.getElementById('game-list');
+const countEl = document.getElementById('count');
+const codeOutput = document.getElementById('code-output');
+
+function esc(str) {
+  return String(str || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, ' ').trim();
+}
+
+function iconPreview(g) {
+  if (g.icon && g.icon.startsWith('http')) {
+    return `<img src="${g.icon}" alt="">`;
+  }
+  return g.icon || '?';
+}
+
+function render() {
+  countEl.textContent = games.length;
+
+  if (games.length === 0) {
+    listEl.innerHTML = '<div class="empty-note">Nessun gioco aggiunto ancora</div>';
+  } else {
+    listEl.innerHTML = games.map((g, i) => `
+      <div class="game-card">
+        <div class="gc-icon" style="background:${g.icon && g.icon.startsWith('http') ? '#e6e6e6' : (g.color || '#888')}">${iconPreview(g)}</div>
+        <div class="gc-info">
+          <p class="gc-name">${g.name || '(senza nome)'}</p>
+          <p class="gc-meta">${g.dev || ''} · ${g.price || 'FREE'} · ${'★'.repeat(g.rating || 5)}</p>
+        </div>
+        <button class="btn btn-danger" onclick="removeGame(${i})">Rimuovi</button>
+      </div>
+    `).join('');
+  }
+
+  codeOutput.value = games.map(g => {
+    const shots = (g.screenshots || []).map(s => `      "${esc(s)}"`).join(',\n');
+    return `  {
+    name: "${esc(g.name)}",
+    dev: "${esc(g.dev)}",
+    icon: "${esc(g.icon)}",
+    color: "${g.color || '#888888'}",
+    rating: ${g.rating || 5},
+    price: "${esc(g.price) || 'FREE'}",
+    category: "games",
+    size: "${esc(g.size)}",
+    version: "${esc(g.version)}",
+    genre: "${esc(g.genre)}",
+    desc: "${esc(g.desc)}",
+    screenshots: [
+${shots}
+    ],
+    link: "${esc(g.link) || '#'}",
+    trailer: "${esc(g.trailer)}"
+  }`;
+  }).join(',\n') + (games.length ? ',' : '');
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
+}
+
+function removeGame(i) {
+  games.splice(i, 1);
+  render();
+}
+window.removeGame = removeGame;
+
+document.getElementById('btn-add').addEventListener('click', () => {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { alert('Inserisci almeno il nome del gioco.'); return; }
+
+  const screenshotsRaw = document.getElementById('f-screenshots').value.trim();
+  const screenshots = screenshotsRaw ? screenshotsRaw.split('\n').map(s => s.trim()).filter(Boolean) : [];
+
+  games.push({
+    name,
+    dev: document.getElementById('f-dev').value.trim() || 'Gameloft',
+    icon: document.getElementById('f-icon').value.trim() || '🎮',
+    color: document.getElementById('f-color').value,
+    rating: parseInt(document.getElementById('f-rating').value, 10),
+    price: document.getElementById('f-price').value.trim() || 'FREE',
+    size: document.getElementById('f-size').value.trim(),
+    version: document.getElementById('f-version').value.trim(),
+    genre: document.getElementById('f-genre').value.trim(),
+    desc: document.getElementById('f-desc').value.trim(),
+    screenshots,
+    link: document.getElementById('f-link').value.trim() || '#',
+    trailer: document.getElementById('f-trailer').value.trim()
+  });
+
+  render();
+
+  // pulisce il modulo per il prossimo inserimento
+  ['f-name','f-icon','f-size','f-version','f-genre','f-desc','f-screenshots','f-link','f-trailer']
+    .forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-price').value = 'FREE';
+  document.getElementById('f-rating').value = '5';
+  window.scrollTo(0, document.body.scrollHeight);
+});
+
+document.getElementById('btn-copy').addEventListener('click', () => {
+  codeOutput.select();
+  navigator.clipboard.writeText(codeOutput.value).then(() => {
+    const msg = document.getElementById('copied-msg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 2500);
+  });
+});
+
+document.getElementById('btn-clear').addEventListener('click', () => {
+  if (confirm('Svuotare tutta la lista dei giochi aggiunti in questa sessione?')) {
+    games = [];
+    render();
+  }
+});
+
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameloft Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #e4e4e2;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #2b2b2b;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* ===== HEADER ===== */
+  header.top-header {
+    background: linear-gradient(#3a3a3a, #1c1c1c);
+    border-bottom: 1px solid #000;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .logo-wrap img { height: 34px; }
+  .logo-wrap span {
+    font-size: 13px; color: #9a9a9a; text-transform: uppercase;
+    letter-spacing: 1.5px; border-left: 1px solid #555; padding-left: 10px;
+  }
+
+  nav.main-nav { display: flex; gap: 4px; flex: 1; }
+  nav.main-nav .nav-item {
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 18px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s;
+  }
+  nav.main-nav .nav-item:hover { color: #fff; }
+  nav.main-nav .nav-item.active { color: #fff; border-bottom-color: #c0392b; }
+
+  .search-wrap { position: relative; width: 260px; flex-shrink: 0; }
+  .search-wrap input {
+    width: 100%;
+    padding: 9px 14px 9px 36px;
+    border-radius: 20px;
+    border: 1px solid #555;
+    background: #2b2b2b;
+    color: #eee;
+    font-size: 13.5px;
+    font-family: "Roboto", Arial, sans-serif;
+  }
+  .search-wrap input::placeholder { color: #888; }
+  .search-wrap input:focus { outline: none; border-color: #c0392b; }
+  .search-wrap svg {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 15px; height: 15px; color: #888; pointer-events: none;
+  }
+
+  /* ===== HERO / FEATURED BAND ===== */
+  .hero-band {
+    background: linear-gradient(#e2544a, #a02219);
+    color: #fff;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+  }
+
+  /* ===== MAIN GRID ===== */
+  main { max-width: 1280px; margin: 0 auto; padding: 28px 24px 60px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 20px;
+  }
+  .empty-note { padding: 60px 20px; text-align: center; color: #888; font-size: 15px; grid-column: 1 / -1; }
+
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #d8d8d6;
+    padding: 18px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-color: #c0392b;
+  }
+  .card-icon {
+    width: 84px; height: 84px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    color: #fff;
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 6px rgba(0,0,0,0.25);
+    border: 1px solid rgba(0,0,0,0.12);
+  }
+  .card-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .card-name { font-size: 15px; font-weight: 500; margin: 0 0 3px; color: #1a1a1a; }
+  .card-dev { font-size: 12.5px; color: #888; margin: 0 0 8px; }
+  .card-stars { font-size: 12.5px; color: #f0a72c; margin-bottom: 6px; }
+  .card-stars .empty { color: #d9d9d9; }
+  .card-price { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+  .card-price.free { color: #6ea100; }
+
+  .card-trailer-badge {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #c0392b;
+  }
+
+  /* ===== MODAL OVERLAY (dettaglio / trailer / download) ===== */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow-y: auto;
+  }
+  .overlay.active { display: flex; }
+
+  .modal {
+    background: #fff;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 720px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .modal-header {
+    background: linear-gradient(#3a3a3a, #1c1c1c);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .modal-close {
+    color: #ccc;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 10px;
+  }
+  .modal-close:hover { color: #fff; }
+
+  .modal-top {
+    display: flex;
+    gap: 18px;
+    padding: 22px;
+    border-bottom: 1px solid #e6e6e4;
+  }
+  .modal-icon {
+    width: 96px; height: 96px;
+    border-radius: 16px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 42px; color: #fff;
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 6px rgba(0,0,0,0.25);
+    border: 1px solid rgba(0,0,0,0.12);
+  }
+  .modal-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-title { font-size: 22px; font-weight: 500; margin: 0 0 4px; }
+  .modal-dev { font-size: 14px; color: #6ea100; margin: 0 0 8px; }
+  .modal-stars { font-size: 14px; color: #f0a72c; }
+  .modal-meta { font-size: 12px; color: #9a9a9a; margin-top: 4px; }
+
+  .modal-buttons { display: flex; gap: 10px; padding: 18px 22px; border-bottom: 1px solid #e6e6e4; }
+  .btn {
+    border: none; cursor: pointer;
+    font-family: "Roboto", Arial, sans-serif;
+    font-weight: 700; font-size: 13.5px; letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 11px 24px;
+    border-radius: 5px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.15);
+  }
+  .btn-install {
+    background: linear-gradient(#a8d64a 0%, #8ec02a 48%, #7fae1e 50%, #729c19 100%);
+    border: 1px solid #5c7e12;
+    color: #fff;
+  }
+  .btn-install.disabled { background: linear-gradient(#dedede,#c8c8c8); border-color:#aaa; color:#888; text-shadow:none; cursor: default; }
+  .btn-trailer { background: linear-gradient(#5a5a5a,#2b2b2b); border: 1px solid #111; color: #fff; }
+  .price-badge {
+    display: inline-block; background: linear-gradient(#e2544a, #c0392b);
+    border: 1px solid #9c2a1f; color: #fff; font-size: 11px; font-weight: 700;
+    padding: 3px 8px; border-radius: 3px; text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+  }
+
+  .modal-screenshots {
+    display: flex; gap: 10px; overflow-x: auto;
+    padding: 18px 22px; border-bottom: 1px solid #e6e6e4;
+  }
+  .modal-screenshots img { height: 190px; border-radius: 5px; border: 1px solid #ddd; flex-shrink: 0; }
+
+  .modal-section { padding: 18px 22px; border-bottom: 1px solid #e6e6e4; }
+  .modal-section:last-child { border-bottom: none; }
+  .modal-section h3 {
+    font-size: 11.5px; text-transform: uppercase; color: #9a9a9a;
+    margin: 0 0 8px; letter-spacing: 0.5px; font-weight: 700;
+  }
+  .modal-section p { font-size: 14px; line-height: 1.6; margin: 0; color: #3a3a3a; }
+  .info-grid { display: flex; gap: 26px; flex-wrap: wrap; }
+  .info-grid div { font-size: 12.5px; color: #6e6e6e; }
+  .info-grid b { display: block; color: #222; font-size: 14px; font-weight: 500; }
+
+  /* ===== PLAYER TRAILER MODAL ===== */
+  #trailer-modal .modal { max-width: 860px; }
+  .video-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+  .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
+
+  .player-controls {
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(#e9e9e9, #b9b9b9 45%, #a3a3a3 46%, #cfcfcf);
+    border-top: 1px solid #eee;
+    padding: 8px 10px;
+  }
+  .pbtn {
+    width: 30px; height: 28px; border-radius: 3px;
+    background: linear-gradient(#fdfdfd, #d6d6d6 45%, #bcbcbc 46%, #e2e2e2);
+    border: 1px solid #8f8f8f;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .pbtn:active { background: linear-gradient(#c9c9c9, #b0b0b0); }
+  .pbtn svg { width: 14px; height: 14px; fill: #444; }
+  .ptrack-wrap { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .phandle {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    background: radial-gradient(circle at 35% 30%, #fff, #9a9a9a 70%, #6e6e6e);
+    border: 1px solid #6e6e6e;
+  }
+  .ptrack { position: relative; flex: 1; height: 6px; background: #6b6b6b; border-radius: 3px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5); cursor: pointer; }
+  .pfill { position: absolute; top:0; left:0; height:100%; width:0%; background: linear-gradient(#ff5d52, #d81f12); border-radius: 3px; }
+  .pfill::after { content:''; position:absolute; right:-5px; top:50%; transform:translateY(-50%); width:10px; height:10px; border-radius:50%; background: radial-gradient(circle at 35% 30%, #fff, #e2544a 70%, #a02219); border: 1px solid #a02219; }
+  .ptime {
+    background:#111; border:1px solid #000; border-radius:3px; color:#ff2d20;
+    font-family:"Courier New",monospace; font-size:12px; font-weight:bold;
+    padding:4px 7px; flex-shrink:0; text-shadow: 0 0 4px rgba(255,45,32,0.6); white-space:nowrap;
+  }
+  .pvol-wrap { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .pvol-track { position:relative; width:60px; height:4px; background:#7a7a7a; border-radius:2px; box-shadow: inset 0 1px 1px rgba(0,0,0,0.5); cursor:pointer; }
+  .pvol-fill { position:absolute; top:0; left:0; height:100%; width:70%; background:#4a4a4a; border-radius:2px; }
+  .pvol-fill::after { content:''; position:absolute; right:-5px; top:50%; transform:translateY(-50%); width:10px; height:10px; border-radius:50%; background: radial-gradient(circle at 35% 30%, #fff, #9a9a9a 70%, #6e6e6e); border:1px solid #6e6e6e; }
+  .trailer-title-bar { background:#111; color:#ccc; font-size:13px; padding:10px 14px; }
+
+  /* ===== DOWNLOAD MODAL ===== */
+  #download-modal .modal { max-width: 460px; }
+  .dl-row { display: flex; align-items: center; gap: 12px; padding: 18px 20px; }
+  .dl-icon { width: 52px; height: 52px; border-radius: 10px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; font-size:22px; color:#fff; overflow:hidden; border: 1px solid rgba(0,0,0,0.12); }
+  .dl-icon img { width:100%; height:100%; object-fit:cover; }
+  .dl-filename { font-size: 15px; margin: 0 0 3px; }
+  .dl-source { font-size: 12px; color: #8a8a8a; margin: 0; }
+  .dl-progress-wrap { padding: 0 20px 6px; }
+  .dl-track { width:100%; height:8px; background:#d8d8d6; border-radius:4px; overflow:hidden; }
+  .dl-fill { height:100%; width:0%; background: linear-gradient(#ffd94a, #f0b400); transition: width 0.15s linear; }
+  .dl-status { padding: 6px 20px 20px; font-size: 12.5px; color: #7c7c7c; }
+  .dl-status.done { color: #6ea100; font-weight: 500; }
+
+  @media (max-width: 900px) {
+    header.top-header { flex-wrap: wrap; height: auto; padding: 10px 16px; gap: 12px; }
+    nav.main-nav { order: 3; width: 100%; }
+    .search-wrap { width: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="logo-wrap">
+    <img id="site-logo" src="https://web.archive.org/web/20250725224727/https://static.wikia.nocookie.net/logopedia/images/4/48/Gameloft_Logo_%282010%3B_White_Version%3B_Reflective_Version%3B_Horizontal_Version%29.png/revision/latest/scale-to-width-down/200?cb=20151130061432" alt="Gameloft">
+    <span id="site-word">store</span>
+  </div>
+  <nav class="main-nav">
+    <div class="nav-item active" data-tab="games" id="tab-games">Giochi</div>
+    <div class="nav-item" data-tab="trailer" id="tab-trailer">Trailer</div>
+    <div class="nav-item" data-tab="downloads" id="tab-downloads">Download</div>
+  </nav>
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>
+    <input type="text" id="search-input" placeholder="Cerca giochi...">
+  </div>
+</header>
+
+<div class="hero-band" id="section-label">Featured</div>
+
+<main>
+  <div class="grid" id="game-grid"></div>
+</main>
+
+<!-- MODAL DETTAGLIO -->
+<div class="overlay" id="detail-overlay">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-close" id="detail-close">✕ <span id="close-label">Chiudi</span></div></div>
+    <div class="modal-top">
+      <div class="modal-icon" id="d-icon"></div>
+      <div>
+        <p class="modal-title" id="d-title"></p>
+        <p class="modal-dev" id="d-dev"></p>
+        <div class="modal-stars" id="d-stars"></div>
+        <div class="modal-meta" id="d-meta"></div>
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button class="btn btn-install" id="d-download-btn">INSTALL</button>
+      <button class="btn btn-trailer" id="d-trailer-btn">TRAILER</button>
+    </div>
+    <div class="modal-screenshots" id="d-screenshots"></div>
+    <div class="modal-section">
+      <h3 id="info-title">Info</h3>
+      <div class="info-grid">
+        <div><b id="d-size">-</b><span id="label-size">Dimensione</span></div>
+        <div><b id="d-version">-</b><span id="label-version">Versione</span></div>
+        <div><b id="d-category">-</b><span id="label-category">Categoria</span></div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h3 id="desc-title">Descrizione</h3>
+      <p id="d-desc"></p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TRAILER -->
+<div class="overlay" id="trailer-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-close" id="trailer-close">✕ <span class="close-label2">Chiudi</span></div></div>
+    <div class="trailer-title-bar" id="trailer-title-bar">Trailer</div>
+    <div class="video-wrap"><div id="yt-player"></div></div>
+    <div class="player-controls">
+      <div class="pbtn" id="p-playpause">
+        <svg id="icon-pause" viewBox="0 0 24 24"><rect x="5" y="4" width="5" height="16"/><rect x="14" y="4" width="5" height="16"/></svg>
+        <svg id="icon-play" viewBox="0 0 24 24" style="display:none"><polygon points="6,4 20,12 6,20"/></svg>
+      </div>
+      <div class="pbtn" id="p-restart">
+        <svg viewBox="0 0 24 24"><rect x="5" y="4" width="2.5" height="16"/><polygon points="20,4 8,12 20,20"/></svg>
+      </div>
+      <div class="ptrack-wrap">
+        <div class="phandle"></div>
+        <div class="ptrack" id="p-track"><div class="pfill" id="p-fill"></div></div>
+        <div class="ptime"><span id="p-current">0:00</span> / <span id="p-duration">0:00</span></div>
+      </div>
+      <div class="pvol-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#444"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16.5 12c0-1.77-1-3.29-2.5-4.03v8.06c1.5-.74 2.5-2.26 2.5-4.03z"/></svg>
+        <div class="pvol-track" id="p-voltrack"><div class="pvol-fill" id="p-volfill"></div></div>
+      </div>
+      <div class="pbtn" id="p-fullscreen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DOWNLOAD -->
+<div class="overlay" id="download-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-close" id="download-close">✕ <span class="close-label2">Chiudi</span></div></div>
+    <div class="trailer-title-bar" id="download-history-title">Cronologia download</div>
+    <div class="dl-row">
+      <div class="dl-icon" id="dl-icon"></div>
+      <div>
+        <p class="dl-filename" id="dl-filename">-</p>
+        <p class="dl-source" id="dl-source">-</p>
+      </div>
+    </div>
+    <div class="dl-progress-wrap"><div class="dl-track"><div class="dl-fill" id="dl-fill"></div></div></div>
+    <div class="dl-status" id="dl-status">-</div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="games-data.js"></script>
+<script>
+document.getElementById('site-word').textContent = T.storeWord;
+document.getElementById('search-input').placeholder = T.searchPlaceholder;
+document.getElementById('tab-games').textContent = T.tabGames;
+document.getElementById('tab-trailer').textContent = T.tabTrailer;
+document.getElementById('tab-downloads').textContent = T.tabDownloads;
+document.getElementById('section-label').textContent = T.sectionGames;
+document.getElementById('info-title').textContent = T.infoTitle;
+document.getElementById('desc-title').textContent = T.descTitle;
+document.getElementById('label-size').textContent = T.sizeLabel;
+document.getElementById('label-version').textContent = T.versionLabel;
+document.getElementById('label-category').textContent = T.categoryLabel;
+document.getElementById('download-history-title').textContent = T.downloadHistory;
+document.querySelectorAll('.close-label2').forEach(el => el.textContent = T.close);
+document.getElementById('close-label').textContent = T.close;
+
+const grid = document.getElementById('game-grid');
+const navTabs = document.querySelectorAll('.nav-item');
+const sectionLabel = document.getElementById('section-label');
+const searchInput = document.getElementById('search-input');
+
+let currentTab = 'games';
+let currentQuery = '';
+let currentApp = null;
+
+function priceMarkup(app) {
+  if (app.price === 'FREE') return `<div class="card-price free">${T.free}</div>`;
+  if (app.price === 'Installed') return `<div class="card-price">${T.installed}</div>`;
+  return `<div class="card-price">${app.price}</div>`;
+}
+
+function renderGrid(filter) {
+  grid.innerHTML = '';
+  let items;
+  if (filter === 'downloads') items = APPS;
+  else if (filter === 'trailer') items = APPS.filter(a => a.trailer);
+  else items = APPS.filter(a => a.category === filter);
+
+  if (currentQuery.trim() !== '') {
+    const q = currentQuery.trim().toLowerCase();
+    items = items.filter(a => a.name.toLowerCase().includes(q) || a.dev.toLowerCase().includes(q));
+  }
+
+  if (items.length === 0) {
+    const msg = filter === 'trailer' ? T.noTrailers : T.noGames;
+    grid.innerHTML = `<div class="empty-note">${msg}</div>`;
+    return;
+  }
+
+  items.forEach(app => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const extra = filter === 'trailer'
+      ? `<div class="card-trailer-badge">▶ ${T.trailerBtn}</div>`
+      : `${priceMarkup(app)}<div class="card-stars">${starMarkup(app.rating)}</div>`;
+    card.innerHTML = `
+      <div class="card-icon" style="background:${iconBg(app)};color:${iconFg(app)}">${iconMarkup(app)}</div>
+      <p class="card-name">${app.name}</p>
+      <p class="card-dev">${app.dev}</p>
+      ${extra}
+    `;
+    card.addEventListener('click', () => {
+      if (filter === 'trailer') openTrailer(app);
+      else openDetail(app);
+    });
+    grid.appendChild(card);
+  });
+}
+
+navTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    navTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentTab = tab.dataset.tab;
+    sectionLabel.textContent = currentTab === 'games' ? T.sectionGames
+      : currentTab === 'trailer' ? T.sectionTrailer
+      : T.sectionDownloads;
+    renderGrid(currentTab);
+  });
+});
+
+searchInput.addEventListener('input', (e) => {
+  currentQuery = e.target.value;
+  renderGrid(currentTab);
+});
+
+/* ===== MODAL DETTAGLIO ===== */
+const detailOverlay = document.getElementById('detail-overlay');
+
+function openDetail(app) {
+  currentApp = app;
+  const iconEl = document.getElementById('d-icon');
+  iconEl.style.background = iconBg(app);
+  iconEl.style.color = iconFg(app);
+  iconEl.innerHTML = iconMarkup(app);
+
+  document.getElementById('d-title').textContent = app.name;
+  document.getElementById('d-dev').textContent = app.dev;
+  document.getElementById('d-stars').innerHTML = starMarkup(app.rating);
+  document.getElementById('d-meta').innerHTML = app.price === 'FREE' ? '' : (app.price === 'Installed' ? T.installed : `<span class="price-badge">${app.price}</span>`);
+  document.getElementById('d-size').textContent = app.size;
+  document.getElementById('d-version').textContent = app.version;
+  document.getElementById('d-category').textContent = app.genre;
+  document.getElementById('d-desc').textContent = app.desc;
+
+  const shotsEl = document.getElementById('d-screenshots');
+  if (app.screenshots && app.screenshots.length) {
+    shotsEl.style.display = 'flex';
+    shotsEl.innerHTML = app.screenshots.map(s => `<img src="${s}" alt="${app.name}">`).join('');
+  } else {
+    shotsEl.style.display = 'none';
+    shotsEl.innerHTML = '';
+  }
+
+  const btn = document.getElementById('d-download-btn');
+  if (!app.link || app.link === '#') {
+    btn.classList.add('disabled');
+    btn.textContent = T.noLink;
+  } else {
+    btn.classList.remove('disabled');
+    btn.textContent = T.install;
+  }
+
+  const trailerBtn = document.getElementById('d-trailer-btn');
+  trailerBtn.textContent = T.trailerBtn;
+  trailerBtn.style.display = app.trailer ? 'inline-block' : 'none';
+
+  detailOverlay.classList.add('active');
+}
+document.getElementById('detail-close').addEventListener('click', () => detailOverlay.classList.remove('active'));
+detailOverlay.addEventListener('click', (e) => { if (e.target === detailOverlay) detailOverlay.classList.remove('active'); });
+
+document.getElementById('d-download-btn').addEventListener('click', (e) => {
+  if (e.currentTarget.classList.contains('disabled')) return;
+  startDownload(currentApp);
+});
+document.getElementById('d-trailer-btn').addEventListener('click', () => openTrailer(currentApp));
+
+/* ===== MODAL TRAILER (stessa skin custom della versione mobile) ===== */
+const trailerModal = document.getElementById('trailer-modal');
+const trailerTitleBar = document.getElementById('trailer-title-bar');
+let ytPlayer = null, ytReady = false, progressTimer = null, pendingVideoId = null;
+
+const ytScript = document.createElement('script');
+ytScript.src = 'https://www.youtube.com/iframe_api';
+document.head.appendChild(ytScript);
+
+function onYouTubeIframeAPIReady() {
+  ytPlayer = new YT.Player('yt-player', {
+    height: '100%', width: '100%',
+    playerVars: { controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1 },
+    events: {
+      onReady: () => { ytReady = true; if (pendingVideoId) { ytPlayer.loadVideoById(pendingVideoId); pendingVideoId = null; } setPlayIcon(false); },
+      onStateChange: (e) => {
+        if (e.data === YT.PlayerState.PLAYING) { setPlayIcon(false); startProgressTimer(); }
+        if (e.data === YT.PlayerState.PAUSED) { setPlayIcon(true); stopProgressTimer(); }
+        if (e.data === YT.PlayerState.ENDED) { setPlayIcon(true); stopProgressTimer(); }
+      }
+    }
+  });
+}
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+function fmtTime(sec) {
+  if (!isFinite(sec) || sec < 0) sec = 0;
+  const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+function setPlayIcon(showPlay) {
+  document.getElementById('icon-play').style.display = showPlay ? 'block' : 'none';
+  document.getElementById('icon-pause').style.display = showPlay ? 'none' : 'block';
+}
+function startProgressTimer() {
+  stopProgressTimer();
+  progressTimer = setInterval(() => {
+    if (!ytPlayer || !ytPlayer.getCurrentTime) return;
+    const cur = ytPlayer.getCurrentTime(), dur = ytPlayer.getDuration();
+    document.getElementById('p-fill').style.width = dur ? `${(cur / dur) * 100}%` : '0%';
+    document.getElementById('p-current').textContent = fmtTime(cur);
+    document.getElementById('p-duration').textContent = fmtTime(dur);
+  }, 500);
+}
+function stopProgressTimer() { clearInterval(progressTimer); }
+
+function openTrailer(app) {
+  if (!app) return;
+  detailOverlay.classList.remove('active');
+  trailerTitleBar.textContent = `${app.name} — ${T.trailerOfficial}`;
+  document.getElementById('p-fill').style.width = '0%';
+  document.getElementById('p-current').textContent = '0:00';
+  document.getElementById('p-duration').textContent = '0:00';
+
+  if (!app.trailer) {
+    trailerTitleBar.textContent = `${app.name} — ${T.trailerMissing}`;
+  } else if (ytReady) {
+    ytPlayer.loadVideoById(app.trailer);
+  } else {
+    pendingVideoId = app.trailer;
+  }
+  trailerModal.classList.add('active');
+}
+document.getElementById('trailer-close').addEventListener('click', () => {
+  if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+  stopProgressTimer();
+  trailerModal.classList.remove('active');
+});
+trailerModal.addEventListener('click', (e) => { if (e.target === trailerModal) document.getElementById('trailer-close').click(); });
+
+document.getElementById('p-playpause').addEventListener('click', () => {
+  if (!ytPlayer || !ytPlayer.getPlayerState) return;
+  const state = ytPlayer.getPlayerState();
+  if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
+});
+document.getElementById('p-restart').addEventListener('click', () => { if (ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(0, true); });
+document.getElementById('p-track').addEventListener('click', (e) => {
+  if (!ytPlayer || !ytPlayer.getDuration) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+  ytPlayer.seekTo(ytPlayer.getDuration() * ratio, true);
+});
+let currentVolume = 70;
+const pVolFill = document.getElementById('p-volfill');
+pVolFill.style.width = currentVolume + '%';
+document.getElementById('p-voltrack').addEventListener('click', (e) => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+  currentVolume = Math.round(ratio * 100);
+  pVolFill.style.width = currentVolume + '%';
+  if (ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(currentVolume);
+});
+document.getElementById('p-fullscreen').addEventListener('click', () => {
+  const wrap = document.querySelector('#trailer-modal .video-wrap');
+  if (wrap.requestFullscreen) wrap.requestFullscreen();
+});
+
+/* ===== MODAL DOWNLOAD (finta barra, basata sul campo "size") ===== */
+const downloadModal = document.getElementById('download-modal');
+let dlInterval = null;
+
+function startDownload(app) {
+  if (!app || !app.link || app.link === '#') return;
+  detailOverlay.classList.remove('active');
+
+  document.getElementById('dl-icon').style.background = iconBg(app);
+  document.getElementById('dl-icon').style.color = iconFg(app);
+  document.getElementById('dl-icon').innerHTML = iconMarkup(app);
+  document.getElementById('dl-filename').textContent = guessFilename(app.link);
+  document.getElementById('dl-source').textContent = guessDomain(app.link);
+
+  const fill = document.getElementById('dl-fill');
+  const status = document.getElementById('dl-status');
+  fill.style.width = '0%';
+  status.classList.remove('done');
+
+  const total = parseSizeToBytes(app.size) || (20 * 1024 * 1024);
+  downloadModal.classList.add('active');
+  clearInterval(dlInterval);
+
+  const speedBytesPerTick = (2 + Math.random() * 5) * 1024 * 1024 * 0.2;
+  let received = 0;
+
+  dlInterval = setInterval(() => {
+    received += speedBytesPerTick * (0.7 + Math.random() * 0.6);
+    if (received >= total) {
+      received = total;
+      clearInterval(dlInterval);
+      fill.style.width = '100%';
+      status.classList.add('done');
+      status.textContent = `${T.completed} — ${fmtBytes(total)}`;
+
+      const a = document.createElement('a');
+      a.href = app.link;
+      a.download = guessFilename(app.link);
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      return;
+    }
+    const pct = (received / total) * 100;
+    fill.style.width = pct.toFixed(1) + '%';
+    status.textContent = `${T.downloading} ${Math.floor(pct)}% (${fmtBytes(received)} / ${fmtBytes(total)})`;
+  }, 200);
+}
+
+document.getElementById('download-close').addEventListener('click', () => {
+  clearInterval(dlInterval);
+  downloadModal.classList.remove('active');
+});
+downloadModal.addEventListener('click', (e) => { if (e.target === downloadModal) document.getElementById('download-close').click(); });
+
+renderGrid('games');
+</script>
+
+</body>
+</html>
