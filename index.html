@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameloft Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     CONFIGURA QUI I TUOI GIOCHI: vedi l'array APPS nel tag <script>
+     più in basso. Ogni oggetto = una riga della lista.
+     ============================================================ */
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #b9bdb6;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== finta status bar del telefono ===== */
+  .statusbar {
+    background: #eceeec;
+    border-bottom: 1px solid #cfd2cd;
+    color: #3a3a3a;
+    font-size: 11px;
+    padding: 3px 8px;
+    display: flex;
+    justify-content: space-between;
+    font-family: Arial, sans-serif;
+  }
+
+  .phone {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
+    box-shadow: 0 0 14px rgba(0,0,0,0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== HEADER stile Market: bianco, logo bag+robot, wordmark verde ===== */
+  .market-header {
+    background: linear-gradient(#3a3a3a, #1c1c1c);
+    border-bottom: 1px solid #000;
+    padding: 10px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .market-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bag-icon { height: 30px; width: auto; display: block; }
+  .market-word {
+    font-size: 13px;
+    font-weight: 500;
+    color: #9a9a9a;
+    letter-spacing: 1.5px;
+    font-family: "Roboto", Arial, sans-serif;
+    margin-top: 12px;
+    text-transform: uppercase;
+    border-left: 1px solid #555;
+    padding-left: 8px;
+  }
+  .search-icon {
+    margin-left: auto;
+    width: 32px; height: 32px;
+    color: #3f3f3f;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 6px;
+    border-radius: 3px;
+    background: linear-gradient(#ffffff, #999999);
+    border: 1px solid #7a7a7a;
+  }
+  .search-icon:active {
+    background: linear-gradient(#c4c4c4, #888888);
+  }
+
+  /* ===== BARRA DI RICERCA ===== */
+  .search-bar {
+    display: none;
+    background: #fbfbfa;
+    border-bottom: 1px solid #d8d8d6;
+    padding: 8px 10px;
+  }
+  .search-bar.active { display: block; }
+  .search-bar input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: "Roboto", Arial, sans-serif;
+    border: 1px solid #c7c7c5;
+    border-radius: 20px;
+    background: #ffffff;
+    color: #333;
+    outline: none;
+  }
+  .search-bar input:focus {
+    border-color: #9ec023;
+    box-shadow: 0 0 0 2px rgba(158,192,35,0.15);
+  }
+
+  /* ===== TABS: bianco, testo grigio scuro, indicatore oliva sotto il tab attivo ===== */
+  .tabs {
+    display: flex;
+    background: linear-gradient(#ffffff, #999999);
+    border-bottom: 1px solid #7a7a7a;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 4px 9px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3f3f3f;
+    border-right: 1px solid #aaaaaa;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    user-select: none;
+    text-transform: capitalize;
+  }
+  .tab:last-child { border-right: none; }
+  .tab.active {
+    color: #1a1a1a;
+    border-bottom: 3px solid #c0392b;
+  }
+
+  /* ===== SECTION LABEL: barra oliva a gradiente ===== */
+  .section-label {
+    background: linear-gradient(#e2544a, #a02219);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+    border-bottom: 1px solid #7a180f;
+    border-top: 1px solid #ef7166;
+  }
+
+  /* ===== LIST ===== */
+  .app-list-view { display: flex; flex-direction: column; flex: 1; }
+  .app-list-view.hidden { display: none; }
+  .app-list { background: #ffffff; flex: 1; }
+  .app-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 10px;
+    border-bottom: 1px solid #e6e6e4;
+    cursor: pointer;
+  }
+  .app-row:active { background: #f2f6e4; }
+
+  .app-icon {
+    width: 48px; height: 48px;
+    border-radius: 9px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 1px 2px rgba(0,0,0,0.25);
+    border: 1px solid rgba(0,0,0,0.12);
+    overflow: hidden;
+  }
+  .app-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .app-info { flex: 1; min-width: 0; }
+  .app-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0 0 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .app-dev {
+    font-size: 12.5px;
+    color: #8a8a8a;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-side {
+    text-align: right;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+  .app-price {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 3px;
+  }
+  .app-price.free { color: #6ea100; }
+  .app-price.installed { color: #9a9a9a; font-weight: 500; font-size: 12px; }
+  .stars {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #f0a72c;
+  }
+  .stars .empty { color: #d9d9d9; }
+
+  /* ===== DETAIL VIEW ===== */
+  .detail { display: none; background: #ffffff; }
+  .detail.active { display: block; }
+
+  .detail-header {
+    background: #ffffff;
+    border-bottom: 1px solid #dcdcdc;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .back-btn {
+    color: #6ea100;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 6px 4px;
+    cursor: pointer;
+  }
+
+  .detail-top {
+    display: flex;
+    padding: 16px 12px;
+    border-bottom: 1px solid #e6e6e4;
+  }
+  .detail-icon {
+    width: 74px; height: 74px;
+    border-radius: 14px;
+    margin-right: 14px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px;
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 2px 4px rgba(0,0,0,0.25);
+    border: 1px solid rgba(0,0,0,0.12);
+    overflow: hidden;
+  }
+  .detail-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .detail-title { font-size: 18px; font-weight: 500; margin: 0 0 4px 0; color: #1a1a1a; }
+  .detail-dev { font-size: 13px; color: #6ea100; margin: 0 0 6px 0; }
+  .detail-stars { font-size: 13px; color: #f0a72c; }
+  .detail-meta { font-size: 11px; color: #9a9a9a; margin-top: 3px; }
+
+  /* ===== GALLERIA SCREENSHOT ===== */
+  .screenshot-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 12px;
+    border-bottom: 1px solid #e6e6e4;
+    -webkit-overflow-scrolling: touch;
+  }
+  .screenshot-strip img {
+    height: 130px;
+    width: auto;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    flex-shrink: 0;
+  }
+
+  /* pulsante glossy verde in stile Android 2.x */
+  .download-bar {
+    display: flex;
+    justify-content: center;
+    padding: 14px;
+    border-bottom: 1px solid #e6e6e4;
+    background: #fafaf8;
+  }
+  .download-btn {
+    background: linear-gradient(#a8d64a 0%, #8ec02a 48%, #7fae1e 50%, #729c19 100%);
+    border: 1px solid #5c7e12;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+  }
+  .download-btn:active { opacity: 0.85; transform: translateY(1px); }
+  .download-btn.disabled {
+    background: linear-gradient(#dedede, #c8c8c8);
+    border-color: #aaaaaa;
+    color: #888888;
+    text-shadow: none;
+    box-shadow: none;
+  }
+
+  /* badge prezzo rosso in stile Gameloft/wapshop, usato per contenuti a pagamento */
+  .price-badge {
+    display: inline-block;
+    background: linear-gradient(#e2544a, #c0392b);
+    border: 1px solid #9c2a1f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+  }
+
+  .detail-section { padding: 12px; border-bottom: 1px solid #e6e6e4; }
+  .detail-section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #9a9a9a;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+  .detail-section p { font-size: 13px; line-height: 1.5; margin: 0; color: #3a3a3a; }
+  .info-grid { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+  .info-grid div { font-size: 12px; color: #6e6e6e; }
+  .info-grid b { display: block; color: #222; font-size: 13px; font-weight: 500; }
+
+
+  /* ============================================================
+     PLAYER TRAILER CUSTOM (skin ricreata dall'immagine di riferimento)
+     ============================================================ */
+  .player-view { display: none; background: #000000; }
+  .player-view.active { display: block; }
+
+  .player-header {
+    background: #1c1c1c;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+  }
+  .player-header .back-btn { color: #e2544a; }
+
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+  }
+  .video-wrap iframe {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+    pointer-events: none; /* i controlli nativi di YouTube restano nascosti, si usa solo la skin custom */
+  }
+
+  /* barra di controllo: metallo grigio con bordi lucidi, come nell'immagine */
+  .player-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(#e9e9e9, #b9b9b9 45%, #a3a3a3 46%, #cfcfcf);
+    border-top: 1px solid #eee;
+    padding: 6px 8px;
+  }
+  .pbtn {
+    width: 26px; height: 24px;
+    border-radius: 3px;
+    background: linear-gradient(#fdfdfd, #d6d6d6 45%, #bcbcbc 46%, #e2e2e2);
+    border: 1px solid #8f8f8f;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .pbtn:active { background: linear-gradient(#c9c9c9, #b0b0b0); }
+  .pbtn svg { width: 13px; height: 13px; fill: #444; }
+
+  .ptrack-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+  .phandle {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, #9a9a9a 70%, #6e6e6e);
+    border: 1px solid #6e6e6e;
+    flex-shrink: 0;
+  }
+  .ptrack {
+    position: relative;
+    flex: 1;
+    height: 5px;
+    background: #6b6b6b;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    cursor: pointer;
+  }
+  .pfill {
+    position: absolute; top: 0; left: 0; height: 100%;
+    width: 0%;
+    background: linear-gradient(#ff5d52, #d81f12);
+    border-radius: 3px;
+  }
+  .pfill::after {
+    content: '';
+    position: absolute; right: -4px; top: 50%; transform: translateY(-50%);
+    width: 9px; height: 9px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, #e2544a 70%, #a02219);
+    border: 1px solid #a02219;
+  }
+
+  .ptime {
+    background: #111;
+    border: 1px solid #000;
+    border-radius: 3px;
+    color: #ff2d20;
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 6px;
+    flex-shrink: 0;
+    text-shadow: 0 0 4px rgba(255,45,32,0.6);
+    white-space: nowrap;
+  }
+
+  .pvol-wrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .pvol-track {
+    position: relative;
+    width: 46px;
+    height: 3px;
+    background: #7a7a7a;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5);
+    cursor: pointer;
+  }
+  .pvol-fill {
+    position: absolute; top: 0; left: 0; height: 100%;
+    width: 70%;
+    background: #4a4a4a;
+    border-radius: 2px;
+  }
+  .pvol-fill::after {
+    content: '';
+    position: absolute; right: -4px; top: 50%; transform: translateY(-50%);
+    width: 9px; height: 9px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, #9a9a9a 70%, #6e6e6e);
+    border: 1px solid #6e6e6e;
+  }
+
+  .trailer-title-bar {
+    background: #111;
+    color: #ccc;
+    font-size: 12.5px;
+    padding: 8px 10px;
+    border-bottom: 1px solid #000;
+  }
+
+  /* ============================================================
+     SCHERMATA "CRONOLOGIA DOWNLOAD" (ricreata dall'immagine di riferimento)
+     ============================================================ */
+  .download-view { display: none; background: #f4f4f2; flex: 1; flex-direction: column; }
+  .download-view.active { display: flex; }
+
+  .download-view-header {
+    background: #ffffff;
+    border-bottom: 1px solid #dcdcdc;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .download-history-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2b2b2b;
+    padding: 10px 12px 4px;
+  }
+
+  .dl-row {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e6e6e4;
+  }
+  .dl-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    color: #fff;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.12);
+  }
+  .dl-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .dl-info { flex: 1; min-width: 0; }
+  .dl-filename {
+    font-size: 14px;
+    color: #1a1a1a;
+    margin: 0 0 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dl-source {
+    font-size: 11.5px;
+    color: #8a8a8a;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dl-progress-wrap { padding: 0 12px 4px; background: #ffffff; }
+  .dl-track {
+    width: 100%;
+    height: 6px;
+    background: #d8d8d6;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .dl-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(#ffd94a, #f0b400);
+    transition: width 0.15s linear;
+  }
+  .dl-fill.indeterminate {
+    width: 40% !important;
+    background-image: linear-gradient(45deg, #f0b400 25%, #ffd94a 25%, #ffd94a 50%, #f0b400 50%, #f0b400 75%, #ffd94a 75%, #ffd94a 100%);
+    background-size: 20px 20px;
+    animation: dlstripes 0.6s linear infinite;
+  }
+  @keyframes dlstripes { 0% { background-position: 0 0; } 100% { background-position: 20px 0; } }
+  .dl-status {
+    padding: 5px 12px 12px;
+    background: #ffffff;
+    font-size: 11.5px;
+    color: #7c7c7c;
+    border-bottom: 1px solid #e6e6e4;
+  }
+  .dl-status.done { color: #6ea100; font-weight: 500; }
+
+  .dl-footer-note {
+    padding: 14px 16px;
+    font-size: 11.5px;
+    color: #9a9a9a;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span>Gameloft Store</span>
+  <span>3G &nbsp; <span id="clock">--:--</span></span>
+</div>
+
+<div class="phone">
+
+  <!-- HEADER -->
+  <div class="market-header">
+    <div class="market-logo">
+      <img class="bag-icon" src="https://static.wikia.nocookie.net/logopedia/images/2/27/Gameloft_Logo_%282010%3B_White_Version%3B_Horizontal_Version%29.png/revision/latest?cb=20151129131656" alt="Gameloft">
+      <span class="market-word" id="market-word">store</span>
+    </div>
+    <svg class="search-icon" id="search-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="10.5" cy="10.5" r="6.5"/>
+      <line x1="15.5" y1="15.5" x2="21" y2="21"/>
+    </svg>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="search-bar" id="search-bar">
+    <input type="text" id="search-input" placeholder="Cerca giochi..." autocomplete="off">
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" data-tab="games" id="tab-games">Giochi</div>
+    <div class="tab" data-tab="trailer" id="tab-trailer">Trailer</div>
+    <div class="tab" data-tab="downloads" id="tab-downloads">Download</div>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div class="app-list-view">
+    <div class="section-label" id="section-label">Featured</div>
+    <div class="app-list" id="app-list"></div>
+  </div>
+
+  <!-- DETAIL VIEW -->
+  <div class="detail" id="detail-view">
+    <div class="detail-header">
+      <div class="back-btn" id="back-btn">‹ store</div>
+    </div>
+
+    <div class="detail-top">
+      <div class="detail-icon" id="d-icon"></div>
+      <div>
+        <p class="detail-title" id="d-title"></p>
+        <p class="detail-dev" id="d-dev"></p>
+        <div class="detail-stars" id="d-stars"></div>
+        <div class="detail-meta" id="d-meta"></div>
+      </div>
+    </div>
+
+    <div class="download-bar">
+      <a class="download-btn" id="d-download-btn" rel="noopener">INSTALL</a>
+      <a class="download-btn" id="d-trailer-btn" style="margin-left:8px;background:linear-gradient(#5a5a5a,#2b2b2b);border-color:#111;">TRAILER</a>
+    </div>
+
+    <div class="screenshot-strip" id="d-screenshots"></div>
+
+    <div class="detail-section">
+      <h3 id="info-title">Info</h3>
+      <div class="info-grid">
+        <div><b id="d-size">-</b><span id="label-size">Dimensione</span></div>
+        <div><b id="d-version">-</b><span id="label-version">Versione</span></div>
+        <div><b id="d-category">-</b><span id="label-category">Categoria</span></div>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h3 id="desc-title">Descrizione</h3>
+      <p id="d-desc"></p>
+    </div>
+  </div>
+
+  <!-- TRAILER PLAYER VIEW -->
+  <div class="player-view" id="player-view">
+    <div class="player-header">
+      <div class="back-btn" id="player-back-btn">‹ store</div>
+    </div>
+
+    <div class="trailer-title-bar" id="trailer-title-bar">Trailer</div>
+
+    <div class="video-wrap">
+      <div id="yt-player"></div>
+    </div>
+
+    <div class="player-controls">
+      <div class="pbtn" id="p-playpause" title="Play/Pausa">
+        <svg id="icon-pause" viewBox="0 0 24 24"><rect x="5" y="4" width="5" height="16"/><rect x="14" y="4" width="5" height="16"/></svg>
+        <svg id="icon-play" viewBox="0 0 24 24" style="display:none"><polygon points="6,4 20,12 6,20"/></svg>
+      </div>
+      <div class="pbtn" id="p-restart" title="Ricomincia">
+        <svg viewBox="0 0 24 24"><rect x="5" y="4" width="2.5" height="16"/><polygon points="20,4 8,12 20,20"/></svg>
+      </div>
+
+      <div class="ptrack-wrap">
+        <div class="phandle"></div>
+        <div class="ptrack" id="p-track">
+          <div class="pfill" id="p-fill"></div>
+        </div>
+        <div class="ptime"><span id="p-current">0:00</span> / <span id="p-duration">0:00</span></div>
+      </div>
+
+      <div class="pvol-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#444"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16.5 12c0-1.77-1-3.29-2.5-4.03v8.06c1.5-.74 2.5-2.26 2.5-4.03z"/></svg>
+        <div class="pvol-track" id="p-voltrack">
+          <div class="pvol-fill" id="p-volfill"></div>
+        </div>
+      </div>
+
+      <div class="pbtn" id="p-quality" title="Impostazioni">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 12c0-.4 0-.7-.1-1.1l2-1.6-2-3.4-2.3.9c-.6-.5-1.3-.9-2-1.2L14.2 3h-4.4l-.4 2.6c-.7.3-1.4.7-2 1.2l-2.3-.9-2 3.4 2 1.6c-.1.4-.1.7-.1 1.1s0 .7.1 1.1l-2 1.6 2 3.4 2.3-.9c.6.5 1.3.9 2 1.2l.4 2.6h4.4l.4-2.6c.7-.3 1.4-.7 2-1.2l2.3.9 2-3.4-2-1.6c.1-.4.1-.7.1-1.1z"/></svg>
+      </div>
+      <div class="pbtn" id="p-fullscreen" title="Schermo intero">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD HISTORY VIEW -->
+  <div class="download-view" id="download-view">
+    <div class="download-view-header">
+      <div class="back-btn" id="download-back-btn">‹ store</div>
+    </div>
+    <div class="download-history-title" id="download-history-title">Cronologia download</div>
+
+    <div class="dl-row">
+      <div class="dl-icon" id="dl-icon"></div>
+      <div class="dl-info">
+        <p class="dl-filename" id="dl-filename">-</p>
+        <p class="dl-source" id="dl-source">-</p>
+      </div>
+    </div>
+    <div class="dl-progress-wrap">
+      <div class="dl-track"><div class="dl-fill" id="dl-fill"></div></div>
+    </div>
+    <div class="dl-status" id="dl-status">-</div>
+
+    <div class="dl-footer-note" id="dl-footer-note"></div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   AGGIUNGI QUI I TUOI GIOCHI
+   - icon: emoji/lettera, oppure un link http a un'immagine (verrà mostrata come icona)
+   - color: colore di sfondo dell'icona (hex) - ignorato se icon è un link immagine
+   - price: "FREE" oppure un prezzo tipo "€2,99" (mostra badge rosso se non FREE)
+   - link: link diretto al file (Google Drive, archive.org, ecc.) - se lasci "#" il pulsante risulta disabilitato
+   - trailer: ID del video YouTube del trailer (la parte dopo "v=" nell'URL) - lascia "" se non disponibile
+   - screenshots: array di link immagine mostrati nella galleria della scheda di dettaglio - lascia [] se non disponibili
+   - category: lascia sempre "games" (il sito mostra solo giochi, niente app)
+   ============================================================ */
+const APPS = [
+  {
+    name: "Asphalt 8: Airborne",
+    dev: "Gameloft",
+    icon: "https://static.wikia.nocookie.net/asphalt/images/5/5b/A8_v2.0_icon.png/revision/latest?cb=20200704065107",
+    color: "#1a1a1a",
+    rating: 5,
+    price: "FREE",
+    category: "games",
+    size: "1.5 GB",
+    version: "2.0",
+    genre: "Corse",
+    desc: "LEAVE GRAVITY IN THE DUST The best arcade racing game series reaches a new turning point! Perform dynamic, high-speed aerial stunts in an intense driving experience powered by a brand-new physics engine! LUXURY DREAM CARS • More than 95 high-performance cars (80% NEW!) • Top licensed manufacturers and models like the Lamborghini Veneno, Bugatti Veyron, Ferrari FXX, Lamborghini Aventador and Pagani Zonda R • Newly recorded high-fidelity car motor sounds for realistic audio immersion GET AIRBORNE • Hit the ramps and take the race above • Perform barrel rolls and wild 360º jumps • Maneuver through the air, pulling stunts while racing NEW EXOTIC LOCATIONS • Race in 13 different settings like Venice, French Guiana, Iceland, the Nevada Desert, Dubai and other exciting locations! • All tracks available in original and mirror variations in Career mode • Discover plenty of hidden shortcuts NEW FEATURES FOR SPEED FREAKS • 9 seasons & more than 300 events in Career mode • Stunning visuals thanks to next-gen shaders, real-time geometry reflection & other amazing effects for a new simulation of speed! • A detailed damage system like nothing you've seen before • Check out the new Infected and Drift Gate game modes SIMULTANEOUS MULTIPLAYER & GHOST CHALLENGES • Simultaneous multiplayer action for up to 12 real opponents! • Dare friends to asynchronous races in your favorite cars • Compare scores on the new leaderboards with friends and drivers around the world • Share your racing achievements and prove that you're the ultimate speed machine MUSIC TO REV YOUR SOUL • A heart-thumping mix of amazing licensed music for your game • Featuring real tracks from Bloc Party, Mutemath & The Crystal Method! A game for fans of extreme arcade racing, with real dream cars and phenomenal graphics that will also please racing simulation enthusiasts.",
+    screenshots: [
+      "https://web.archive.org/web/20151022214342im_/https://store-images.microsoft.com/image/apps.11182.9007199266242715.6955419d-1916-4572-bbd0-e623f8b00789.10e8ed5b-b04f-4d0d-950a-9ac972e3d856?w=712&h=400&mode=letterbox&background=black",
+      "https://web.archive.org/web/20151022214342im_/https://store-images.microsoft.com/image/apps.51606.9007199266242715.a9fc72ba-6594-49b6-b54d-155b4162ff0d.6f7367e3-92ad-4402-953d-20d2482507f9?w=712&h=400&mode=letterbox&background=black",
+      "https://web.archive.org/web/20151022214344im_/https://store-images.microsoft.com/image/apps.1539.9007199266242715.36363ed4-0436-4d62-b95a-169b0f908a78.281f3449-0ba1-417d-a677-af43ecf9a144?w=712&h=400&mode=letterbox&background=black",
+      "https://web.archive.org/web/20151022214345im_/https://store-images.microsoft.com/image/apps.45546.9007199266242715.0080bc67-a61c-4842-80e7-1fb1bd18ad31.ed46c6b4-37bd-4904-b98a-870c0dced13f?w=712&h=400&mode=letterbox&background=black"
+    ],
+    link: "https://archive.org/download/asphalt-8-v-2.0.0e.apk/Asphalt_8_v2.0.0e.apk.zip/Asphalt_8_v2.0.0e.apk",
+    trailer: ""
+  },
+  {
+    name: "Bonsai Blast",
+    dev: "Glu Mobile",
+    icon: "🌳",
+    color: "#4caf50",
+    rating: 5,
+    price: "FREE",
+    category: "games",
+    size: "2.1 MB",
+    version: "1.4.2",
+    genre: "Arcade",
+    desc: "Fai esplodere le sfere colorate in questo classico puzzle arcade. Punta, mira e libera il bonsai!",
+    link: "#",
+    trailer: ""
+  },
+  {
+    name: "Asphalt 6: Adrenaline HD",
+    dev: "Gameloft",
+    icon: "🏎️",
+    color: "#c0392b",
+    rating: 5,
+    price: "FREE",
+    category: "games",
+    size: "24 MB",
+    version: "1.0.0",
+    genre: "Corse",
+    desc: "Corse ad alta velocità su supercar in quindici città reali di tutto il mondo.",
+    link: "#",
+    trailer: ""
+  },
+  {
+    name: "The Oregon Trail HD",
+    dev: "Gameloft",
+    icon: "🐎",
+    color: "#8d6e63",
+    rating: 4,
+    price: "FREE",
+    category: "games",
+    size: "18 MB",
+    version: "1.0.3",
+    genre: "Avventura",
+    desc: "Guida la tua carovana lungo lo storico Oregon Trail affrontando ogni pericolo del viaggio.",
+    link: "#",
+    trailer: ""
+  },
+  {
+    name: "Modern Combat 3: Fallen Nation",
+    dev: "Gameloft",
+    icon: "🔫",
+    color: "#37474f",
+    rating: 4,
+    price: "FREE",
+    category: "games",
+    size: "29 MB",
+    version: "1.1.0",
+    genre: "Sparatutto",
+    desc: "Combatti sul campo di battaglia globale in questo sparatutto in prima persona.",
+    link: "#",
+    trailer: ""
+  }
+];
+
+/* ============================================================
+   MULTILINGUA: la lingua viene rilevata automaticamente dal
+   dispositivo/browser del visitatore (navigator.language).
+   Per aggiungere una lingua, copia un blocco e traduci i valori.
+   ============================================================ */
+const translations = {
+  it: {
+    storeWord: "store", searchPlaceholder: "Cerca giochi...",
+    tabGames: "Giochi", tabTrailer: "Trailer", tabDownloads: "Download",
+    sectionGames: "Featured", sectionTrailer: "Guarda i trailer", sectionDownloads: "Tutti i download",
+    back: "store", install: "INSTALL", noLink: "LINK NON DISPONIBILE", trailerBtn: "TRAILER",
+    infoTitle: "Info", descTitle: "Descrizione", sizeLabel: "Dimensione", versionLabel: "Versione", categoryLabel: "Categoria",
+    free: "GRATIS", installed: "Installato",
+    noGames: "Nessun gioco trovato", noTrailers: "Nessun trailer disponibile",
+    trailerOfficial: "Trailer ufficiale", trailerMissing: "trailer non ancora aggiunto",
+    downloadHistory: "Cronologia download", downloading: "Download in corso...", completed: "Download completato",
+    connecting: "Connessione al server...", fallbackMsg: "Download avviato nel browser",
+    footerNote: "Il file verrà scaricato dal tuo browser. Controlla la barra delle notifiche per aprirlo al termine."
+  },
+  en: {
+    storeWord: "store", searchPlaceholder: "Search games...",
+    tabGames: "Games", tabTrailer: "Trailers", tabDownloads: "Downloads",
+    sectionGames: "Featured", sectionTrailer: "Watch trailers", sectionDownloads: "All downloads",
+    back: "store", install: "INSTALL", noLink: "LINK UNAVAILABLE", trailerBtn: "TRAILER",
+    infoTitle: "Info", descTitle: "Description", sizeLabel: "Size", versionLabel: "Version", categoryLabel: "Category",
+    free: "FREE", installed: "Installed",
+    noGames: "No games found", noTrailers: "No trailers available",
+    trailerOfficial: "Official trailer", trailerMissing: "trailer not added yet",
+    downloadHistory: "Download history", downloading: "Downloading...", completed: "Download complete",
+    connecting: "Connecting to server...", fallbackMsg: "Download started in browser",
+    footerNote: "The file will be downloaded by your browser. Check your notification bar to open it once finished."
+  },
+  es: {
+    storeWord: "store", searchPlaceholder: "Buscar juegos...",
+    tabGames: "Juegos", tabTrailer: "Tráilers", tabDownloads: "Descargas",
+    sectionGames: "Destacados", sectionTrailer: "Ver tráilers", sectionDownloads: "Todas las descargas",
+    back: "store", install: "INSTALAR", noLink: "ENLACE NO DISPONIBLE", trailerBtn: "TRÁILER",
+    infoTitle: "Info", descTitle: "Descripción", sizeLabel: "Tamaño", versionLabel: "Versión", categoryLabel: "Categoría",
+    free: "GRATIS", installed: "Instalado",
+    noGames: "No se encontraron juegos", noTrailers: "No hay tráilers disponibles",
+    trailerOfficial: "Tráiler oficial", trailerMissing: "tráiler aún no añadido",
+    downloadHistory: "Historial de descargas", downloading: "Descargando...", completed: "Descarga completada",
+    connecting: "Conectando con el servidor...", fallbackMsg: "Descarga iniciada en el navegador",
+    footerNote: "El archivo se descargará con tu navegador. Revisa la barra de notificaciones para abrirlo al terminar."
+  },
+  fr: {
+    storeWord: "store", searchPlaceholder: "Rechercher des jeux...",
+    tabGames: "Jeux", tabTrailer: "Bandes-annonces", tabDownloads: "Téléchargements",
+    sectionGames: "En vedette", sectionTrailer: "Voir les bandes-annonces", sectionDownloads: "Tous les téléchargements",
+    back: "store", install: "INSTALLER", noLink: "LIEN INDISPONIBLE", trailerBtn: "BANDE-ANNONCE",
+    infoTitle: "Infos", descTitle: "Description", sizeLabel: "Taille", versionLabel: "Version", categoryLabel: "Catégorie",
+    free: "GRATUIT", installed: "Installé",
+    noGames: "Aucun jeu trouvé", noTrailers: "Aucune bande-annonce disponible",
+    trailerOfficial: "Bande-annonce officielle", trailerMissing: "bande-annonce pas encore ajoutée",
+    downloadHistory: "Historique des téléchargements", downloading: "Téléchargement en cours...", completed: "Téléchargement terminé",
+    connecting: "Connexion au serveur...", fallbackMsg: "Téléchargement démarré dans le navigateur",
+    footerNote: "Le fichier sera téléchargé par votre navigateur. Consultez la barre de notifications pour l'ouvrir une fois terminé."
+  },
+  de: {
+    storeWord: "store", searchPlaceholder: "Spiele suchen...",
+    tabGames: "Spiele", tabTrailer: "Trailer", tabDownloads: "Downloads",
+    sectionGames: "Empfohlen", sectionTrailer: "Trailer ansehen", sectionDownloads: "Alle Downloads",
+    back: "store", install: "INSTALLIEREN", noLink: "LINK NICHT VERFÜGBAR", trailerBtn: "TRAILER",
+    infoTitle: "Info", descTitle: "Beschreibung", sizeLabel: "Größe", versionLabel: "Version", categoryLabel: "Kategorie",
+    free: "KOSTENLOS", installed: "Installiert",
+    noGames: "Keine Spiele gefunden", noTrailers: "Keine Trailer verfügbar",
+    trailerOfficial: "Offizieller Trailer", trailerMissing: "Trailer noch nicht hinzugefügt",
+    downloadHistory: "Downloadverlauf", downloading: "Wird heruntergeladen...", completed: "Download abgeschlossen",
+    connecting: "Verbindung zum Server...", fallbackMsg: "Download im Browser gestartet",
+    footerNote: "Die Datei wird von deinem Browser heruntergeladen. Prüfe die Benachrichtigungsleiste, um sie zu öffnen."
+  },
+  pt: {
+    storeWord: "store", searchPlaceholder: "Buscar jogos...",
+    tabGames: "Jogos", tabTrailer: "Trailers", tabDownloads: "Downloads",
+    sectionGames: "Em destaque", sectionTrailer: "Ver trailers", sectionDownloads: "Todos os downloads",
+    back: "store", install: "INSTALAR", noLink: "LINK INDISPONÍVEL", trailerBtn: "TRAILER",
+    infoTitle: "Info", descTitle: "Descrição", sizeLabel: "Tamanho", versionLabel: "Versão", categoryLabel: "Categoria",
+    free: "GRÁTIS", installed: "Instalado",
+    noGames: "Nenhum jogo encontrado", noTrailers: "Nenhum trailer disponível",
+    trailerOfficial: "Trailer oficial", trailerMissing: "trailer ainda não adicionado",
+    downloadHistory: "Histórico de downloads", downloading: "Baixando...", completed: "Download concluído",
+    connecting: "Conectando ao servidor...", fallbackMsg: "Download iniciado no navegador",
+    footerNote: "O arquivo será baixado pelo seu navegador. Verifique a barra de notificações para abri-lo ao terminar."
+  }
+};
+
+const detectedLang = (navigator.language || 'it').slice(0, 2).toLowerCase();
+const LANG = translations[detectedLang] ? detectedLang : 'en';
+const T = translations[LANG];
+document.documentElement.lang = LANG;
+
+function applyTranslations() {
+  document.getElementById('market-word').textContent = T.storeWord;
+  document.getElementById('search-input').placeholder = T.searchPlaceholder;
+  document.getElementById('tab-games').textContent = T.tabGames;
+  document.getElementById('tab-trailer').textContent = T.tabTrailer;
+  document.getElementById('tab-downloads').textContent = T.tabDownloads;
+  document.getElementById('section-label').textContent = T.sectionGames;
+  document.getElementById('back-btn').textContent = '‹ ' + T.back;
+  document.getElementById('player-back-btn').textContent = '‹ ' + T.back;
+  document.getElementById('download-back-btn').textContent = '‹ ' + T.back;
+  document.getElementById('d-trailer-btn').textContent = T.trailerBtn;
+  document.getElementById('info-title').textContent = T.infoTitle;
+  document.getElementById('desc-title').textContent = T.descTitle;
+  document.getElementById('label-size').textContent = T.sizeLabel;
+  document.getElementById('label-version').textContent = T.versionLabel;
+  document.getElementById('label-category').textContent = T.categoryLabel;
+  document.getElementById('download-history-title').textContent = T.downloadHistory;
+  document.getElementById('dl-footer-note').textContent = T.footerNote;
+}
+
+const listEl = document.getElementById('app-list');
+const tabs = document.querySelectorAll('.tab');
+const listView = document.querySelector('.app-list-view');
+const detailView = document.getElementById('detail-view');
+const sectionLabel = document.getElementById('section-label');
+const searchToggle = document.getElementById('search-toggle');
+const searchBar = document.getElementById('search-bar');
+const searchInput = document.getElementById('search-input');
+
+let currentTab = 'games';
+let currentQuery = '';
+let currentApp = null;
+
+applyTranslations();
+
+function starMarkup(n) {
+  let s = '';
+  for (let i = 0; i < 5; i++) s += i < n ? '★' : '<span class="empty">★</span>';
+  return s;
+}
+
+function priceMarkup(price) {
+  if (price === 'FREE') return `<div class="app-price free">${T.free}</div>`;
+  if (price === 'Installed') return `<div class="app-price installed">${T.installed}</div>`;
+  return `<div class="app-price">${price}</div>`;
+}
+
+function iconMarkup(app) {
+  if (app.icon && app.icon.startsWith('http')) {
+    return `<img src="${app.icon}" alt="${app.name}">`;
+  }
+  return app.icon;
+}
+function iconBg(app) {
+  if (app.icon && app.icon.startsWith('http')) return '#e6e6e6';
+  return app.color === '#ffffff' ? '#ffffff' : app.color;
+}
+function iconFg(app) {
+  return app.color === '#ffffff' ? '#4caf50' : '#fff';
+}
+
+function renderList(filter) {
+  listEl.innerHTML = '';
+  let items;
+  if (filter === 'downloads') items = APPS;
+  else if (filter === 'trailer') items = APPS.filter(a => a.trailer);
+  else items = APPS.filter(a => a.category === filter);
+
+  if (currentQuery.trim() !== '') {
+    const q = currentQuery.trim().toLowerCase();
+    items = items.filter(a =>
+      a.name.toLowerCase().includes(q) || a.dev.toLowerCase().includes(q)
+    );
+  }
+
+  if (items.length === 0) {
+    const msg = filter === 'trailer' ? T.noTrailers : T.noGames;
+    listEl.innerHTML = `<div style="padding:20px;text-align:center;color:#999;font-size:13px;">${msg}</div>`;
+    return;
+  }
+
+  items.forEach(app => {
+    const row = document.createElement('div');
+    row.className = 'app-row';
+    const rightSide = filter === 'trailer'
+      ? `<div class="app-side"><div class="app-price" style="color:#c0392b;">▶ PLAY</div></div>`
+      : `<div class="app-side">${priceMarkup(app.price)}<div class="stars">${starMarkup(app.rating)}</div></div>`;
+    row.innerHTML = `
+      <div class="app-icon" style="background:${iconBg(app)};color:${iconFg(app)}">${iconMarkup(app)}</div>
+      <div class="app-info">
+        <p class="app-name">${app.name}</p>
+        <p class="app-dev">${app.dev}</p>
+      </div>
+      ${rightSide}
+    `;
+    row.addEventListener('click', () => {
+      if (filter === 'trailer') openPlayer(app);
+      else showDetail(app);
+    });
+    listEl.appendChild(row);
+  });
+}
+
+function showDetail(app) {
+  const iconEl = document.getElementById('d-icon');
+  iconEl.style.background = iconBg(app);
+  iconEl.style.color = iconFg(app);
+  iconEl.innerHTML = iconMarkup(app);
+
+  document.getElementById('d-title').textContent = app.name;
+  document.getElementById('d-dev').textContent = app.dev;
+  document.getElementById('d-stars').innerHTML = starMarkup(app.rating);
+
+  let metaHtml = app.price === 'FREE' ? '' : (app.price === 'Installed' ? 'Installed' : `<span class="price-badge">${app.price}</span>`);
+  document.getElementById('d-meta').innerHTML = metaHtml;
+
+  document.getElementById('d-size').textContent = app.size;
+  document.getElementById('d-version').textContent = app.version;
+  document.getElementById('d-category').textContent = app.genre;
+  document.getElementById('d-desc').textContent = app.desc;
+
+  const shotsEl = document.getElementById('d-screenshots');
+  if (app.screenshots && app.screenshots.length > 0) {
+    shotsEl.style.display = 'flex';
+    shotsEl.innerHTML = app.screenshots.map(src => `<img src="${src}" alt="${app.name} screenshot">`).join('');
+  } else {
+    shotsEl.style.display = 'none';
+    shotsEl.innerHTML = '';
+  }
+
+  currentApp = app;
+  const btn = document.getElementById('d-download-btn');
+  if (!app.link || app.link === '#') {
+    btn.classList.add('disabled');
+    btn.removeAttribute('href');
+    btn.textContent = T.noLink;
+  } else {
+    btn.classList.remove('disabled');
+    btn.href = app.link;
+    btn.textContent = T.install;
+  }
+
+  const trailerBtn = document.getElementById('d-trailer-btn');
+  if (app.trailer) {
+    trailerBtn.style.display = 'inline-block';
+    trailerBtn.onclick = () => openPlayer(app);
+  } else {
+    trailerBtn.style.display = 'none';
+  }
+
+  listView.classList.add('hidden');
+  detailView.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+document.getElementById('back-btn').addEventListener('click', () => {
+  detailView.classList.remove('active');
+  listView.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentTab = tab.dataset.tab;
+    sectionLabel.textContent = currentTab === 'games' ? T.sectionGames
+      : currentTab === 'trailer' ? T.sectionTrailer
+      : T.sectionDownloads;
+    renderList(currentTab);
+  });
+});
+
+/* ===== RICERCA FUNZIONANTE ===== */
+searchToggle.addEventListener('click', () => {
+  searchBar.classList.toggle('active');
+  if (searchBar.classList.contains('active')) {
+    searchInput.focus();
+  } else {
+    currentQuery = '';
+    searchInput.value = '';
+    renderList(currentTab);
+  }
+});
+
+searchInput.addEventListener('input', (e) => {
+  currentQuery = e.target.value;
+  renderList(currentTab);
+});
+
+/* ===== OROLOGIO REALE ===== */
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  document.getElementById('clock').textContent = `${h}:${m}`;
+}
+updateClock();
+setInterval(updateClock, 1000 * 15);
+
+/* ============================================================
+   PLAYER TRAILER CUSTOM
+   Il file .swf caricato non può essere usato: Adobe Flash è stato
+   dismesso nel 2020 e nessun browser lo esegue più. Questa skin
+   ricrea lo stesso aspetto (barra nera, controlli metallizzati,
+   barra rossa, contatore LCD) ma pilota un vero video di YouTube
+   tramite l'IFrame API ufficiale.
+   ============================================================ */
+const playerView = document.getElementById('player-view');
+const trailerTitleBar = document.getElementById('trailer-title-bar');
+let ytPlayer = null;
+let ytReady = false;
+let progressTimer = null;
+let pendingVideoId = null;
+
+// carica l'API IFrame di YouTube in modo asincrono
+const ytScript = document.createElement('script');
+ytScript.src = 'https://www.youtube.com/iframe_api';
+document.head.appendChild(ytScript);
+
+function onYouTubeIframeAPIReady() {
+  ytPlayer = new YT.Player('yt-player', {
+    height: '100%',
+    width: '100%',
+    playerVars: { controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1 },
+    events: {
+      onReady: () => {
+        ytReady = true;
+        if (pendingVideoId) { ytPlayer.loadVideoById(pendingVideoId); pendingVideoId = null; }
+        setPlayIcon(false);
+      },
+      onStateChange: (e) => {
+        if (e.data === YT.PlayerState.PLAYING) { setPlayIcon(false); startProgressTimer(); }
+        if (e.data === YT.PlayerState.PAUSED) { setPlayIcon(true); stopProgressTimer(); }
+        if (e.data === YT.PlayerState.ENDED) { setPlayIcon(true); stopProgressTimer(); }
+      }
+    }
+  });
+}
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+function fmtTime(sec) {
+  if (!isFinite(sec) || sec < 0) sec = 0;
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+
+function setPlayIcon(showPlay) {
+  document.getElementById('icon-play').style.display = showPlay ? 'block' : 'none';
+  document.getElementById('icon-pause').style.display = showPlay ? 'none' : 'block';
+}
+
+function startProgressTimer() {
+  stopProgressTimer();
+  progressTimer = setInterval(() => {
+    if (!ytPlayer || !ytPlayer.getCurrentTime) return;
+    const cur = ytPlayer.getCurrentTime();
+    const dur = ytPlayer.getDuration();
+    document.getElementById('p-fill').style.width = dur ? `${(cur / dur) * 100}%` : '0%';
+    document.getElementById('p-current').textContent = fmtTime(cur);
+    document.getElementById('p-duration').textContent = fmtTime(dur);
+  }, 500);
+}
+function stopProgressTimer() { clearInterval(progressTimer); }
+
+function openPlayer(app) {
+  trailerTitleBar.textContent = `${app.name} — ${T.trailerOfficial}`;
+  document.getElementById('p-fill').style.width = '0%';
+  document.getElementById('p-current').textContent = '0:00';
+  document.getElementById('p-duration').textContent = '0:00';
+
+  if (!app.trailer) {
+    trailerTitleBar.textContent = `${app.name} — ${T.trailerMissing}`;
+  } else if (ytReady) {
+    ytPlayer.loadVideoById(app.trailer);
+  } else {
+    pendingVideoId = app.trailer;
+  }
+
+  listView.classList.add('hidden');
+  detailView.classList.remove('active');
+  playerView.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+document.getElementById('player-back-btn').addEventListener('click', () => {
+  if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+  stopProgressTimer();
+  playerView.classList.remove('active');
+  listView.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+document.getElementById('p-playpause').addEventListener('click', () => {
+  if (!ytPlayer || !ytPlayer.getPlayerState) return;
+  const state = ytPlayer.getPlayerState();
+  if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
+  else ytPlayer.playVideo();
+});
+
+document.getElementById('p-restart').addEventListener('click', () => {
+  if (ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(0, true);
+});
+
+const pTrack = document.getElementById('p-track');
+pTrack.addEventListener('click', (e) => {
+  if (!ytPlayer || !ytPlayer.getDuration) return;
+  const rect = pTrack.getBoundingClientRect();
+  const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+  ytPlayer.seekTo(ytPlayer.getDuration() * ratio, true);
+});
+
+let currentVolume = 70;
+const pVolTrack = document.getElementById('p-voltrack');
+const pVolFill = document.getElementById('p-volfill');
+pVolFill.style.width = currentVolume + '%';
+pVolTrack.addEventListener('click', (e) => {
+  const rect = pVolTrack.getBoundingClientRect();
+  const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+  currentVolume = Math.round(ratio * 100);
+  pVolFill.style.width = currentVolume + '%';
+  if (ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(currentVolume);
+});
+
+document.getElementById('p-fullscreen').addEventListener('click', () => {
+  const wrap = document.querySelector('.video-wrap');
+  if (wrap.requestFullscreen) wrap.requestFullscreen();
+});
+
+/* ============================================================
+   SCHERMATA DI DOWNLOAD IN-PAGE (niente nuova scheda del browser)
+   Il download è REALE: usa fetch + ReadableStream per leggere i
+   byte man mano che arrivano dal server e mostrare l'avanzamento
+   vero (come la barra di download di Chrome), non simulato.
+   ============================================================ */
+const downloadView = document.getElementById('download-view');
+let dlAbortController = null;
+
+function guessFilename(url) {
+  try {
+    const clean = url.split('?')[0].split('#')[0];
+    const parts = clean.split('/').filter(Boolean);
+    return decodeURIComponent(parts[parts.length - 1] || 'file.apk');
+  } catch (e) { return 'file.apk'; }
+}
+function guessDomain(url) {
+  try { return new URL(url).hostname; } catch (e) { return url; }
+}
+function fmtBytes(n) {
+  if (!n || n <= 0) return '0 KB';
+  if (n < 1024 * 1024) return (n / 1024).toFixed(0) + ' KB';
+  return (n / (1024 * 1024)).toFixed(1) + ' MB';
+}
+function parseSizeToBytes(str) {
+  if (!str) return 0;
+  const m = String(str).match(/([\d.]+)\s*(KB|MB|GB)/i);
+  if (!m) return 0;
+  const num = parseFloat(m[1]);
+  const unit = m[2].toUpperCase();
+  const mult = unit === 'GB' ? 1024 ** 3 : unit === 'MB' ? 1024 ** 2 : 1024;
+  return Math.round(num * mult);
+}
+
+async function startDownload(app) {
+  if (!app || !app.link || app.link === '#') return;
+
+  document.getElementById('dl-icon').style.background = iconBg(app);
+  document.getElementById('dl-icon').style.color = iconFg(app);
+  document.getElementById('dl-icon').innerHTML = iconMarkup(app);
+  document.getElementById('dl-filename').textContent = guessFilename(app.link);
+  document.getElementById('dl-source').textContent = guessDomain(app.link);
+
+  const fill = document.getElementById('dl-fill');
+  const status = document.getElementById('dl-status');
+  fill.classList.remove('indeterminate');
+  fill.style.width = '0%';
+  status.classList.remove('done');
+  status.textContent = T.connecting;
+
+  listView.classList.add('hidden');
+  detailView.classList.remove('active');
+  playerView.classList.remove('active');
+  downloadView.classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (dlAbortController) dlAbortController.abort();
+  dlAbortController = new AbortController();
+
+  try {
+    const response = await fetch(app.link, { signal: dlAbortController.signal });
+    if (!response.ok || !response.body) throw new Error('Risposta non valida dal server');
+
+    const declaredLength = parseInt(response.headers.get('Content-Length') || '0', 10);
+    const estimatedTotal = parseSizeToBytes(app.size);
+    const total = declaredLength || estimatedTotal;
+
+    if (!total) fill.classList.add('indeterminate');
+
+    const reader = response.body.getReader();
+    const chunks = [];
+    let received = 0;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+      received += value.length;
+
+      if (total) {
+        const pct = Math.min(100, (received / total) * 100);
+        fill.style.width = pct.toFixed(1) + '%';
+        status.textContent = `${T.downloading} ${Math.floor(pct)}% (${fmtBytes(received)} / ${fmtBytes(total)})`;
+      } else {
+        status.textContent = `${T.downloading} ${fmtBytes(received)}`;
+      }
+    }
+
+    fill.classList.remove('indeterminate');
+    fill.style.width = '100%';
+
+    // assembla il file scaricato e lo consegna al browser (resta su questa pagina)
+    const blob = new Blob(chunks);
+    const blobUrl = URL.createObjectURL(blob);
+    const filename = guessFilename(app.link);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+
+    status.classList.add('done');
+    status.textContent = `${T.completed} — ${fmtBytes(received)}`;
+  } catch (err) {
+    if (err.name === 'AbortError') return;
+    // il server non permette la lettura via fetch (niente CORS): avvia comunque
+    // il download reale del file lasciando fare al browser, senza barra di progresso
+    fill.classList.remove('indeterminate');
+    fill.style.width = '100%';
+    status.classList.add('done');
+    status.textContent = T.fallbackMsg;
+
+    const a = document.createElement('a');
+    a.href = app.link;
+    a.download = guessFilename(app.link);
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+}
+
+document.getElementById('d-download-btn').addEventListener('click', (e) => {
+  if (e.currentTarget.classList.contains('disabled')) return;
+  e.preventDefault();
+  startDownload(currentApp);
+});
+
+document.getElementById('download-back-btn').addEventListener('click', () => {
+  if (dlAbortController) dlAbortController.abort();
+  downloadView.classList.remove('active');
+  listView.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+renderList('games');
+</script>
+
+</body>
+</html>
