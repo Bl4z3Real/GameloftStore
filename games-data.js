@@ -11,6 +11,29 @@
    ============================================================ */
 const APPS = [
   {
+    name: "Modern Combat 5: Blackout",
+    dev: "Gameloft",
+    icon: "https://jetta.vgmtreasurechest.com/soundtracks/modern-combat-5-blackout-android-ios-mobile-switch-windows-gamerip-2014/icon_big.png",
+    color: "#c0392b",
+    rating: 4,
+    price: "FREE",
+    category: "games",
+    size: "46 MB",
+    version: "1.2.0o",
+    genre: "Sparatutto",
+    desc: "•IMPORTANT• Modern Combat 5 requires an Internet connection and a touch input device.  > “It plays as good as it looks.” – IGN > “Amps everything up to the next level.” – 148Apps > “Sharp controls, impressive graphics.” – Pocket Gamer  Step into the action as the latest installment in the best FPS series raises the bar for shooter games once more! Create a squad, add your friends and test your individual and team skills against other squads!  Is single player your thing? Then step into a world on the brink of anarchy and shoot your way out of one dire situation after another to expose a lunatic who's trying to tear the world to shreds.   CHOOSE YOUR FAVORITE CLASS > 4 customizable classes that you can level up across single- and multiplayer > Find the play style the suits you: Assault, Heavy, Recon, or Sniper > Activate class-specific skills by earning and spending Skill Points  HIGH-POWERED MULTIPLAYER > Epic team clashes in Squad vs. Squad matches > Talk to other players in Global and Squad Chat > Individual and Squad leaderboards > Win cool rewards in the limited-time events  UNIFIED PROGRESSION > Accumulate XP and level up by playing both single-player missions and multiplayer matches > Unlock higher-tier weapons by mastering lower-tier ones > Customize the perfect weapon using a host of attachments  INTENSE SOLO CAMPAIGN > Fast-paced story missions with various challenges taking you from Tokyo to Venice > Play the new Spec-Ops missions for a real adrenaline rush > Flawless graphics, music and voice performances with seamlessly integrated cutscenes  HIGHLY CUSTOMIZABLE CONTROLS > Intuitive, highly customizable controls so you can play just the way you want",
+    screenshots: [
+      "https://play-lh.googleusercontent.com/S08HjFQ3aW_MHWd1o1p0J0BamKsvn9Ls7BWgK9-C2aWMZGM_MlFUcooejxxM4MEw3GBgdlJvuT-SsjU_qeXcpQ=w1052-h592-rw",
+      "https://play-lh.googleusercontent.com/Z8CeWd_ILyFEzMm0jltEPw5_Zfc82V4zRJUi-XvJWKLRJjBmQ_IDUsnmJqgy1uG2iH8LWBVwyknutysO1yCuJw=w1052-h592-rw",
+      "https://play-lh.googleusercontent.com/f0QkpXmTWe7e2zISdwXSxqTaLEdswmWTzT1LfWtYhA4nmKnowpyR0PAvQVISg1Yhlro35d1Tj9TkB2MlDfyn=w1052-h592-rw",
+      "https://play-lh.googleusercontent.com/k-IGxmihc1nfYBZdurS5DUYxc7wE4LZ-MhoP5_Hgfhp01iIRMOOItFO1k_HGagZtNL3WJ2uJVEo-oySAqow4kg=w1052-h592-rw",
+      "https://play-lh.googleusercontent.com/5cYwRiEhaI0-OyNVdNivE_q2s6FR00R62rgrxdWyUqzXaPbmFq1J9EkOlQyVlCM_UA2im2N4ZTmtbfeCG778Pw=w1052-h592-rw",
+      "https://play-lh.googleusercontent.com/x4qdz2h5lrDw-wuN4pGY5jneoPAYX_3fds3OPd8zbQrPIiKy7DMkxnPXNI6OVOXdezOuzN6tQ68w53IaFfFYmQ=w1052-h592-rw"
+    ],
+    link: "https://archive.org/download/ModernCombat5V1.2.0oOfflineAPKLOCK.com/Modern%20Combat%205%20v1.2.0o%20%5BOffline%5D%20APKLOCK.com.apk",
+    trailer: "Bmuzjul8wS4"
+  },
+  {
     name: "Asphalt 8: Airborne",
     dev: "Gameloft",
     icon: "https://web.archive.org/web/20250716215220/https://static.wikia.nocookie.net/asphalt/images/5/5b/A8_v2.0_icon.png/revision/latest?cb=20200704065107",
@@ -31,28 +54,20 @@ const APPS = [
     link: "https://archive.org/download/asphalt-8-v-2.0.0e.apk/Asphalt_8_v2.0.0e.apk.zip/Asphalt_8_v2.0.0e.apk",
     trailer: ""
   },
-    {
-    name: "Modern Combat 5: Blackout",
-    dev: "Gameloft",
-    icon: "https://jetta.vgmtreasurechest.com/soundtracks/modern-combat-5-blackout-android-ios-mobile-switch-windows-gamerip-2014/icon_big.png",
-    color: "#c0392b",
-    rating: 4,
+  {
+    name: "Bonsai Blast",
+    dev: "Glu Mobile",
+    icon: "🌳",
+    color: "#4caf50",
+    rating: 5,
     price: "FREE",
     category: "games",
-    size: "46 MB",
-    version: "1.2.0o",
-    genre: "Sparatutto",
-    desc: "•IMPORTANT• Modern Combat 5 requires an Internet connection and a touch input device.  > “It plays as good as it looks.” – IGN > “Amps everything up to the next level.” – 148Apps > “Sharp controls, impressive graphics.” – Pocket Gamer  Step into the action as the latest installment in the best FPS series raises the bar for shooter games once more! Create a squad, add your friends and test your individual and team skills against other squads!  Is single player your thing? Then step into a world on the brink of anarchy and shoot your way out of one dire situation after another to expose a lunatic who’s trying to tear the world to shreds.   CHOOSE YOUR FAVORITE CLASS > 4 customizable classes that you can level up across single- and multiplayer > Find the play style the suits you: Assault, Heavy, Recon, or Sniper > Activate class-specific skills by earning and spending Skill Points  HIGH-POWERED MULTIPLAYER > Epic team clashes in Squad vs. Squad matches > Talk to other players in Global and Squad Chat > Individual and Squad leaderboards > Win cool rewards in the limited-time events  UNIFIED PROGRESSION > Accumulate XP and level up by playing both single-player missions and multiplayer matches > Unlock higher-tier weapons by mastering lower-tier ones > Customize the perfect weapon using a host of attachments  INTENSE SOLO CAMPAIGN > Fast-paced story missions with various challenges taking you from Tokyo to Venice > Play the new Spec-Ops missions for a real adrenaline rush > Flawless graphics, music and voice performances with seamlessly integrated cutscenes  HIGHLY CUSTOMIZABLE CONTROLS > Intuitive, highly customizable controls so you can play just the way you want",
-    screenshots: [
-      "https://play-lh.googleusercontent.com/S08HjFQ3aW_MHWd1o1p0J0BamKsvn9Ls7BWgK9-C2aWMZGM_MlFUcooejxxM4MEw3GBgdlJvuT-SsjU_qeXcpQ=w1052-h592-rw",
-      "https://play-lh.googleusercontent.com/Z8CeWd_ILyFEzMm0jltEPw5_Zfc82V4zRJUi-XvJWKLRJjBmQ_IDUsnmJqgy1uG2iH8LWBVwyknutysO1yCuJw=w1052-h592-rw",
-      "https://play-lh.googleusercontent.com/f0QkpXmTWe7e2zISdwXSxqTaLEdswmWTzT1LfWtYhA4nmKnowpyR0PAvQVISg1Yhlro35d1Tj9TkB2MlDfyn=w1052-h592-rw",
-      "https://play-lh.googleusercontent.com/k-IGxmihc1nfYBZdurS5DUYxc7wE4LZ-MhoP5_Hgfhp01iIRMOOItFO1k_HGagZtNL3WJ2uJVEo-oySAqow4kg=w1052-h592-rw",
-      "https://play-lh.googleusercontent.com/5cYwRiEhaI0-OyNVdNivE_q2s6FR00R62rgrxdWyUqzXaPbmFq1J9EkOlQyVlCM_UA2im2N4ZTmtbfeCG778Pw=w1052-h592-rw",
-      "https://play-lh.googleusercontent.com/x4qdz2h5lrDw-wuN4pGY5jneoPAYX_3fds3OPd8zbQrPIiKy7DMkxnPXNI6OVOXdezOuzN6tQ68w53IaFfFYmQ=w1052-h592-rw"
-    ],
-    link: "https://archive.org/download/ModernCombat5V1.2.0oOfflineAPKLOCK.com/Modern%20Combat%205%20v1.2.0o%20%5BOffline%5D%20APKLOCK.com.apk",
-    trailer: "Bmuzjul8wS4"
+    size: "2.1 MB",
+    version: "1.4.2",
+    genre: "Arcade",
+    desc: "Fai esplodere le sfere colorate in questo classico puzzle arcade. Punta, mira e libera il bonsai!",
+    link: "#",
+    trailer: ""
   },
   {
     name: "Asphalt 6: Adrenaline HD",
