@@ -10,175 +10,238 @@
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
-    background: #e4e4e2;
+    background: #ffffff;
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #2b2b2b;
   }
   a { text-decoration: none; color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; }
 
   /* ===== HEADER ===== */
   header.top-header {
-    background: linear-gradient(#3a3a3a, #1c1c1c);
-    border-bottom: 1px solid #000;
-    padding: 0 24px;
     display: flex;
     align-items: center;
-    gap: 30px;
-    height: 64px;
-    position: sticky;
-    top: 0;
-    z-index: 50;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid #e2e2e2;
   }
-  .logo-wrap { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-  .logo-wrap img { height: 34px; }
-  .logo-wrap span {
-    font-size: 13px; color: #9a9a9a; text-transform: uppercase;
-    letter-spacing: 1.5px; border-left: 1px solid #555; padding-left: 10px;
+  .logo-wrap { display: flex; align-items: center; gap: 10px; }
+  .logo-chip {
+    background: #1c1c1c;
+    border-radius: 4px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
   }
+  .logo-chip img { height: 22px; display: block; }
+  .logo-wrap .store-word {
+    font-size: 26px;
+    font-weight: 400;
+    color: #9a9a9a;
+    letter-spacing: -0.5px;
+  }
+  .logo-wrap .store-word b { color: #c0392b; font-weight: 700; }
 
-  nav.main-nav { display: flex; gap: 4px; flex: 1; }
+  nav.main-nav { display: flex; gap: 4px; margin-left: 24px; }
   nav.main-nav .nav-item {
-    color: #ccc;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    padding: 10px 18px;
+    color: #666;
+    padding: 8px 14px;
     cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: color 0.15s;
+    border-radius: 3px;
   }
-  nav.main-nav .nav-item:hover { color: #fff; }
-  nav.main-nav .nav-item.active { color: #fff; border-bottom-color: #c0392b; }
+  nav.main-nav .nav-item:hover { background: #f2f2f2; color: #222; }
+  nav.main-nav .nav-item.active { color: #fff; background: #c0392b; }
 
-  .search-wrap { position: relative; width: 260px; flex-shrink: 0; }
+  .header-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+
+  .search-wrap { display: flex; width: 260px; }
   .search-wrap input {
-    width: 100%;
-    padding: 9px 14px 9px 36px;
-    border-radius: 20px;
-    border: 1px solid #555;
-    background: #2b2b2b;
-    color: #eee;
+    flex: 1;
+    padding: 8px 12px;
     font-size: 13.5px;
     font-family: "Roboto", Arial, sans-serif;
+    border: 1px solid #cfcfcf;
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    color: #333;
   }
-  .search-wrap input::placeholder { color: #888; }
-  .search-wrap input:focus { outline: none; border-color: #c0392b; }
-  .search-wrap svg {
-    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-    width: 15px; height: 15px; color: #888; pointer-events: none;
-  }
-
-  /* ===== HERO / FEATURED BAND ===== */
-  .hero-band {
-    background: linear-gradient(#e2544a, #a02219);
-    color: #fff;
-    padding: 14px 24px;
-    font-size: 15px;
-    font-weight: 500;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.2);
-  }
-
-  /* ===== MAIN GRID ===== */
-  main { max-width: 1280px; margin: 0 auto; padding: 28px 24px 60px; }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 20px;
-  }
-  .empty-note { padding: 60px 20px; text-align: center; color: #888; font-size: 15px; grid-column: 1 / -1; }
-
-  .card {
-    background: #fff;
-    border-radius: 8px;
-    border: 1px solid #d8d8d6;
-    padding: 18px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    border-color: #c0392b;
-  }
-  .card-icon {
-    width: 84px; height: 84px;
-    border-radius: 16px;
-    margin-bottom: 12px;
+  .search-wrap input:focus { outline: none; border-color: #999; }
+  .search-btn {
+    width: 34px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 38px;
-    color: #fff;
-    overflow: hidden;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 6px rgba(0,0,0,0.25);
-    border: 1px solid rgba(0,0,0,0.12);
+    background: #f0f0f0;
+    border: 1px solid #cfcfcf;
+    border-radius: 0 3px 3px 0;
+    color: #555;
+    flex-shrink: 0;
   }
-  .card-icon img { width: 100%; height: 100%; object-fit: cover; }
-  .card-name { font-size: 15px; font-weight: 500; margin: 0 0 3px; color: #1a1a1a; }
-  .card-dev { font-size: 12.5px; color: #888; margin: 0 0 8px; }
-  .card-stars { font-size: 12.5px; color: #f0a72c; margin-bottom: 6px; }
-  .card-stars .empty { color: #d9d9d9; }
-  .card-price { font-size: 13px; font-weight: 700; color: #1a1a1a; }
-  .card-price.free { color: #6ea100; }
+  .search-btn svg { width: 15px; height: 15px; }
 
-  .card-trailer-badge {
-    margin-top: 8px;
+  /* ===== HERO CAROUSEL (scorrimento reale) ===== */
+  .hero-wrap { position: relative; overflow: hidden; height: 300px; background: #dcdcdc; }
+  .hero-track {
+    display: flex;
+    height: 100%;
+  }
+  .hero-track.animate { transition: transform 0.7s ease; }
+  .hero-slide {
+    flex: 0 0 70%;
+    height: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.4s, filter 0.4s;
+  }
+  .hero-slide.side { flex: 0 0 15%; opacity: 0.4; filter: brightness(0.6) grayscale(0.15); }
+  .hero-slide .hero-caption {
+    position: absolute; left: 20px; bottom: 16px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    letter-spacing: 1px;
+  }
+  .hero-dots {
+    position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px; z-index: 5;
+  }
+  .hero-dots span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+  }
+  .hero-dots span.active { background: #fff; }
+  .hero-empty {
+    display: flex; align-items: center; justify-content: center;
+    height: 100%; color: #999; font-size: 14px;
+  }
+
+  /* ===== CATEGORIES / TABS BAR (texture a righe diagonali come nell'originale) ===== */
+  .cat-tabs-bar { display: flex; border-bottom: 3px solid #c0392b; }
+  .cat-label {
+    flex: 0 0 220px;
+    background-color: #444;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0.09) 0px,
+      rgba(255,255,255,0.09) 5px,
+      transparent 5px,
+      transparent 10px
+    );
+    color: #fff;
     font-size: 12px;
     font-weight: 700;
-    color: #c0392b;
+    letter-spacing: 0.6px;
+    padding: 11px 16px;
+    text-transform: uppercase;
   }
+  .view-tabs { display: flex; align-items: flex-end; padding-left: 4px; flex: 1; }
+  .view-tab {
+    padding: 11px 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: #888;
+    background-color: #e4e4e2;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0.55) 0px,
+      rgba(255,255,255,0.55) 5px,
+      transparent 5px,
+      transparent 10px
+    );
+    cursor: pointer;
+    border-right: 1px solid #d2d2d0;
+  }
+  .view-tab.active { color: #1a1a1a; background: #fff; background-image: none; }
+
+  /* ===== LAYOUT: SIDEBAR + GRID ===== */
+  .layout { display: flex; align-items: flex-start; }
+  .sidebar { flex: 0 0 220px; border-right: 1px solid #e6e6e4; padding-bottom: 40px; }
+  .sidebar-section { padding: 18px 16px 6px; }
+  .sidebar-heading {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 15px; font-weight: 700; color: #1a1a1a;
+    padding: 4px 0 10px;
+  }
+  .sidebar-heading .chev { color: #c0392b; font-size: 13px; }
+  .sidebar-sub { padding-left: 2px; border-left: 2px solid #f0f0f0; margin-left: 2px; }
+  .sidebar-sub a {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: #555;
+    padding: 8px 4px 8px 12px;
+    cursor: pointer;
+  }
+  .sidebar-sub a:hover { color: #c0392b; background: #fafafa; }
+  .sidebar-sub a.active { color: #c0392b; font-weight: 700; }
+  .sidebar-sub a .chev { font-size: 11px; color: #ccc; }
+
+  main.content { flex: 1; padding: 22px 24px; min-width: 0; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px 20px;
+  }
+  .empty-note { padding: 60px 20px; text-align: center; color: #888; font-size: 14px; grid-column: 1 / -1; }
+
+  .card { cursor: pointer; }
+  .card-icon {
+    width: 72px; height: 72px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; color: #fff;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.12);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .card-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .card-name {
+    font-size: 13.5px; font-weight: 500; color: #1a1a1a;
+    margin: 0 0 2px; line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .card-dev { font-size: 10.5px; font-weight: 700; letter-spacing: 0.3px; color: #999; text-transform: uppercase; margin: 0 0 8px; }
+
+  .card-btn {
+    display: inline-block;
+    background: linear-gradient(#fafafa, #e2e2e2);
+    border: 1px solid #b8b8b8;
+    border-radius: 3px;
+    color: #333;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 6px 14px;
+    text-transform: uppercase;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+  }
+  .card-btn:hover { background: linear-gradient(#fff, #ececec); }
+  .card-btn.free-btn { color: #6ea100; }
 
   /* ===== MODAL OVERLAY (dettaglio / trailer / download) ===== */
   .overlay {
     display: none;
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background: rgba(0,0,0,0.6);
     z-index: 200;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: flex-start; justify-content: center;
     padding: 40px 20px;
     overflow-y: auto;
   }
   .overlay.active { display: flex; }
-
-  .modal {
-    background: #fff;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 720px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  }
-  .modal-header {
-    background: linear-gradient(#3a3a3a, #1c1c1c);
-    padding: 10px 16px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  .modal-close {
-    color: #ccc;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 4px 10px;
-  }
+  .modal { background: #fff; border-radius: 6px; width: 100%; max-width: 720px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .modal-header { background: linear-gradient(#3a3a3a, #1c1c1c); padding: 10px 16px; display: flex; justify-content: flex-end; }
+  .modal-close { color: #ccc; font-size: 13px; font-weight: 500; cursor: pointer; padding: 4px 10px; }
   .modal-close:hover { color: #fff; }
-
-  .modal-top {
-    display: flex;
-    gap: 18px;
-    padding: 22px;
-    border-bottom: 1px solid #e6e6e4;
-  }
+  .modal-top { display: flex; gap: 18px; padding: 22px; border-bottom: 1px solid #e6e6e4; }
   .modal-icon {
-    width: 96px; height: 96px;
-    border-radius: 16px;
-    flex-shrink: 0;
+    width: 96px; height: 96px; border-radius: 16px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    font-size: 42px; color: #fff;
-    overflow: hidden;
+    font-size: 42px; color: #fff; overflow: hidden;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 6px rgba(0,0,0,0.25);
     border: 1px solid rgba(0,0,0,0.12);
   }
@@ -186,43 +249,19 @@
   .modal-title { font-size: 22px; font-weight: 500; margin: 0 0 4px; }
   .modal-dev { font-size: 14px; color: #6ea100; margin: 0 0 8px; }
   .modal-stars { font-size: 14px; color: #f0a72c; }
+  .modal-stars .empty { color: #d9d9d9; }
   .modal-meta { font-size: 12px; color: #9a9a9a; margin-top: 4px; }
-
   .modal-buttons { display: flex; gap: 10px; padding: 18px 22px; border-bottom: 1px solid #e6e6e4; }
-  .btn {
-    border: none; cursor: pointer;
-    font-family: "Roboto", Arial, sans-serif;
-    font-weight: 700; font-size: 13.5px; letter-spacing: 0.4px;
-    text-transform: uppercase;
-    padding: 11px 24px;
-    border-radius: 5px;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.15);
-  }
-  .btn-install {
-    background: linear-gradient(#a8d64a 0%, #8ec02a 48%, #7fae1e 50%, #729c19 100%);
-    border: 1px solid #5c7e12;
-    color: #fff;
-  }
+  .btn { border: none; cursor: pointer; font-family: "Roboto", Arial, sans-serif; font-weight: 700; font-size: 13.5px; letter-spacing: 0.4px; text-transform: uppercase; padding: 11px 24px; border-radius: 5px; text-shadow: 0 -1px 0 rgba(0,0,0,0.15); }
+  .btn-install { background: linear-gradient(#a8d64a 0%, #8ec02a 48%, #7fae1e 50%, #729c19 100%); border: 1px solid #5c7e12; color: #fff; }
   .btn-install.disabled { background: linear-gradient(#dedede,#c8c8c8); border-color:#aaa; color:#888; text-shadow:none; cursor: default; }
   .btn-trailer { background: linear-gradient(#5a5a5a,#2b2b2b); border: 1px solid #111; color: #fff; }
-  .price-badge {
-    display: inline-block; background: linear-gradient(#e2544a, #c0392b);
-    border: 1px solid #9c2a1f; color: #fff; font-size: 11px; font-weight: 700;
-    padding: 3px 8px; border-radius: 3px; text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
-  }
-
-  .modal-screenshots {
-    display: flex; gap: 10px; overflow-x: auto;
-    padding: 18px 22px; border-bottom: 1px solid #e6e6e4;
-  }
+  .price-badge { display: inline-block; background: linear-gradient(#e2544a, #c0392b); border: 1px solid #9c2a1f; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 3px; text-shadow: 0 -1px 0 rgba(0,0,0,0.2); }
+  .modal-screenshots { display: flex; gap: 10px; overflow-x: auto; padding: 18px 22px; border-bottom: 1px solid #e6e6e4; }
   .modal-screenshots img { height: 190px; border-radius: 5px; border: 1px solid #ddd; flex-shrink: 0; }
-
   .modal-section { padding: 18px 22px; border-bottom: 1px solid #e6e6e4; }
   .modal-section:last-child { border-bottom: none; }
-  .modal-section h3 {
-    font-size: 11.5px; text-transform: uppercase; color: #9a9a9a;
-    margin: 0 0 8px; letter-spacing: 0.5px; font-weight: 700;
-  }
+  .modal-section h3 { font-size: 11.5px; text-transform: uppercase; color: #9a9a9a; margin: 0 0 8px; letter-spacing: 0.5px; font-weight: 700; }
   .modal-section p { font-size: 14px; line-height: 1.6; margin: 0; color: #3a3a3a; }
   .info-grid { display: flex; gap: 26px; flex-wrap: wrap; }
   .info-grid div { font-size: 12.5px; color: #6e6e6e; }
@@ -232,37 +271,16 @@
   #trailer-modal .modal { max-width: 860px; }
   .video-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
   .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
-
-  .player-controls {
-    display: flex; align-items: center; gap: 8px;
-    background: linear-gradient(#e9e9e9, #b9b9b9 45%, #a3a3a3 46%, #cfcfcf);
-    border-top: 1px solid #eee;
-    padding: 8px 10px;
-  }
-  .pbtn {
-    width: 30px; height: 28px; border-radius: 3px;
-    background: linear-gradient(#fdfdfd, #d6d6d6 45%, #bcbcbc 46%, #e2e2e2);
-    border: 1px solid #8f8f8f;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; flex-shrink: 0;
-  }
+  .player-controls { display: flex; align-items: center; gap: 8px; background: linear-gradient(#e9e9e9, #b9b9b9 45%, #a3a3a3 46%, #cfcfcf); border-top: 1px solid #eee; padding: 8px 10px; }
+  .pbtn { width: 30px; height: 28px; border-radius: 3px; background: linear-gradient(#fdfdfd, #d6d6d6 45%, #bcbcbc 46%, #e2e2e2); border: 1px solid #8f8f8f; box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
   .pbtn:active { background: linear-gradient(#c9c9c9, #b0b0b0); }
   .pbtn svg { width: 14px; height: 14px; fill: #444; }
   .ptrack-wrap { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .phandle {
-    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
-    background: radial-gradient(circle at 35% 30%, #fff, #9a9a9a 70%, #6e6e6e);
-    border: 1px solid #6e6e6e;
-  }
+  .phandle { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; background: radial-gradient(circle at 35% 30%, #fff, #9a9a9a 70%, #6e6e6e); border: 1px solid #6e6e6e; }
   .ptrack { position: relative; flex: 1; height: 6px; background: #6b6b6b; border-radius: 3px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5); cursor: pointer; }
   .pfill { position: absolute; top:0; left:0; height:100%; width:0%; background: linear-gradient(#ff5d52, #d81f12); border-radius: 3px; }
   .pfill::after { content:''; position:absolute; right:-5px; top:50%; transform:translateY(-50%); width:10px; height:10px; border-radius:50%; background: radial-gradient(circle at 35% 30%, #fff, #e2544a 70%, #a02219); border: 1px solid #a02219; }
-  .ptime {
-    background:#111; border:1px solid #000; border-radius:3px; color:#ff2d20;
-    font-family:"Courier New",monospace; font-size:12px; font-weight:bold;
-    padding:4px 7px; flex-shrink:0; text-shadow: 0 0 4px rgba(255,45,32,0.6); white-space:nowrap;
-  }
+  .ptime { background:#111; border:1px solid #000; border-radius:3px; color:#ff2d20; font-family:"Courier New",monospace; font-size:12px; font-weight:bold; padding:4px 7px; flex-shrink:0; text-shadow: 0 0 4px rgba(255,45,32,0.6); white-space:nowrap; }
   .pvol-wrap { display:flex; align-items:center; gap:6px; flex-shrink:0; }
   .pvol-track { position:relative; width:60px; height:4px; background:#7a7a7a; border-radius:2px; box-shadow: inset 0 1px 1px rgba(0,0,0,0.5); cursor:pointer; }
   .pvol-fill { position:absolute; top:0; left:0; height:100%; width:70%; background:#4a4a4a; border-radius:2px; }
@@ -283,9 +301,9 @@
   .dl-status.done { color: #6ea100; font-weight: 500; }
 
   @media (max-width: 900px) {
-    header.top-header { flex-wrap: wrap; height: auto; padding: 10px 16px; gap: 12px; }
-    nav.main-nav { order: 3; width: 100%; }
-    .search-wrap { width: 200px; }
+    .sidebar { display: none; }
+    .cat-label { display: none; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 </head>
@@ -293,25 +311,54 @@
 
 <header class="top-header">
   <div class="logo-wrap">
-    <img id="site-logo" src="https://web.archive.org/web/20250725224727/https://static.wikia.nocookie.net/logopedia/images/4/48/Gameloft_Logo_%282010%3B_White_Version%3B_Reflective_Version%3B_Horizontal_Version%29.png/revision/latest/scale-to-width-down/200?cb=20151130061432" alt="Gameloft">
-    <span id="site-word">store</span>
+    <div class="logo-chip">
+      <img src="https://web.archive.org/web/20250725224727/https://static.wikia.nocookie.net/logopedia/images/4/48/Gameloft_Logo_%282010%3B_White_Version%3B_Reflective_Version%3B_Horizontal_Version%29.png/revision/latest/scale-to-width-down/200?cb=20151130061432" alt="Gameloft">
+    </div>
+    <div class="store-word">Gameloft <b>Store</b></div>
+    <nav class="main-nav">
+      <div class="nav-item active" data-tab="games" id="tab-games">Giochi</div>
+      <div class="nav-item" data-tab="trailer" id="tab-trailer">Trailer</div>
+      <div class="nav-item" data-tab="downloads" id="tab-downloads">Download</div>
+    </nav>
   </div>
-  <nav class="main-nav">
-    <div class="nav-item active" data-tab="games" id="tab-games">Giochi</div>
-    <div class="nav-item" data-tab="trailer" id="tab-trailer">Trailer</div>
-    <div class="nav-item" data-tab="downloads" id="tab-downloads">Download</div>
-  </nav>
-  <div class="search-wrap">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>
-    <input type="text" id="search-input" placeholder="Cerca giochi...">
+  <div class="header-right">
+    <div class="search-wrap">
+      <input type="text" id="search-input" placeholder="Cerca giochi...">
+      <div class="search-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>
+      </div>
+    </div>
   </div>
 </header>
 
-<div class="hero-band" id="section-label">Featured</div>
+<!-- HERO CAROUSEL -->
+<div class="hero-wrap">
+  <div class="hero-track" id="hero-track"></div>
+  <div class="hero-dots" id="hero-dots"></div>
+</div>
 
-<main>
-  <div class="grid" id="game-grid"></div>
-</main>
+<!-- CATEGORIES / TABS BAR -->
+<div class="cat-tabs-bar">
+  <div class="cat-label" id="cat-label">Categorie</div>
+  <div class="view-tabs">
+    <div class="view-tab active" data-sub="all" id="subtab-all">Featured</div>
+    <div class="view-tab" data-sub="paid" id="subtab-paid">Top Paid</div>
+    <div class="view-tab" data-sub="free" id="subtab-free">Top Free</div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-heading"><span id="sidebar-title">Giochi</span> <span class="chev">›</span></div>
+      <div class="sidebar-sub" id="genre-list"></div>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="grid" id="game-grid"></div>
+  </main>
+</div>
 
 <!-- MODAL DETTAGLIO -->
 <div class="overlay" id="detail-overlay">
@@ -396,12 +443,10 @@
 <script src="shared.js"></script>
 <script src="games-data.js"></script>
 <script>
-document.getElementById('site-word').textContent = T.storeWord;
-document.getElementById('search-input').placeholder = T.searchPlaceholder;
 document.getElementById('tab-games').textContent = T.tabGames;
 document.getElementById('tab-trailer').textContent = T.tabTrailer;
 document.getElementById('tab-downloads').textContent = T.tabDownloads;
-document.getElementById('section-label').textContent = T.sectionGames;
+document.getElementById('sidebar-title').textContent = T.tabGames;
 document.getElementById('info-title').textContent = T.infoTitle;
 document.getElementById('desc-title').textContent = T.descTitle;
 document.getElementById('label-size').textContent = T.sizeLabel;
@@ -413,25 +458,138 @@ document.getElementById('close-label').textContent = T.close;
 
 const grid = document.getElementById('game-grid');
 const navTabs = document.querySelectorAll('.nav-item');
-const sectionLabel = document.getElementById('section-label');
+const subTabs = document.querySelectorAll('.view-tab');
+const genreListEl = document.getElementById('genre-list');
 const searchInput = document.getElementById('search-input');
 
 let currentTab = 'games';
+let currentSub = 'all';
+let currentGenre = null;
 let currentQuery = '';
 let currentApp = null;
 
-function priceMarkup(app) {
-  if (app.price === 'FREE') return `<div class="card-price free">${T.free}</div>`;
-  if (app.price === 'Installed') return `<div class="card-price">${T.installed}</div>`;
-  return `<div class="card-price">${app.price}</div>`;
+/* ===== SIDEBAR GENERI (generati dai giochi presenti) ===== */
+function buildGenreList() {
+  const genres = [...new Set(APPS.map(a => a.genre).filter(Boolean))];
+  let html = `<a data-genre="" class="active">Tutti i giochi <span class="chev">›</span></a>`;
+  genres.forEach(g => { html += `<a data-genre="${g}">${g} <span class="chev">›</span></a>`; });
+  genreListEl.innerHTML = html;
+  genreListEl.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      genreListEl.querySelectorAll('a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+      currentGenre = a.dataset.genre || null;
+      renderGrid();
+    });
+  });
+}
+buildGenreList();
+
+/* ===== HERO CAROUSEL (usa gli screenshot dei giochi che ne hanno, con scorrimento animato) ===== */
+const heroTrack = document.getElementById('hero-track');
+const heroDots = document.getElementById('hero-dots');
+let heroSlides = [];
+APPS.forEach(app => {
+  (app.screenshots || []).forEach(src => heroSlides.push({ src, name: app.name }));
+});
+let heroIndex = 0;
+let heroAnimating = false;
+
+function slideHTML(item, cls) {
+  const captionHTML = cls === '' ? `<div class="hero-caption">${item.name}</div>` : '';
+  return `<div class="hero-slide ${cls}" style="background-image:url('${item.src}')">${captionHTML}</div>`;
 }
 
-function renderGrid(filter) {
+function renderHero() {
+  if (heroSlides.length === 0) {
+    heroTrack.innerHTML = '<div class="hero-empty">Aggiungi screenshot ai tuoi giochi per popolare il banner in evidenza</div>';
+    heroDots.innerHTML = '';
+    return;
+  }
+  const total = heroSlides.length;
+  const prev = heroSlides[(heroIndex - 1 + total) % total];
+  const cur = heroSlides[heroIndex];
+  const next = heroSlides[(heroIndex + 1) % total];
+
+  heroTrack.classList.remove('animate');
+  heroTrack.style.transform = 'translateX(0%)';
+  heroTrack.innerHTML = slideHTML(prev, 'side') + slideHTML(cur, '') + slideHTML(next, 'side');
+
+  heroDots.innerHTML = heroSlides.map((_, i) => `<span class="${i === heroIndex ? 'active' : ''}" data-i="${i}"></span>`).join('');
+  heroDots.querySelectorAll('span').forEach(dot => {
+    dot.addEventListener('click', () => { if (!heroAnimating) goToHero(parseInt(dot.dataset.i, 10)); });
+  });
+}
+
+function advanceHero() {
+  if (heroSlides.length < 2 || heroAnimating) return;
+  heroAnimating = true;
+  // fa scorrere fisicamente il banner verso sinistra (l'immagine "next" entra da destra)
+  requestAnimationFrame(() => {
+    heroTrack.classList.add('animate');
+    heroTrack.style.transform = 'translateX(-15%)';
+  });
+  setTimeout(() => {
+    heroIndex = (heroIndex + 1) % heroSlides.length;
+    heroAnimating = false;
+    renderHero();
+  }, 700);
+}
+
+function goToHero(i) {
+  heroIndex = i;
+  renderHero();
+}
+
+renderHero();
+setInterval(advanceHero, 4500);
+
+/* ===== NAV PRINCIPALE (Giochi / Trailer / Download) ===== */
+navTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    navTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentTab = tab.dataset.tab;
+    document.querySelector('.cat-tabs-bar').style.display = currentTab === 'games' ? 'flex' : 'none';
+    document.querySelector('.sidebar').style.display = currentTab === 'games' ? 'block' : 'none';
+    renderGrid();
+  });
+});
+
+subTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    subTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentSub = tab.dataset.sub;
+    renderGrid();
+  });
+});
+
+searchInput.addEventListener('input', (e) => {
+  currentQuery = e.target.value;
+  renderGrid();
+});
+
+/* ===== GRIGLIA GIOCHI ===== */
+function cardButtonMarkup(app, filter) {
+  if (filter === 'trailer') return `<span class="card-btn">▶ ${T.trailerBtn}</span>`;
+  if (app.price === 'FREE') return `<span class="card-btn free-btn">${T.install}</span>`;
+  if (app.price === 'Installed') return `<span class="card-btn">${T.installed}</span>`;
+  return `<span class="card-btn">${app.price}</span>`;
+}
+
+function renderGrid() {
   grid.innerHTML = '';
   let items;
-  if (filter === 'downloads') items = APPS;
-  else if (filter === 'trailer') items = APPS.filter(a => a.trailer);
-  else items = APPS.filter(a => a.category === filter);
+  if (currentTab === 'downloads') items = APPS;
+  else if (currentTab === 'trailer') items = APPS.filter(a => a.trailer);
+  else items = APPS.filter(a => a.category === 'games');
+
+  if (currentTab === 'games') {
+    if (currentSub === 'paid') items = items.filter(a => a.price !== 'FREE');
+    if (currentSub === 'free') items = items.filter(a => a.price === 'FREE');
+    if (currentGenre) items = items.filter(a => a.genre === currentGenre);
+  }
 
   if (currentQuery.trim() !== '') {
     const q = currentQuery.trim().toLowerCase();
@@ -439,7 +597,7 @@ function renderGrid(filter) {
   }
 
   if (items.length === 0) {
-    const msg = filter === 'trailer' ? T.noTrailers : T.noGames;
+    const msg = currentTab === 'trailer' ? T.noTrailers : T.noGames;
     grid.innerHTML = `<div class="empty-note">${msg}</div>`;
     return;
   }
@@ -447,39 +605,25 @@ function renderGrid(filter) {
   items.forEach(app => {
     const card = document.createElement('div');
     card.className = 'card';
-    const extra = filter === 'trailer'
-      ? `<div class="card-trailer-badge">▶ ${T.trailerBtn}</div>`
-      : `${priceMarkup(app)}<div class="card-stars">${starMarkup(app.rating)}</div>`;
     card.innerHTML = `
       <div class="card-icon" style="background:${iconBg(app)};color:${iconFg(app)}">${iconMarkup(app)}</div>
       <p class="card-name">${app.name}</p>
       <p class="card-dev">${app.dev}</p>
-      ${extra}
+      ${cardButtonMarkup(app, currentTab)}
     `;
-    card.addEventListener('click', () => {
-      if (filter === 'trailer') openTrailer(app);
-      else openDetail(app);
+    card.addEventListener('click', (e) => {
+      if (currentTab === 'trailer') { openTrailer(app); return; }
+      // click sul pulsante = azione diretta (installa), click sulla card = apre il dettaglio
+      if (e.target.closest('.card-btn')) {
+        startDownload(app);
+      } else {
+        openDetail(app);
+      }
     });
     grid.appendChild(card);
   });
 }
-
-navTabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    navTabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    currentTab = tab.dataset.tab;
-    sectionLabel.textContent = currentTab === 'games' ? T.sectionGames
-      : currentTab === 'trailer' ? T.sectionTrailer
-      : T.sectionDownloads;
-    renderGrid(currentTab);
-  });
-});
-
-searchInput.addEventListener('input', (e) => {
-  currentQuery = e.target.value;
-  renderGrid(currentTab);
-});
+renderGrid();
 
 /* ===== MODAL DETTAGLIO ===== */
 const detailOverlay = document.getElementById('detail-overlay');
@@ -526,7 +670,6 @@ function openDetail(app) {
 }
 document.getElementById('detail-close').addEventListener('click', () => detailOverlay.classList.remove('active'));
 detailOverlay.addEventListener('click', (e) => { if (e.target === detailOverlay) detailOverlay.classList.remove('active'); });
-
 document.getElementById('d-download-btn').addEventListener('click', (e) => {
   if (e.currentTarget.classList.contains('disabled')) return;
   startDownload(currentApp);
@@ -685,8 +828,6 @@ document.getElementById('download-close').addEventListener('click', () => {
   downloadModal.classList.remove('active');
 });
 downloadModal.addEventListener('click', (e) => { if (e.target === downloadModal) document.getElementById('download-close').click(); });
-
-renderGrid('games');
 </script>
 
 </body>
