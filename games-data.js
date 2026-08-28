@@ -33,6 +33,7 @@ const APPS = [
     link: "https://archive.org/download/ModernCombat5V1.2.0oOfflineAPKLOCK.com/Modern%20Combat%205%20v1.2.0o%20%5BOffline%5D%20APKLOCK.com.apk",
     trailer: "Bmuzjul8wS4"
   },
+
   {
     name: "Asphalt 8: Airborne",
     dev: "Gameloft",
@@ -54,64 +55,105 @@ const APPS = [
     link: "https://archive.org/download/asphalt-8-v-2.0.0e.apk/Asphalt_8_v2.0.0e.apk.zip/Asphalt_8_v2.0.0e.apk",
     trailer: ""
   },
+
   {
-    name: "Bonsai Blast",
-    dev: "Glu Mobile",
-    icon: "🌳",
-    color: "#4caf50",
+    name: "Modern Combat 2: Black Pegasus",
+    dev: "Gameloft",
+    icon: "https://web.archive.org/web/20140611053801im_/https://lh5.ggpht.com/e7UJXt5PjxlqYmUbXPXRtPjdarX_RUnHbHjg9eb_yJJ7SD6pKQ70DGMtLlhsQf4N_A=w124",
+    color: "#c0392b",
     rating: 5,
+    price: "€6.99",
+    category: "games",
+    size: "11 MB",
+    version: "1.0.5",
+    genre: "Sparatutto",
+    desc: "Finish what you started. Complete the mission unveiled in the first opus of one of the most acclaimed FPS games on Android, this time on fronts all over the globe. Modern Combat 2: Black Pegasus further improves the exemplary gameplay of the first Modern Combat game for an astounding immersion in a modern war experience.  Contact us at android.support@gameloft.com for any problems you may have with this application.",
+    screenshots: [
+      "https://web.archive.org/web/20140611053802im_/https://lh5.ggpht.com/Uz62eBvUZLU0G2JB8OTZWddKo39kZy0iQQRVzzo-PyzJmwdiPO0xYKIUWk6sBYq5XQ=h230",
+      "https://web.archive.org/web/20140611053802im_/https://lh5.ggpht.com/5tj7zdj4ovmOz8R0SxXNxG5pZwXTOWMceugDp3DfAG45CPosbXrUh6CgswWxwT_96g=h230",
+      "https://web.archive.org/web/20140611053802im_/https://lh5.ggpht.com/uoXhZENj6Yf6W1WxeiQypkNHMnl4_EuO8Ke8ppmWotW3F5KJ80O8hDmwpM1k2T8SQSE=h230",
+      "https://web.archive.org/web/20140611053802im_/https://lh3.ggpht.com/x2fxhYwkyhWIqpPlb4q-nfOOa1sig-QOZLN9B1hOyM9BJsXSLMNJSkh8NMIzPJPmkIo=h230"
+    ],
+    link: "https://archive.org/download/modern-combat-2-black-pegasus-v-1.0.5/Modern%20Combat%202%20-%20Black%20Pegasus%20v1.0.5.apk",
+    trailer: "fM0E6QL2_rA"
+  },
+
+  {
+    name: "Modern Combat 3: Fallen Nation",
+    dev: "Gameloft",
+    icon: "https://web.archive.org/web/20121111115650im_/https://lh6.ggpht.com/pC8T732QNYuqMzGDhpZHsiWRvSJCXX9LtAS_JakYm6AR5OQNGVCTKSuIfc-VMDjFjs8=w124",
+    color: "#c0392b",
+    rating: 5,
+    price: "€6.99",
+    category: "games",
+    size: "18 MB",
+    version: "1.1.7g",
+    genre: "Sparatutto",
+    desc: "When war arrives, there is no time to be afraid. ** This game requires 1.37 GB of free storage space. **Permission added to view account information. We use this permission to set up push notifications, allowing us to inform you of important game-related news. Your Gmail account is checked only locally and is NOT sent to any server. We are working on a way to do this without requiring this permission. The best smartphone FPS series returns with even more intense, apocalyptic battles. **PocketGamer: \"A brilliant combination of graphics, gripping action, and a solid multiplayer mode.\" The best and most realistic mobile FPS series returns with an intense, apocalyptic battle for America's freedom, in both single-player and multiplayer modes. PLAY THE HERO IN AN IMMERSIVE SOLO CAMPAIGN • Fight through 13 campaign missions, from Los Angeles to Pakistan. • Experience numerous memorable moments thanks to a top-notch script. • Diverse mission types: escort, sabotage, helicopter, off-road vehicle chase... A REALISTIC AND IMMERSIVE WAR EXPERIENCE • The most immersive and intuitive mobile FPS experience has been further improved with a sprint-and-slide feature. • Experience next-gen graphics and unprecedented environmental rendering. • Enhanced sound effects and crystal-clear voice acting enrich the apocalyptic experience. ENJOY THE BEST MULTIPLAYER MODE ON MOBILE • Battle against up to 12 players across 6 exclusive maps in 7 different modes. • Use customized weapons to climb the leaderboards—which go beyond simple scoring.",
+    screenshots: [
+      "https://web.archive.org/web/20121113094313im_/https://lh3.ggpht.com/-UvEh90Wq1cUF-JSfpgeEoS0p9EoYXG2ZYV784RFXDi2EEgFJbiU8Y_w-IQ-htNPLeY=h230",
+      "https://web.archive.org/web/20121113095606im_/https://lh6.ggpht.com/HyUOt-Er7WpDROO7tlP7d4TckdVKHo9ifAifG3V7d9zianvgd22oY0ZirlHI5EoF4sbP=h230"
+    ],
+    link: "https://archive.org/download/modern-combat-3-fallen-nation-v-1-1-6b-cache/Modern-Combat-3-Fallen-Nation-v1-1-7g.apk",
+    trailer: "mdF0EvDwH-Y"
+  },
+
+  {
+    name: "Modern Combat 4: Zero Hour",
+    dev: "Gameloft",
+    icon: "https://web.archive.org/web/20130114212517im_/https://lh5.ggpht.com/E2RoZJUZmOAnrKN1A_qXVobeIugNAuWGwo3hBEzBiI3cf74tVMDzIxZ5CSQ-ag0Hxzd0=w124",
+    color: "#c0392b",
+    rating: 5,
+    price: "€6.99",
+    category: "games",
+    size: "27 MB",
+    version: "1.2.3e",
+    genre: "Sparatutto",
+    desc: "Gear up and jump into the ultimate FPS experience! Experience top-tier first-person shooter action on your smartphone, with a brand-new chapter that takes mobile gaming to the next level. In the wake of a nuclear disaster, the only chance to save the world lies in the hands of a few elite soldiers. These warriors must track down world leaders and rescue them from a terrifying terrorist organization. Immerse yourself in unforgettable action-packed gameplay ☢ Experience a gripping storyline and play as the antagonist, Edward Page—seeing the conflict from both sides. ☢ Dominate the battlefield with a tactical movement system! ☢ Wage war across the globe, from Antarctica to Barcelona! Experience console-quality graphics and sound ☢ Enjoy console-quality graphics, lifelike animations, and dynamic objects. ☢ The first Gameloft title powered by the Havok engine, featuring amazing ragdoll effects and realistic vehicle physics. ☢ High-quality sound and voice acting provided by a renowned film industry studio. Experience a redesigned multiplayer mode ☢ Combine your online profile with a revamped loadout system featuring over 20,000 weapon configurations! ☢ A new specialization system with redesigned skills. ☢ Lead your character to the top of the new online leaderboards!",
+    screenshots: [
+      "https://web.archive.org/web/20140115143338im_/https://lh3.ggpht.com/3tzdvmRhxivLjkYbEcdclBHJwmmAS-Y_JkCooLtOrh9MS-twE-gzMM6OBjWgWgEIAQ=h900",
+      "https://web.archive.org/web/20140115143339im_/https://lh3.ggpht.com/jAfaR4iKD_PwlWjKokfjqZIDQbL1awRx8Wig9m3555SXoT2gn3UXKARTALEEx75L5A=h900",
+      "https://web.archive.org/web/20140115143340im_/https://lh3.ggpht.com/bmVb87WR38mGVuQ4jXqg5kmbvYgi5irRfc5nMfhxXOggu8rycaEIk4d8ExL2KBPalMY=h900",
+      "https://web.archive.org/web/20140115143341im_/https://lh3.ggpht.com/hCHvPtqBx0TXB8guXjLRpzRpgC3nnbtmOEAZzunQzLu9CNMcSt_v1-p58M5z0WiBeFk=h900",
+      "https://web.archive.org/web/20140115143332im_/https://lh6.ggpht.com/8Qy1VPLjhCok0e7oKh_ybxLrrorSFEdE4pnRvTWYAaD96A87zTnCeL5CyLevh2vBqg=h900"
+    ],
+    link: "https://dl.apkvision.org/modern-combat-4-zero-hour/modern-combat-4-zero-hour-1.2.3e.apk",
+    trailer: "XlIuh_Iu6vw"
+  },
+
+  {
+    name: "N.O.V.A. Legacy",
+    dev: "Gameloft",
+    icon: "https://web.archive.org/web/20170223085520im_/https://lh3.googleusercontent.com/0GuE81ngktAI4vUopxV9qUgxGt_bpyDNcnPrNVFolh0d98qVMoGu9b2JBJxZAC239iA=w300",
+    color: "#c0392b",
+    rating: 3,
     price: "FREE",
     category: "games",
-    size: "2.1 MB",
-    version: "1.4.2",
-    genre: "Arcade",
-    desc: "Fai esplodere le sfere colorate in questo classico puzzle arcade. Punta, mira e libera il bonsai!",
-    link: "#",
-    trailer: ""
+    size: "45 MB",
+    version: "5.8.3c",
+    genre: "Sparatutto",
+    desc: "THE LEGEND REBORN & REMASTERED  N.O.V.A. Legacy brings you the best sci-fi FPS experience from the epic first episode of the critically acclaimed N.O.V.A. saga -- all in a compact 20 MB version.  Kal Wardin, our hero, is a retired N.O.V.A. veteran summoned once again to don his Mobile Armor Suit in defense of the Colonial Administration forces.  Helped by Yelena, his personal AI Agent, Kal must protect humanity's destiny by entering the battlefield against alien invaders while uncovering the mystery behind their sudden attack.  A CONSOLE-LIKE EXPERIENCE ON MOBILE: - An immersive shooter experience based on a renowned Gameloft FPS series in the same vein as Modern Combat. - Craft and upgrade weapons, from powerful assault rifles to devastating plasma guns. - Enjoy the original N.O.V.A. shooter experience with enhanced graphics and gameplay.  DEFEAT ALIEN FORCES IN VARIOUS GAME MODES: - Story Mode: Delve into the plot and fight to uncover the truth about these alien invaders. - Shadow Events: Defeat the aliens' Special Forces in challenging limited-time events. - Special Ops: Launch a strategic strike on unique alien formations.  TEST YOUR SKILLS IN MULTIPLAYER ARENAS: - Deathmatch: Be the last one standing in a 6-player firefight. - Customize your character with a variety of Marine and alien skins. - Leaderboards and 3rd-person Death Cam replays.",
+    screenshots: [
+      "https://web.archive.org/web/20171010235625im_/https://lh3.googleusercontent.com/HxpbpICHxr034it127qjASgqVGXhsxQqTCq-NUEFIQbxalaBrWSPl0RqJ7EwhVsMQ6w=h310",
+      "https://web.archive.org/web/20171011003809im_/https://lh3.googleusercontent.com/btOcKOTV7h-ChiF_sZaWjPuMSTgWyrW6MwoFLL8WUPSoc2jVGoWKHDp-d_BE_K0GWmo=h310",
+      "https://web.archive.org/web/20171010231942im_/https://lh3.googleusercontent.com/YgXJ2RQtqzsZndlWi0eRH4QAZ19YrrO6Lz79yx3IiLl4dzKaT0HbirYhnKIGc9OfSw=h310",
+      "https://web.archive.org/web/20171010235828im_/https://lh3.googleusercontent.com/r0EEvcdxLv76LGndlQ9ABx_MGuV2y6nx7ERTSSyC-iqqmP4yMycdGSgpM6QbUxs6kQ8=h310",
+      "https://web.archive.org/web/20171011001135im_/https://lh3.googleusercontent.com/MGG8wf9dwtLiqHP-oF2UPTDP61ufOFP_1G7OJGu3SI1DVbXTu-X7OIqrImz4KMvtPRoF=h310",
+      "https://web.archive.org/web/20171011000226im_/https://lh3.googleusercontent.com/U5W6RNwKrd38Ccfa70p6qPkUD21MBKV0hPa_0iLebXM1c3eeduFlhi6_Kx2WJiwL3jsP=h310"
+    ],
+    link: "https://dl.apkvision.org/nova-legacy/N.O.V.A-v5-8-3c.apk",
+    trailer: "RRViSISYi2g"
   },
+
   {
-    name: "Asphalt 6: Adrenaline HD",
+    name: "N.O.V.A. 2",
     dev: "Gameloft",
-    icon: "🏎️",
+    icon: "https://web.archive.org/web/20190128150426im_/https://lh5.ggpht.com/TwhLviPhN5OnExtq7w6NS0-fGojbcBpjk6NmSytQlZ7063R0IZ3TLktpTcX9A8UqypQ=w124",
     color: "#c0392b",
     rating: 5,
     price: "FREE",
     category: "games",
-    size: "24 MB",
-    version: "1.0.0",
-    genre: "Corse",
-    desc: "Corse ad alta velocità su supercar in quindici città reali di tutto il mondo.",
-    link: "#",
-    trailer: ""
-  },
-  {
-    name: "The Oregon Trail HD",
-    dev: "Gameloft",
-    icon: "🐎",
-    color: "#8d6e63",
-    rating: 4,
-    price: "FREE",
-    category: "games",
-    size: "18 MB",
-    version: "1.0.3",
-    genre: "Avventura",
-    desc: "Guida la tua carovana lungo lo storico Oregon Trail affrontando ogni pericolo del viaggio.",
-    link: "#",
-    trailer: ""
-  },
-  {
-    name: "Modern Combat 3: Fallen Nation",
-    dev: "Gameloft",
-    icon: "🔫",
-    color: "#37474f",
-    rating: 4,
-    price: "FREE",
-    category: "games",
-    size: "29 MB",
-    version: "1.1.0",
+    size: "5 MB",
+    version: "1.0.5",
     genre: "Sparatutto",
-    desc: "Combatti sul campo di battaglia globale in questo sparatutto in prima persona.",
-    link: "#",
-    trailer: ""
-  }
-];
+    desc: "The Best Sci-Fi FPS Game Is Back! Immerse Yourself in a Whole New Dimension of Gaming!  The best sci-fi FPS game is back! Immerse yourself in a whole new dimension of gaming!  Pocket Gamer — 9/10 + Gold Award: “It surpasses its predecessor with faster-paced action, fantastic graphics, and the best multiplayer yet.”  IGN — 8.5/10 + Editor’s Choice: “Smooth controls are a great help during the intense action.”  The AppEra: “N.O.V.A. 2 is without a doubt the best FPS game.”  TouchGen: “Its intense gameplay is absolutely impossible to put down.”  148apps: “N.O.V.A. 2 is a game that rivals console titles.”  App Advice: “It provides the ultimate online multiplayer experience, with fast connections and battles for up to 10 players.”  ---  The Ultimate Game, Faster and More Powerful Than Ever!  - Encounter new enemies equipped with improved artificial intelligence! - Master countless different weapons and powers. - Enjoy ever-changing gameplay: running, shooting, falling, riding a motorbike, controlling a giant mech, firing lasers, and much more. - The more, the merrier! Up to 10 players can play together across 10 multiplayer maps. - Build a legendary career on the multiplayer leaderboards. - Explore locations reborn with stunning graphics. - If you previously enjoyed N.O.V.A. HD, receive an additional bonus.  Six years have passed since the first story.  Humanity has been thrown into a bloody civil war between the Earth Orbit Government and a mysterious new organization known as the Human-Alien Alliance. Our protagonist, Kal Wardin, left the N.O.V.A. forces of Earth Orbit years ago and had been living with farmers in a local colony on the planet Scorpius.  But even this most peaceful of places could not escape the flames of a merciless war...  An Unparalleled Single-Player Campaign:  - 12 chapters featuring countless enemies and spectacular environments across a variety of locations. - Dozens of weapons, including dual pistols, assault rifles, shotguns, automatic shotguns, sniper rifles, rocket launchers, grenade launchers, alien plasma guns, alien lightning guns, alien laser guns, turrets, kill grenades, mines, and more. - 3 special powers: Freeze, Time Delay, and the melee attack Disc. - Intense battles against enemies equipped with greatly improved artificial intelligence.  Intense Multiplayer Modes:  - Online or local play for 1–10 players. - 5 modes: Free-for-All, Team Deathmatch, Capture the Flag, Capture the Point, and One-Shot Kill. - Ranking and perk systems. - 10 maps featuring thrilling battles. - Exciting matches against friends or players from around the world through Gameloft LIVE! - Global leaderboards available in the game and on the official website (www.near-orbit-vangua
