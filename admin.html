@@ -19,9 +19,23 @@
   header {
     background: linear-gradient(#3a3a3a, #1c1c1c);
     padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
   }
   header h1 { margin: 0; color: #fff; font-size: 18px; font-weight: 500; }
   header p { margin: 4px 0 0; color: #aaa; font-size: 12.5px; }
+  #lang-select {
+    background: #2b2b2b;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 12.5px;
+    font-family: "Roboto", Arial, sans-serif;
+    flex-shrink: 0;
+  }
 
   .panel {
     background: #fff;
@@ -116,6 +130,26 @@
     padding: 6px 10px;
   }
 
+  /* upload file */
+  .upload-box {
+    border: 2px dashed #c7c7c5;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    background: #fafaf9;
+  }
+  .upload-box input[type="file"] { display: none; }
+  .upload-label {
+    display: inline-block;
+    cursor: pointer;
+    color: #c0392b;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: underline;
+  }
+  .upload-status { font-size: 12.5px; color: #6ea100; margin-top: 8px; font-weight: 500; }
+  .upload-status.error { color: #c0392b; }
+
   /* lista giochi aggiunti */
   .game-card {
     display: flex;
@@ -153,8 +187,8 @@
     white-space: pre;
     overflow-x: auto;
   }
-  .copy-row { display: flex; gap: 10px; margin-top: 10px; }
-  .copy-row .btn { flex: 1; }
+  .copy-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  .copy-row .btn { flex: 1; min-width: 140px; }
   .copied-msg {
     display: none;
     color: #6ea100;
@@ -170,51 +204,72 @@
 <body>
 
 <header>
-  <h1>Gameloft Store — Pannello Admin</h1>
-  <p>Aggiungi giochi e trailer senza scrivere codice a mano.</p>
+  <div>
+    <h1 id="t-title">Gameloft Store — Pannello Admin</h1>
+    <p id="t-subtitle">Aggiungi giochi e trailer senza scrivere codice a mano.</p>
+  </div>
+  <select id="lang-select">
+    <option value="it">🇮🇹 Italiano</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="es">🇪🇸 Español</option>
+    <option value="fr">🇫🇷 Français</option>
+    <option value="de">🇩🇪 Deutsch</option>
+    <option value="pt">🇵🇹 Português</option>
+  </select>
 </header>
 
 <div class="wrap">
 
   <div class="panel">
-    <div class="panel-title">Come funziona</div>
+    <div class="panel-title" id="t-how-title">Come funziona</div>
     <div class="panel-body">
-      <ol class="howto">
-        <li>Compila il modulo qui sotto per ogni gioco e premi <b>"Aggiungi gioco alla lista"</b>.</li>
-        <li>Ripeti per tutti i giochi che vuoi aggiungere.</li>
-        <li>In fondo alla pagina trovi il <b>codice generato automaticamente</b>: premi "Copia codice".</li>
-        <li>Apri <b>games-data.js</b> (il file condiviso da index.html e desktop.html), trova la riga <code>const APPS = [</code> e incolla il codice copiato subito dopo quella riga (oppure sostituisci l'intero array se vuoi ripartire da zero).</li>
-        <li>Salva il file: i nuovi giochi compariranno automaticamente sia nella versione mobile che in quella desktop.</li>
+      <ol class="howto" id="t-how-list">
+        <li>Compila il modulo qui sotto per ogni gioco e premi <b>"Aggiungi gioco alla lista"</b> — oppure carica un <b>games-data.js</b> esistente per modificarlo.</li>
+        <li>Ripeti per tutti i giochi che vuoi aggiungere o rimuovi quelli che non ti servono.</li>
+        <li>Premi <b>"Scarica games-data.js"</b> per ottenere il file già pronto, oppure copia il codice generato.</li>
+        <li>Carica il file ottenuto nella tua repository, sostituendo quello vecchio.</li>
+        <li>Salva/pubblica: i giochi compariranno automaticamente sia nella versione mobile che in quella desktop.</li>
       </ol>
     </div>
   </div>
 
   <div class="panel">
-    <div class="panel-title">Nuovo gioco</div>
+    <div class="panel-title" id="t-upload-title">Carica un games-data.js esistente (opzionale)</div>
+    <div class="panel-body">
+      <div class="upload-box">
+        <label class="upload-label" for="file-upload" id="t-upload-label">📂 Scegli il file games-data.js dal tuo computer</label>
+        <input type="file" id="file-upload" accept=".js,text/javascript">
+        <p class="upload-status" id="upload-status" style="display:none;"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" id="t-newgame-title">Nuovo gioco</div>
     <div class="panel-body">
 
-      <label>Nome del gioco</label>
+      <label id="t-l-name">Nome del gioco</label>
       <input type="text" id="f-name" placeholder="Es. Asphalt 8: Airborne">
 
-      <label>Sviluppatore</label>
+      <label id="t-l-dev">Sviluppatore</label>
       <input type="text" id="f-dev" placeholder="Es. Gameloft" value="Gameloft">
 
-      <label>Icona <span class="hint">— emoji (es. 🏎️) oppure link diretto a un'immagine</span></label>
+      <label id="t-l-icon">Icona <span class="hint" id="t-l-icon-hint">— emoji (es. 🏎️) oppure link diretto a un'immagine</span></label>
       <div class="icon-row">
         <div><input type="text" id="f-icon" placeholder="🏎️ oppure https://..."></div>
         <div>
           <input type="color" id="f-color" value="#c0392b">
         </div>
       </div>
-      <p style="font-size:11px;color:#999;margin:4px 0 0;">Il colore viene usato solo se l'icona è un'emoji, non un link immagine.</p>
+      <p style="font-size:11px;color:#999;margin:4px 0 0;" id="t-color-note">Il colore viene usato solo se l'icona è un'emoji, non un link immagine.</p>
 
       <div class="row2">
         <div>
-          <label>Prezzo <span class="hint">— "FREE" o es. €2,99</span></label>
+          <label id="t-l-price">Prezzo <span class="hint" id="t-l-price-hint">— "FREE" o es. €2,99</span></label>
           <input type="text" id="f-price" value="FREE">
         </div>
         <div>
-          <label>Valutazione</label>
+          <label id="t-l-rating">Valutazione</label>
           <select id="f-rating">
             <option value="5">★★★★★ (5)</option>
             <option value="4">★★★★☆ (4)</option>
@@ -227,58 +282,356 @@
 
       <div class="row2">
         <div>
-          <label>Dimensione <span class="hint">— controlla la barra della finta schermata di download</span></label>
+          <label id="t-l-size">Dimensione <span class="hint" id="t-l-size-hint">— controlla la barra della finta schermata di download</span></label>
           <input type="text" id="f-size" placeholder="Es. 38 MB">
         </div>
         <div>
-          <label>Versione</label>
+          <label id="t-l-version">Versione</label>
           <input type="text" id="f-version" placeholder="Es. 1.0.0">
         </div>
       </div>
 
-      <label>Genere / Categoria</label>
+      <label id="t-l-genre">Genere / Categoria</label>
       <input type="text" id="f-genre" placeholder="Es. Corse, Sparatutto, Arcade...">
 
-      <label>Descrizione</label>
+      <label id="t-l-desc">Descrizione</label>
       <textarea id="f-desc" placeholder="Descrizione del gioco..."></textarea>
 
-      <label>Screenshot <span class="hint">— un link immagine per riga, opzionale</span></label>
+      <label id="t-l-shots">Screenshot <span class="hint" id="t-l-shots-hint">— un link immagine per riga, opzionale</span></label>
       <textarea id="f-screenshots" placeholder="https://...
 https://...
 https://..."></textarea>
 
-      <label>Link di download <span class="hint">— Google Drive, archive.org, ecc.</span></label>
+      <label id="t-l-link">Link di download <span class="hint" id="t-l-link-hint">— Google Drive, archive.org, ecc.</span></label>
       <input type="text" id="f-link" placeholder="https://...">
 
-      <label>ID trailer YouTube <span class="hint">— la parte dopo "v=" nel link YouTube, opzionale</span></label>
+      <label id="t-l-trailer">ID trailer YouTube <span class="hint" id="t-l-trailer-hint">— la parte dopo "v=" nel link YouTube, opzionale</span></label>
       <input type="text" id="f-trailer" placeholder="Es. dQw4w9WgXcQ">
 
-      <button class="btn btn-primary" id="btn-add">+ Aggiungi gioco alla lista</button>
+      <button class="btn btn-primary" id="btn-add">+ <span id="t-btn-add">Aggiungi gioco alla lista</span></button>
     </div>
   </div>
 
   <div class="panel">
-    <div class="panel-title">Giochi aggiunti in questa sessione (<span id="count">0</span>)</div>
+    <div class="panel-title"><span id="t-list-title">Giochi in lista</span> (<span id="count">0</span>)</div>
     <div id="game-list">
-      <div class="empty-note">Nessun gioco aggiunto ancora</div>
+      <div class="empty-note" id="t-empty">Nessun gioco aggiunto ancora</div>
     </div>
   </div>
 
   <div class="panel">
-    <div class="panel-title">Codice da incollare in games-data.js</div>
+    <div class="panel-title" id="t-code-title">Codice / file games-data.js</div>
     <div class="panel-body">
       <textarea id="code-output" readonly></textarea>
       <div class="copy-row">
-        <button class="btn btn-secondary" id="btn-copy" style="flex:1;">Copia codice</button>
-        <button class="btn btn-danger" id="btn-clear" style="flex:1;">Svuota lista</button>
+        <button class="btn btn-secondary" id="btn-download-file"><span id="t-btn-download">⬇ Scarica games-data.js</span></button>
+        <button class="btn btn-secondary" id="btn-copy"><span id="t-btn-copy">Copia codice</span></button>
+        <button class="btn btn-danger" id="btn-clear"><span id="t-btn-clear">Svuota lista</span></button>
       </div>
-      <p class="copied-msg" id="copied-msg">✓ Codice copiato negli appunti</p>
+      <p class="copied-msg" id="copied-msg">✓ <span id="t-copied">Codice copiato negli appunti</span></p>
     </div>
   </div>
 
 </div>
 
 <script>
+/* ============================================================
+   TRADUZIONI PANNELLO ADMIN
+   ============================================================ */
+const ADMIN_T = {
+  it: {
+    title: "Gameloft Store — Pannello Admin",
+    subtitle: "Aggiungi giochi e trailer senza scrivere codice a mano.",
+    howTitle: "Come funziona",
+    howList: [
+      'Compila il modulo qui sotto per ogni gioco e premi <b>"Aggiungi gioco alla lista"</b> — oppure carica un <b>games-data.js</b> esistente per modificarlo.',
+      "Ripeti per tutti i giochi che vuoi aggiungere o rimuovi quelli che non ti servono.",
+      'Premi <b>"Scarica games-data.js"</b> per ottenere il file già pronto, oppure copia il codice generato.',
+      "Carica il file ottenuto nella tua repository, sostituendo quello vecchio.",
+      "Salva/pubblica: i giochi compariranno automaticamente sia nella versione mobile che in quella desktop."
+    ],
+    uploadTitle: "Carica un games-data.js esistente (opzionale)",
+    uploadLabel: "📂 Scegli il file games-data.js dal tuo computer",
+    uploadOk: n => `✓ Caricati ${n} giochi dal file. Ora puoi aggiungerne altri o rimuoverli.`,
+    uploadErr: "✗ Il file non sembra un games-data.js valido.",
+    newGameTitle: "Nuovo gioco",
+    lName: "Nome del gioco", lDev: "Sviluppatore",
+    lIcon: "Icona", lIconHint: "— emoji (es. 🏎️) oppure link diretto a un'immagine",
+    colorNote: "Il colore viene usato solo se l'icona è un'emoji, non un link immagine.",
+    lPrice: "Prezzo", lPriceHint: '— "FREE" o es. €2,99',
+    lRating: "Valutazione",
+    lSize: "Dimensione", lSizeHint: "— controlla la barra della finta schermata di download",
+    lVersion: "Versione",
+    lGenre: "Genere / Categoria",
+    lDesc: "Descrizione",
+    lShots: "Screenshot", lShotsHint: "— un link immagine per riga, opzionale",
+    lLink: "Link di download", lLinkHint: "— Google Drive, archive.org, ecc.",
+    lTrailer: "ID trailer YouTube", lTrailerHint: '— la parte dopo "v=" nel link YouTube, opzionale',
+    btnAdd: "Aggiungi gioco alla lista",
+    listTitle: "Giochi in lista",
+    empty: "Nessun gioco aggiunto ancora",
+    remove: "Rimuovi",
+    codeTitle: "Codice / file games-data.js",
+    btnDownload: "⬇ Scarica games-data.js",
+    btnCopy: "Copia codice",
+    btnClear: "Svuota lista",
+    copied: "Codice copiato negli appunti",
+    confirmClear: "Svuotare tutta la lista dei giochi?",
+    alertName: "Inserisci almeno il nome del gioco."
+  },
+  en: {
+    title: "Gameloft Store — Admin Panel",
+    subtitle: "Add games and trailers without writing code by hand.",
+    howTitle: "How it works",
+    howList: [
+      'Fill in the form below for each game and click <b>"Add game to list"</b> — or upload an existing <b>games-data.js</b> to edit it.',
+      "Repeat for every game you want to add, or remove the ones you don't need.",
+      'Click <b>"Download games-data.js"</b> to get the ready-made file, or copy the generated code.',
+      "Upload the resulting file to your repository, replacing the old one.",
+      "Save/publish: the games will automatically appear in both the mobile and desktop versions."
+    ],
+    uploadTitle: "Upload an existing games-data.js (optional)",
+    uploadLabel: "📂 Choose the games-data.js file from your computer",
+    uploadOk: n => `✓ Loaded ${n} games from the file. You can now add more or remove some.`,
+    uploadErr: "✗ This doesn't look like a valid games-data.js file.",
+    newGameTitle: "New game",
+    lName: "Game name", lDev: "Developer",
+    lIcon: "Icon", lIconHint: "— emoji (e.g. 🏎️) or a direct link to an image",
+    colorNote: "The color is only used if the icon is an emoji, not an image link.",
+    lPrice: "Price", lPriceHint: '— "FREE" or e.g. $2.99',
+    lRating: "Rating",
+    lSize: "Size", lSizeHint: "— controls the fake download screen progress bar",
+    lVersion: "Version",
+    lGenre: "Genre / Category",
+    lDesc: "Description",
+    lShots: "Screenshots", lShotsHint: "— one image link per line, optional",
+    lLink: "Download link", lLinkHint: "— Google Drive, archive.org, etc.",
+    lTrailer: "YouTube trailer ID", lTrailerHint: '— the part after "v=" in the YouTube link, optional',
+    btnAdd: "Add game to list",
+    listTitle: "Games in list",
+    empty: "No games added yet",
+    remove: "Remove",
+    codeTitle: "Code / games-data.js file",
+    btnDownload: "⬇ Download games-data.js",
+    btnCopy: "Copy code",
+    btnClear: "Clear list",
+    copied: "Code copied to clipboard",
+    confirmClear: "Clear the whole game list?",
+    alertName: "Please enter at least the game name."
+  },
+  es: {
+    title: "Gameloft Store — Panel de administración",
+    subtitle: "Añade juegos y tráilers sin escribir código a mano.",
+    howTitle: "Cómo funciona",
+    howList: [
+      'Completa el formulario de abajo para cada juego y pulsa <b>"Añadir juego a la lista"</b>, o carga un <b>games-data.js</b> existente para editarlo.',
+      "Repite para todos los juegos que quieras añadir o elimina los que no necesites.",
+      'Pulsa <b>"Descargar games-data.js"</b> para obtener el archivo listo, o copia el código generado.',
+      "Sube el archivo resultante a tu repositorio, sustituyendo el antiguo.",
+      "Guarda/publica: los juegos aparecerán automáticamente en la versión móvil y de escritorio."
+    ],
+    uploadTitle: "Cargar un games-data.js existente (opcional)",
+    uploadLabel: "📂 Elige el archivo games-data.js de tu ordenador",
+    uploadOk: n => `✓ Se cargaron ${n} juegos del archivo. Ahora puedes añadir más o eliminarlos.`,
+    uploadErr: "✗ Esto no parece un archivo games-data.js válido.",
+    newGameTitle: "Nuevo juego",
+    lName: "Nombre del juego", lDev: "Desarrollador",
+    lIcon: "Icono", lIconHint: "— emoji (p. ej. 🏎️) o un enlace directo a una imagen",
+    colorNote: "El color solo se usa si el icono es un emoji, no un enlace de imagen.",
+    lPrice: "Precio", lPriceHint: '— "FREE" o p. ej. €2,99',
+    lRating: "Valoración",
+    lSize: "Tamaño", lSizeHint: "— controla la barra de la falsa pantalla de descarga",
+    lVersion: "Versión",
+    lGenre: "Género / Categoría",
+    lDesc: "Descripción",
+    lShots: "Capturas", lShotsHint: "— un enlace de imagen por línea, opcional",
+    lLink: "Enlace de descarga", lLinkHint: "— Google Drive, archive.org, etc.",
+    lTrailer: "ID del tráiler de YouTube", lTrailerHint: '— la parte después de "v=" en el enlace de YouTube, opcional',
+    btnAdd: "Añadir juego a la lista",
+    listTitle: "Juegos en la lista",
+    empty: "Todavía no se ha añadido ningún juego",
+    remove: "Eliminar",
+    codeTitle: "Código / archivo games-data.js",
+    btnDownload: "⬇ Descargar games-data.js",
+    btnCopy: "Copiar código",
+    btnClear: "Vaciar lista",
+    copied: "Código copiado al portapapeles",
+    confirmClear: "¿Vaciar toda la lista de juegos?",
+    alertName: "Introduce al menos el nombre del juego."
+  },
+  fr: {
+    title: "Gameloft Store — Panneau d'administration",
+    subtitle: "Ajoutez des jeux et des bandes-annonces sans écrire de code.",
+    howTitle: "Comment ça marche",
+    howList: [
+      'Remplissez le formulaire ci-dessous pour chaque jeu et cliquez sur <b>"Ajouter le jeu à la liste"</b>, ou importez un <b>games-data.js</b> existant pour le modifier.',
+      "Répétez pour tous les jeux à ajouter, ou supprimez ceux dont vous n'avez pas besoin.",
+      'Cliquez sur <b>"Télécharger games-data.js"</b> pour obtenir le fichier prêt à l\'emploi, ou copiez le code généré.',
+      "Téléversez le fichier obtenu dans votre dépôt, en remplaçant l'ancien.",
+      "Enregistrez/publiez : les jeux apparaîtront automatiquement dans les versions mobile et bureau."
+    ],
+    uploadTitle: "Importer un games-data.js existant (optionnel)",
+    uploadLabel: "📂 Choisissez le fichier games-data.js sur votre ordinateur",
+    uploadOk: n => `✓ ${n} jeux chargés depuis le fichier. Vous pouvez maintenant en ajouter ou en supprimer.`,
+    uploadErr: "✗ Ce fichier ne semble pas être un games-data.js valide.",
+    newGameTitle: "Nouveau jeu",
+    lName: "Nom du jeu", lDev: "Développeur",
+    lIcon: "Icône", lIconHint: "— emoji (ex. 🏎️) ou lien direct vers une image",
+    colorNote: "La couleur n'est utilisée que si l'icône est un emoji, pas un lien image.",
+    lPrice: "Prix", lPriceHint: '— "FREE" ou ex. 2,99 €',
+    lRating: "Note",
+    lSize: "Taille", lSizeHint: "— contrôle la barre de la fausse fenêtre de téléchargement",
+    lVersion: "Version",
+    lGenre: "Genre / Catégorie",
+    lDesc: "Description",
+    lShots: "Captures d'écran", lShotsHint: "— un lien image par ligne, optionnel",
+    lLink: "Lien de téléchargement", lLinkHint: "— Google Drive, archive.org, etc.",
+    lTrailer: "ID de la bande-annonce YouTube", lTrailerHint: '— la partie après "v=" dans le lien YouTube, optionnel',
+    btnAdd: "Ajouter le jeu à la liste",
+    listTitle: "Jeux dans la liste",
+    empty: "Aucun jeu ajouté pour le moment",
+    remove: "Supprimer",
+    codeTitle: "Code / fichier games-data.js",
+    btnDownload: "⬇ Télécharger games-data.js",
+    btnCopy: "Copier le code",
+    btnClear: "Vider la liste",
+    copied: "Code copié dans le presse-papiers",
+    confirmClear: "Vider toute la liste des jeux ?",
+    alertName: "Veuillez saisir au moins le nom du jeu."
+  },
+  de: {
+    title: "Gameloft Store — Admin-Bereich",
+    subtitle: "Füge Spiele und Trailer hinzu, ohne Code zu schreiben.",
+    howTitle: "So funktioniert's",
+    howList: [
+      'Fülle das Formular unten für jedes Spiel aus und klicke auf <b>"Spiel zur Liste hinzufügen"</b> — oder lade eine vorhandene <b>games-data.js</b> zum Bearbeiten hoch.',
+      "Wiederhole das für alle gewünschten Spiele oder entferne welche, die du nicht brauchst.",
+      'Klicke auf <b>"games-data.js herunterladen"</b>, um die fertige Datei zu erhalten, oder kopiere den generierten Code.',
+      "Lade die resultierende Datei in dein Repository hoch und ersetze die alte.",
+      "Speichern/veröffentlichen: Die Spiele erscheinen automatisch in der Mobil- und Desktop-Version."
+    ],
+    uploadTitle: "Vorhandene games-data.js hochladen (optional)",
+    uploadLabel: "📂 Wähle die games-data.js-Datei von deinem Computer",
+    uploadOk: n => `✓ ${n} Spiele aus der Datei geladen. Du kannst jetzt weitere hinzufügen oder entfernen.`,
+    uploadErr: "✗ Das sieht nicht wie eine gültige games-data.js-Datei aus.",
+    newGameTitle: "Neues Spiel",
+    lName: "Spielname", lDev: "Entwickler",
+    lIcon: "Symbol", lIconHint: "— Emoji (z. B. 🏎️) oder Direktlink zu einem Bild",
+    colorNote: "Die Farbe wird nur verwendet, wenn das Symbol ein Emoji ist, kein Bildlink.",
+    lPrice: "Preis", lPriceHint: '— "FREE" oder z. B. 2,99 €',
+    lRating: "Bewertung",
+    lSize: "Größe", lSizeHint: "— steuert den Fortschrittsbalken des simulierten Downloads",
+    lVersion: "Version",
+    lGenre: "Genre / Kategorie",
+    lDesc: "Beschreibung",
+    lShots: "Screenshots", lShotsHint: "— ein Bildlink pro Zeile, optional",
+    lLink: "Download-Link", lLinkHint: "— Google Drive, archive.org usw.",
+    lTrailer: "YouTube-Trailer-ID", lTrailerHint: '— der Teil nach "v=" im YouTube-Link, optional',
+    btnAdd: "Spiel zur Liste hinzufügen",
+    listTitle: "Spiele in der Liste",
+    empty: "Noch keine Spiele hinzugefügt",
+    remove: "Entfernen",
+    codeTitle: "Code / games-data.js-Datei",
+    btnDownload: "⬇ games-data.js herunterladen",
+    btnCopy: "Code kopieren",
+    btnClear: "Liste leeren",
+    copied: "Code in die Zwischenablage kopiert",
+    confirmClear: "Die gesamte Spieleliste leeren?",
+    alertName: "Bitte gib mindestens den Spielnamen ein."
+  },
+  pt: {
+    title: "Gameloft Store — Painel de administração",
+    subtitle: "Adicione jogos e trailers sem escrever código à mão.",
+    howTitle: "Como funciona",
+    howList: [
+      'Preencha o formulário abaixo para cada jogo e clique em <b>"Adicionar jogo à lista"</b> — ou carregue um <b>games-data.js</b> existente para editá-lo.',
+      "Repita para todos os jogos que quiser adicionar ou remova os que não precisar.",
+      'Clique em <b>"Baixar games-data.js"</b> para obter o arquivo pronto, ou copie o código gerado.',
+      "Envie o arquivo resultante para o seu repositório, substituindo o antigo.",
+      "Salve/publique: os jogos aparecerão automaticamente nas versões mobile e desktop."
+    ],
+    uploadTitle: "Carregar um games-data.js existente (opcional)",
+    uploadLabel: "📂 Escolha o arquivo games-data.js do seu computador",
+    uploadOk: n => `✓ ${n} jogos carregados do arquivo. Agora você pode adicionar mais ou remover.`,
+    uploadErr: "✗ Isso não parece ser um arquivo games-data.js válido.",
+    newGameTitle: "Novo jogo",
+    lName: "Nome do jogo", lDev: "Desenvolvedor",
+    lIcon: "Ícone", lIconHint: "— emoji (ex. 🏎️) ou link direto para uma imagem",
+    colorNote: "A cor só é usada se o ícone for um emoji, não um link de imagem.",
+    lPrice: "Preço", lPriceHint: '— "FREE" ou ex. R$9,99',
+    lRating: "Avaliação",
+    lSize: "Tamanho", lSizeHint: "— controla a barra da tela de download falsa",
+    lVersion: "Versão",
+    lGenre: "Gênero / Categoria",
+    lDesc: "Descrição",
+    lShots: "Capturas de tela", lShotsHint: "— um link de imagem por linha, opcional",
+    lLink: "Link de download", lLinkHint: "— Google Drive, archive.org, etc.",
+    lTrailer: "ID do trailer do YouTube", lTrailerHint: '— a parte depois de "v=" no link do YouTube, opcional',
+    btnAdd: "Adicionar jogo à lista",
+    listTitle: "Jogos na lista",
+    empty: "Nenhum jogo adicionado ainda",
+    remove: "Remover",
+    codeTitle: "Código / arquivo games-data.js",
+    btnDownload: "⬇ Baixar games-data.js",
+    btnCopy: "Copiar código",
+    btnClear: "Limpar lista",
+    copied: "Código copiado para a área de transferência",
+    confirmClear: "Limpar toda a lista de jogos?",
+    alertName: "Digite pelo menos o nome do jogo."
+  }
+};
+
+const detectedLang = (navigator.language || 'it').slice(0, 2).toLowerCase();
+let currentLang = ADMIN_T[detectedLang] ? detectedLang : 'en';
+
+function applyAdminLang() {
+  const t = ADMIN_T[currentLang];
+  document.documentElement.lang = currentLang;
+  document.getElementById('t-title').textContent = t.title;
+  document.getElementById('t-subtitle').textContent = t.subtitle;
+  document.getElementById('t-how-title').textContent = t.howTitle;
+  document.getElementById('t-how-list').innerHTML = t.howList.map(li => `<li>${li}</li>`).join('');
+  document.getElementById('t-upload-title').textContent = t.uploadTitle;
+  document.getElementById('t-upload-label').textContent = t.uploadLabel;
+  document.getElementById('t-newgame-title').textContent = t.newGameTitle;
+  document.getElementById('t-l-name').textContent = t.lName;
+  document.getElementById('t-l-dev').textContent = t.lDev;
+  document.getElementById('t-l-icon').childNodes[0].textContent = t.lIcon + ' ';
+  document.getElementById('t-l-icon-hint').textContent = t.lIconHint;
+  document.getElementById('t-color-note').textContent = t.colorNote;
+  document.getElementById('t-l-price').childNodes[0].textContent = t.lPrice + ' ';
+  document.getElementById('t-l-price-hint').textContent = t.lPriceHint;
+  document.getElementById('t-l-rating').textContent = t.lRating;
+  document.getElementById('t-l-size').childNodes[0].textContent = t.lSize + ' ';
+  document.getElementById('t-l-size-hint').textContent = t.lSizeHint;
+  document.getElementById('t-l-version').textContent = t.lVersion;
+  document.getElementById('t-l-genre').textContent = t.lGenre;
+  document.getElementById('t-l-desc').textContent = t.lDesc;
+  document.getElementById('t-l-shots').childNodes[0].textContent = t.lShots + ' ';
+  document.getElementById('t-l-shots-hint').textContent = t.lShotsHint;
+  document.getElementById('t-l-link').childNodes[0].textContent = t.lLink + ' ';
+  document.getElementById('t-l-link-hint').textContent = t.lLinkHint;
+  document.getElementById('t-l-trailer').childNodes[0].textContent = t.lTrailer + ' ';
+  document.getElementById('t-l-trailer-hint').textContent = t.lTrailerHint;
+  document.getElementById('t-btn-add').textContent = t.btnAdd;
+  document.getElementById('t-list-title').textContent = t.listTitle;
+  document.getElementById('t-code-title').textContent = t.codeTitle;
+  document.getElementById('t-btn-download').textContent = t.btnDownload;
+  document.getElementById('t-btn-copy').textContent = t.btnCopy;
+  document.getElementById('t-btn-clear').textContent = t.btnClear;
+  document.getElementById('t-copied').textContent = t.copied;
+  render();
+}
+
+document.getElementById('lang-select').value = currentLang;
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  currentLang = e.target.value;
+  applyAdminLang();
+});
+
+/* ============================================================
+   DATI GIOCHI
+   ============================================================ */
 const STORAGE_KEY = 'gameloft_admin_games';
 let games = [];
 
@@ -302,25 +655,21 @@ function iconPreview(g) {
   return g.icon || '?';
 }
 
-function render() {
-  countEl.textContent = games.length;
+const FILE_HEADER = `/* ============================================================
+   AGGIUNGI QUI I TUOI GIOCHI (usato sia da index.html che da desktop.html)
+   - icon: emoji/lettera, oppure un link http a un'immagine (verrà mostrata come icona)
+   - color: colore di sfondo dell'icona (hex) - ignorato se icon è un link immagine
+   - price: "FREE" oppure un prezzo tipo "€2,99" (mostra badge rosso se non FREE)
+   - link: link diretto al file (Google Drive, archive.org, ecc.) - se lasci "#" il pulsante risulta disabilitato
+   - trailer: ID del video YouTube del trailer (la parte dopo "v=" nell'URL) - lascia "" se non disponibile
+   - screenshots: array di link immagine mostrati nella galleria della scheda di dettaglio - lascia [] se non disponibili
+   - size: dimensione del file (es. "38 MB") - controlla anche quanto dura la finta barra di download
+   - category: lascia sempre "games" (il sito mostra solo giochi, niente app)
+   ============================================================ */
+`;
 
-  if (games.length === 0) {
-    listEl.innerHTML = '<div class="empty-note">Nessun gioco aggiunto ancora</div>';
-  } else {
-    listEl.innerHTML = games.map((g, i) => `
-      <div class="game-card">
-        <div class="gc-icon" style="background:${g.icon && g.icon.startsWith('http') ? '#e6e6e6' : (g.color || '#888')}">${iconPreview(g)}</div>
-        <div class="gc-info">
-          <p class="gc-name">${g.name || '(senza nome)'}</p>
-          <p class="gc-meta">${g.dev || ''} · ${g.price || 'FREE'} · ${'★'.repeat(g.rating || 5)}</p>
-        </div>
-        <button class="btn btn-danger" onclick="removeGame(${i})">Rimuovi</button>
-      </div>
-    `).join('');
-  }
-
-  codeOutput.value = games.map(g => {
+function buildFileContent() {
+  const body = games.map(g => {
     const shots = (g.screenshots || []).map(s => `      "${esc(s)}"`).join(',\n');
     return `  {
     name: "${esc(g.name)}",
@@ -340,8 +689,30 @@ ${shots}
     link: "${esc(g.link) || '#'}",
     trailer: "${esc(g.trailer)}"
   }`;
-  }).join(',\n') + (games.length ? ',' : '');
+  }).join(',\n');
+  return `${FILE_HEADER}const APPS = [\n${body}${games.length ? '\n' : ''}];\n`;
+}
 
+function render() {
+  const t = ADMIN_T[currentLang];
+  countEl.textContent = games.length;
+
+  if (games.length === 0) {
+    listEl.innerHTML = `<div class="empty-note">${t.empty}</div>`;
+  } else {
+    listEl.innerHTML = games.map((g, i) => `
+      <div class="game-card">
+        <div class="gc-icon" style="background:${g.icon && g.icon.startsWith('http') ? '#e6e6e6' : (g.color || '#888')}">${iconPreview(g)}</div>
+        <div class="gc-info">
+          <p class="gc-name">${g.name || '(?)'}</p>
+          <p class="gc-meta">${g.dev || ''} · ${g.price || 'FREE'} · ${'★'.repeat(g.rating || 5)}</p>
+        </div>
+        <button class="btn btn-danger" onclick="removeGame(${i})">${t.remove}</button>
+      </div>
+    `).join('');
+  }
+
+  codeOutput.value = buildFileContent();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
 }
 
@@ -352,8 +723,9 @@ function removeGame(i) {
 window.removeGame = removeGame;
 
 document.getElementById('btn-add').addEventListener('click', () => {
+  const t = ADMIN_T[currentLang];
   const name = document.getElementById('f-name').value.trim();
-  if (!name) { alert('Inserisci almeno il nome del gioco.'); return; }
+  if (!name) { alert(t.alertName); return; }
 
   const screenshotsRaw = document.getElementById('f-screenshots').value.trim();
   const screenshots = screenshotsRaw ? screenshotsRaw.split('\n').map(s => s.trim()).filter(Boolean) : [];
@@ -376,7 +748,6 @@ document.getElementById('btn-add').addEventListener('click', () => {
 
   render();
 
-  // pulisce il modulo per il prossimo inserimento
   ['f-name','f-icon','f-size','f-version','f-genre','f-desc','f-screenshots','f-link','f-trailer']
     .forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-price').value = 'FREE';
@@ -394,13 +765,62 @@ document.getElementById('btn-copy').addEventListener('click', () => {
 });
 
 document.getElementById('btn-clear').addEventListener('click', () => {
-  if (confirm('Svuotare tutta la lista dei giochi aggiunti in questa sessione?')) {
+  const t = ADMIN_T[currentLang];
+  if (confirm(t.confirmClear)) {
     games = [];
     render();
   }
 });
 
-render();
+/* ============================================================
+   SCARICA games-data.js già pronto (Blob + download)
+   ============================================================ */
+document.getElementById('btn-download-file').addEventListener('click', () => {
+  const content = buildFileContent();
+  const blob = new Blob([content], { type: 'text/javascript' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'games-data.js';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+});
+
+/* ============================================================
+   CARICA un games-data.js esistente e lo analizza
+   ============================================================ */
+document.getElementById('file-upload').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const t = ADMIN_T[currentLang];
+  const statusEl = document.getElementById('upload-status');
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const content = ev.target.result;
+    try {
+      const match = content.match(/const\s+APPS\s*=\s*(\[[\s\S]*\])\s*;?/);
+      if (!match) throw new Error('no match');
+      // valuta l'array letterale JS del file caricato (dati locali dell'utente, non eseguiamo altro)
+      const parsed = new Function('return ' + match[1])();
+      if (!Array.isArray(parsed)) throw new Error('not array');
+      games = parsed;
+      statusEl.textContent = t.uploadOk(games.length);
+      statusEl.classList.remove('error');
+      statusEl.style.display = 'block';
+      render();
+    } catch (err) {
+      statusEl.textContent = t.uploadErr;
+      statusEl.classList.add('error');
+      statusEl.style.display = 'block';
+    }
+  };
+  reader.readAsText(file);
+});
+
+applyAdminLang();
 </script>
 
 </body>
