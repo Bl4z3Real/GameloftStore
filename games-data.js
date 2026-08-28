@@ -13,7 +13,7 @@ const APPS = [
   {
     name: "Asphalt 7: Heat",
     dev: "Gameloft",
-    icon: "https://asphalt.fandom.com/wiki/Winter_Update_(Asphalt_7)?file=A7_v1.11.png",
+    icon: "https://static.wikia.nocookie.net/asphalt/images/8/81/A7_v1.11.png/revision/latest?cb=20200704184337",
     color: "#c0392b",
     rating: 5,
     price: "FREE",
