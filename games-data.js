@@ -300,50 +300,5 @@ const APPS = [
     ],
     link: "https://archive.org/download/asphalt-8-v-2.0.0e.apk/Asphalt_8_v2.0.0e.apk.zip/Asphalt_8_v2.0.0e.apk",
     trailer: ""
-  },
-  {
-    name: "Bonsai Blast",
-    dev: "Glu Mobile",
-    icon: "🌳",
-    color: "#4caf50",
-    rating: 5,
-    price: "FREE",
-    category: "games",
-    size: "2.1 MB",
-    version: "1.4.2",
-    genre: "Arcade",
-    desc: "Fai esplodere le sfere colorate in questo classico puzzle arcade. Punta, mira e libera il bonsai!",
-    link: "#",
-    trailer: ""
-  },
-  {
-    name: "Asphalt 6: Adrenaline HD",
-    dev: "Gameloft",
-    icon: "🏎️",
-    color: "#c0392b",
-    rating: 5,
-    price: "FREE",
-    category: "games",
-    size: "24 MB",
-    version: "1.0.0",
-    genre: "Corse",
-    desc: "Corse ad alta velocità su supercar in quindici città reali di tutto il mondo.",
-    link: "#",
-    trailer: ""
-  },
-  {
-    name: "The Oregon Trail HD",
-    dev: "Gameloft",
-    icon: "🐎",
-    color: "#8d6e63",
-    rating: 4,
-    price: "FREE",
-    category: "games",
-    size: "18 MB",
-    version: "1.0.3",
-    genre: "Avventura",
-    desc: "Guida la tua carovana lungo lo storico Oregon Trail affrontando ogni pericolo del viaggio.",
-    link: "#",
-    trailer: ""
   }
 ];
