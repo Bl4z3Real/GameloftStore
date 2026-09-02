@@ -350,7 +350,8 @@
   .video-wrap {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    height: 0;
+    padding-top: 56.25%; /* trucco 16:9 compatibile con browser datati, al posto di aspect-ratio */
     background: #000;
     overflow: hidden;
   }
@@ -751,9 +752,9 @@ function applyTranslations() {
   document.getElementById('tab-trailer').textContent = T.tabTrailer;
   document.getElementById('tab-downloads').textContent = T.tabDownloads;
   document.getElementById('section-label').textContent = T.sectionGames;
-  document.getElementById('back-btn').textContent = '‹ ' + T.back;
-  document.getElementById('player-back-btn').textContent = '‹ ' + T.back;
-  document.getElementById('download-back-btn').textContent = '‹ ' + T.back;
+  document.getElementById('back-btn').textContent = '\u2039 ' + T.back;
+  document.getElementById('player-back-btn').textContent = '\u2039 ' + T.back;
+  document.getElementById('download-back-btn').textContent = '\u2039 ' + T.back;
   document.getElementById('d-trailer-btn').textContent = T.trailerBtn;
   document.getElementById('info-title').textContent = T.infoTitle;
   document.getElementById('desc-title').textContent = T.descTitle;
@@ -764,62 +765,65 @@ function applyTranslations() {
   document.getElementById('dl-footer-note').textContent = T.footerNote;
 }
 
-const listEl = document.getElementById('app-list');
-const tabs = document.querySelectorAll('.tab');
-const listView = document.querySelector('.app-list-view');
-const detailView = document.getElementById('detail-view');
-const sectionLabel = document.getElementById('section-label');
-const searchToggle = document.getElementById('search-toggle');
-const searchBar = document.getElementById('search-bar');
-const searchInput = document.getElementById('search-input');
+var listEl = document.getElementById('app-list');
+var tabs = toArray(document.querySelectorAll('.tab'));
+var listView = document.querySelector('.app-list-view');
+var detailView = document.getElementById('detail-view');
+var sectionLabel = document.getElementById('section-label');
+var searchToggle = document.getElementById('search-toggle');
+var searchBar = document.getElementById('search-bar');
+var searchInput = document.getElementById('search-input');
 
-let currentTab = 'games';
-let currentQuery = '';
-let currentApp = null;
+var currentTab = 'games';
+var currentQuery = '';
+var currentApp = null;
 
 applyTranslations();
 
 function priceMarkup(price) {
-  if (price === 'FREE') return `<div class="app-price free">${T.free}</div>`;
-  if (price === 'Installed') return `<div class="app-price installed">${T.installed}</div>`;
-  return `<div class="app-price">${price}</div>`;
+  if (price === 'FREE') return '<div class="app-price free">' + escHtml(T.free) + '</div>';
+  if (price === 'Installed') return '<div class="app-price installed">' + escHtml(T.installed) + '</div>';
+  return '<div class="app-price">' + escHtml(price) + '</div>';
 }
 
 function renderList(filter) {
   listEl.innerHTML = '';
-  let items;
-  if (filter === 'downloads') items = APPS;
-  else if (filter === 'trailer') items = APPS.filter(a => a.trailer);
-  else items = APPS.filter(a => a.category === filter);
+  var items;
+  if (filter === 'downloads') {
+    items = APPS;
+  } else if (filter === 'trailer') {
+    items = APPS.filter(function (a) { return !!a.trailer; });
+  } else {
+    items = APPS.filter(function (a) { return a.category === filter; });
+  }
 
-  if (currentQuery.trim() !== '') {
-    const q = currentQuery.trim().toLowerCase();
-    items = items.filter(a =>
-      a.name.toLowerCase().includes(q) || a.dev.toLowerCase().includes(q)
-    );
+  if (currentQuery.replace(/^\s+|\s+$/g, '') !== '') {
+    var q = currentQuery.replace(/^\s+|\s+$/g, '');
+    items = items.filter(function (a) {
+      return stringContains(a.name, q) || stringContains(a.dev, q);
+    });
   }
 
   if (items.length === 0) {
-    const msg = filter === 'trailer' ? T.noTrailers : T.noGames;
-    listEl.innerHTML = `<div style="padding:20px;text-align:center;color:#999;font-size:13px;">${msg}</div>`;
+    var msg = filter === 'trailer' ? T.noTrailers : T.noGames;
+    listEl.innerHTML = '<div style="padding:20px;text-align:center;color:#999;font-size:13px;">' + escHtml(msg) + '</div>';
     return;
   }
 
-  items.forEach(app => {
-    const row = document.createElement('div');
+  items.forEach(function (app) {
+    var row = document.createElement('div');
     row.className = 'app-row';
-    const rightSide = filter === 'trailer'
-      ? `<div class="app-side"><div class="app-price" style="color:#c0392b;">▶ PLAY</div></div>`
-      : `<div class="app-side">${priceMarkup(app.price)}<div class="stars">${starMarkup(app.rating)}</div></div>`;
-    row.innerHTML = `
-      <div class="app-icon" style="background:${iconBg(app)};color:${iconFg(app)}">${iconMarkup(app)}</div>
-      <div class="app-info">
-        <p class="app-name">${app.name}</p>
-        <p class="app-dev">${app.dev}</p>
-      </div>
-      ${rightSide}
-    `;
-    row.addEventListener('click', () => {
+    var rightSide = filter === 'trailer'
+      ? '<div class="app-side"><div class="app-price" style="color:#c0392b;">\u25B6 PLAY</div></div>'
+      : '<div class="app-side">' + priceMarkup(app.price) + '<div class="stars">' + starMarkup(app.rating) + '</div></div>';
+    row.innerHTML =
+      '<div class="app-icon" style="background:' + iconBg(app) + ';color:' + iconFg(app) + ';">' + iconMarkup(app) + '</div>' +
+      '<div class="app-info">' +
+      '<p class="app-name">' + escHtml(app.name) + '</p>' +
+      '<p class="app-dev">' + escHtml(app.dev) + '</p>' +
+      '</div>' +
+      rightSide;
+    row.addEventListener('click', function () {
       if (filter === 'trailer') openPlayer(app);
       else showDetail(app);
     });
@@ -828,7 +832,7 @@ function renderList(filter) {
 }
 
 function showDetail(app) {
-  const iconEl = document.getElementById('d-icon');
+  var iconEl = document.getElementById('d-icon');
   iconEl.style.background = iconBg(app);
   iconEl.style.color = iconFg(app);
   iconEl.innerHTML = iconMarkup(app);
@@ -837,7 +841,7 @@ function showDetail(app) {
   document.getElementById('d-dev').textContent = app.dev;
   document.getElementById('d-stars').innerHTML = starMarkup(app.rating);
 
-  let metaHtml = app.price === 'FREE' ? '' : (app.price === 'Installed' ? 'Installed' : `<span class="price-badge">${app.price}</span>`);
+  var metaHtml = app.price === 'FREE' ? '' : (app.price === 'Installed' ? 'Installed' : '<span class="price-badge">' + escHtml(app.price) + '</span>');
   document.getElementById('d-meta').innerHTML = metaHtml;
 
   document.getElementById('d-size').textContent = app.size;
@@ -845,17 +849,19 @@ function showDetail(app) {
   document.getElementById('d-category').textContent = app.genre;
   document.getElementById('d-desc').textContent = app.desc;
 
-  const shotsEl = document.getElementById('d-screenshots');
+  var shotsEl = document.getElementById('d-screenshots');
   if (app.screenshots && app.screenshots.length > 0) {
     shotsEl.style.display = 'flex';
-    shotsEl.innerHTML = app.screenshots.map(src => `<img src="${src}" alt="${app.name} screenshot">`).join('');
+    shotsEl.innerHTML = app.screenshots.map(function (src) {
+      return '<img src="' + escHtml(src) + '" alt="' + escHtml(app.name) + ' screenshot">';
+    }).join('');
   } else {
     shotsEl.style.display = 'none';
     shotsEl.innerHTML = '';
   }
 
   currentApp = app;
-  const btn = document.getElementById('d-download-btn');
+  var btn = document.getElementById('d-download-btn');
   if (!app.link || app.link === '#') {
     btn.classList.add('disabled');
     btn.removeAttribute('href');
@@ -866,10 +872,10 @@ function showDetail(app) {
     btn.textContent = T.install;
   }
 
-  const trailerBtn = document.getElementById('d-trailer-btn');
+  var trailerBtn = document.getElementById('d-trailer-btn');
   if (app.trailer) {
     trailerBtn.style.display = 'inline-block';
-    trailerBtn.onclick = () => openPlayer(app);
+    trailerBtn.onclick = function () { openPlayer(app); };
   } else {
     trailerBtn.style.display = 'none';
   }
@@ -879,17 +885,17 @@ function showDetail(app) {
   window.scrollTo(0, 0);
 }
 
-document.getElementById('back-btn').addEventListener('click', () => {
+document.getElementById('back-btn').addEventListener('click', function () {
   detailView.classList.remove('active');
   listView.classList.remove('hidden');
   window.scrollTo(0, 0);
 });
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
+tabs.forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    tabs.forEach(function (t) { t.classList.remove('active'); });
     tab.classList.add('active');
-    currentTab = tab.dataset.tab;
+    currentTab = tab.getAttribute('data-tab');
     sectionLabel.textContent = currentTab === 'games' ? T.sectionGames
       : currentTab === 'trailer' ? T.sectionTrailer
       : T.sectionDownloads;
@@ -898,7 +904,7 @@ tabs.forEach(tab => {
 });
 
 /* ===== RICERCA FUNZIONANTE ===== */
-searchToggle.addEventListener('click', () => {
+searchToggle.addEventListener('click', function () {
   searchBar.classList.toggle('active');
   if (searchBar.classList.contains('active')) {
     searchInput.focus();
@@ -909,17 +915,17 @@ searchToggle.addEventListener('click', () => {
   }
 });
 
-searchInput.addEventListener('input', (e) => {
+searchInput.addEventListener('input', function (e) {
   currentQuery = e.target.value;
   renderList(currentTab);
 });
 
 /* ===== OROLOGIO REALE ===== */
 function updateClock() {
-  const now = new Date();
-  const h = String(now.getHours()).padStart(2, '0');
-  const m = String(now.getMinutes()).padStart(2, '0');
-  document.getElementById('clock').textContent = `${h}:${m}`;
+  var now = new Date();
+  var h = padZero(now.getHours());
+  var m = padZero(now.getMinutes());
+  document.getElementById('clock').textContent = h + ':' + m;
 }
 updateClock();
 setInterval(updateClock, 1000 * 15);
@@ -932,15 +938,15 @@ setInterval(updateClock, 1000 * 15);
    barra rossa, contatore LCD) ma pilota un vero video di YouTube
    tramite l'IFrame API ufficiale.
    ============================================================ */
-const playerView = document.getElementById('player-view');
-const trailerTitleBar = document.getElementById('trailer-title-bar');
-let ytPlayer = null;
-let ytReady = false;
-let progressTimer = null;
-let pendingVideoId = null;
+var playerView = document.getElementById('player-view');
+var trailerTitleBar = document.getElementById('trailer-title-bar');
+var ytPlayer = null;
+var ytReady = false;
+var progressTimer = null;
+var pendingVideoId = null;
 
 // carica l'API IFrame di YouTube in modo asincrono
-const ytScript = document.createElement('script');
+var ytScript = document.createElement('script');
 ytScript.src = 'https://www.youtube.com/iframe_api';
 document.head.appendChild(ytScript);
 
@@ -950,12 +956,12 @@ function onYouTubeIframeAPIReady() {
     width: '100%',
     playerVars: { controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1 },
     events: {
-      onReady: () => {
+      onReady: function () {
         ytReady = true;
         if (pendingVideoId) { ytPlayer.loadVideoById(pendingVideoId); pendingVideoId = null; }
         setPlayIcon(false);
       },
-      onStateChange: (e) => {
+      onStateChange: function (e) {
         if (e.data === YT.PlayerState.PLAYING) { setPlayIcon(false); startProgressTimer(); }
         if (e.data === YT.PlayerState.PAUSED) { setPlayIcon(true); stopProgressTimer(); }
         if (e.data === YT.PlayerState.ENDED) { setPlayIcon(true); stopProgressTimer(); }
@@ -967,9 +973,9 @@ window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
 function fmtTime(sec) {
   if (!isFinite(sec) || sec < 0) sec = 0;
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60);
-  return `${m}:${String(s).padStart(2, '0')}`;
+  var m = Math.floor(sec / 60);
+  var s = Math.floor(sec % 60);
+  return m + ':' + padZero(s);
 }
 
 function setPlayIcon(showPlay) {
@@ -979,11 +985,11 @@ function setPlayIcon(showPlay) {
 
 function startProgressTimer() {
   stopProgressTimer();
-  progressTimer = setInterval(() => {
+  progressTimer = setInterval(function () {
     if (!ytPlayer || !ytPlayer.getCurrentTime) return;
-    const cur = ytPlayer.getCurrentTime();
-    const dur = ytPlayer.getDuration();
-    document.getElementById('p-fill').style.width = dur ? `${(cur / dur) * 100}%` : '0%';
+    var cur = ytPlayer.getCurrentTime();
+    var dur = ytPlayer.getDuration();
+    document.getElementById('p-fill').style.width = dur ? ((cur / dur) * 100) + '%' : '0%';
     document.getElementById('p-current').textContent = fmtTime(cur);
     document.getElementById('p-duration').textContent = fmtTime(dur);
   }, 500);
@@ -991,13 +997,13 @@ function startProgressTimer() {
 function stopProgressTimer() { clearInterval(progressTimer); }
 
 function openPlayer(app) {
-  trailerTitleBar.textContent = `${app.name} — ${T.trailerOfficial}`;
+  trailerTitleBar.textContent = app.name + ' \u2014 ' + T.trailerOfficial;
   document.getElementById('p-fill').style.width = '0%';
   document.getElementById('p-current').textContent = '0:00';
   document.getElementById('p-duration').textContent = '0:00';
 
   if (!app.trailer) {
-    trailerTitleBar.textContent = `${app.name} — ${T.trailerMissing}`;
+    trailerTitleBar.textContent = app.name + ' \u2014 ' + T.trailerMissing;
   } else if (ytReady) {
     ytPlayer.loadVideoById(app.trailer);
   } else {
@@ -1010,7 +1016,7 @@ function openPlayer(app) {
   window.scrollTo(0, 0);
 }
 
-document.getElementById('player-back-btn').addEventListener('click', () => {
+document.getElementById('player-back-btn').addEventListener('click', function () {
   if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
   stopProgressTimer();
   playerView.classList.remove('active');
@@ -1018,39 +1024,39 @@ document.getElementById('player-back-btn').addEventListener('click', () => {
   window.scrollTo(0, 0);
 });
 
-document.getElementById('p-playpause').addEventListener('click', () => {
+document.getElementById('p-playpause').addEventListener('click', function () {
   if (!ytPlayer || !ytPlayer.getPlayerState) return;
-  const state = ytPlayer.getPlayerState();
+  var state = ytPlayer.getPlayerState();
   if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
   else ytPlayer.playVideo();
 });
 
-document.getElementById('p-restart').addEventListener('click', () => {
+document.getElementById('p-restart').addEventListener('click', function () {
   if (ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(0, true);
 });
 
-const pTrack = document.getElementById('p-track');
-pTrack.addEventListener('click', (e) => {
+var pTrack = document.getElementById('p-track');
+pTrack.addEventListener('click', function (e) {
   if (!ytPlayer || !ytPlayer.getDuration) return;
-  const rect = pTrack.getBoundingClientRect();
-  const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+  var rect = pTrack.getBoundingClientRect();
+  var ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
   ytPlayer.seekTo(ytPlayer.getDuration() * ratio, true);
 });
 
-let currentVolume = 70;
-const pVolTrack = document.getElementById('p-voltrack');
-const pVolFill = document.getElementById('p-volfill');
+var currentVolume = 70;
+var pVolTrack = document.getElementById('p-voltrack');
+var pVolFill = document.getElementById('p-volfill');
 pVolFill.style.width = currentVolume + '%';
-pVolTrack.addEventListener('click', (e) => {
-  const rect = pVolTrack.getBoundingClientRect();
-  const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+pVolTrack.addEventListener('click', function (e) {
+  var rect = pVolTrack.getBoundingClientRect();
+  var ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
   currentVolume = Math.round(ratio * 100);
   pVolFill.style.width = currentVolume + '%';
   if (ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(currentVolume);
 });
 
-document.getElementById('p-fullscreen').addEventListener('click', () => {
-  const wrap = document.querySelector('.video-wrap');
+document.getElementById('p-fullscreen').addEventListener('click', function () {
+  var wrap = document.querySelector('.video-wrap');
   if (wrap.requestFullscreen) wrap.requestFullscreen();
 });
 
@@ -1060,8 +1066,8 @@ document.getElementById('p-fullscreen').addEventListener('click', () => {
    di ogni gioco (es. "38 MB"): la velocità è simulata in modo
    realistico, poi a fine animazione parte il download vero del file.
    ============================================================ */
-const downloadView = document.getElementById('download-view');
-let dlInterval = null;
+var downloadView = document.getElementById('download-view');
+var dlInterval = null;
 
 function startDownload(app) {
   if (!app || !app.link || app.link === '#') return;
@@ -1072,15 +1078,15 @@ function startDownload(app) {
   document.getElementById('dl-filename').textContent = guessFilename(app.link);
   document.getElementById('dl-source').textContent = guessDomain(app.link);
 
-  const fill = document.getElementById('dl-fill');
-  const status = document.getElementById('dl-status');
+  var fill = document.getElementById('dl-fill');
+  var status = document.getElementById('dl-status');
   fill.classList.remove('indeterminate');
   fill.style.width = '0%';
   status.classList.remove('done');
 
   // dimensione dichiarata nel campo "size" del gioco (es. "38 MB").
   // se non è impostata o non è leggibile, usa 20 MB come valore di default.
-  const total = parseSizeToBytes(app.size) || (20 * 1024 * 1024);
+  var total = parseSizeToBytes(app.size) || (20 * 1024 * 1024);
 
   listView.classList.add('hidden');
   detailView.classList.remove('active');
@@ -1091,10 +1097,10 @@ function startDownload(app) {
   clearInterval(dlInterval);
 
   // velocità di download simulata, casuale ma realistica (tra ~2 e ~7 MB/s)
-  const speedBytesPerTick = (2 + Math.random() * 5) * 1024 * 1024 * 0.2; // per tick da 200ms
-  let received = 0;
+  var speedBytesPerTick = (2 + Math.random() * 5) * 1024 * 1024 * 0.2; // per tick da 200ms
+  var received = 0;
 
-  dlInterval = setInterval(() => {
+  dlInterval = setInterval(function () {
     received += speedBytesPerTick * (0.7 + Math.random() * 0.6); // piccola variazione realistica
     if (received >= total) {
       received = total;
@@ -1102,32 +1108,32 @@ function startDownload(app) {
 
       fill.style.width = '100%';
       status.classList.add('done');
-      status.textContent = `${T.completed} — ${fmtBytes(total)}`;
+      status.textContent = T.completed + ' \u2014 ' + fmtBytes(total);
 
       // a fine animazione parte il download reale del file, restando su questa pagina
-      const a = document.createElement('a');
+      var a = document.createElement('a');
       a.href = app.link;
       a.download = guessFilename(app.link);
       a.rel = 'noopener';
       document.body.appendChild(a);
       a.click();
-      a.remove();
+      removeNode(a);
       return;
     }
 
-    const pct = (received / total) * 100;
+    var pct = (received / total) * 100;
     fill.style.width = pct.toFixed(1) + '%';
-    status.textContent = `${T.downloading} ${Math.floor(pct)}% (${fmtBytes(received)} / ${fmtBytes(total)})`;
+    status.textContent = T.downloading + ' ' + Math.floor(pct) + '% (' + fmtBytes(received) + ' / ' + fmtBytes(total) + ')';
   }, 200);
 }
 
-document.getElementById('d-download-btn').addEventListener('click', (e) => {
+document.getElementById('d-download-btn').addEventListener('click', function (e) {
   if (e.currentTarget.classList.contains('disabled')) return;
   e.preventDefault();
   startDownload(currentApp);
 });
 
-document.getElementById('download-back-btn').addEventListener('click', () => {
+document.getElementById('download-back-btn').addEventListener('click', function () {
   clearInterval(dlInterval);
   downloadView.classList.remove('active');
   listView.classList.remove('hidden');
