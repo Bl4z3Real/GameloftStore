@@ -181,13 +181,13 @@
 
   main.content { flex: 1; padding: 22px 24px; min-width: 0; }
   .grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 26px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
   }
-  .empty-note { padding: 60px 20px; text-align: center; color: #888; font-size: 14px; grid-column: 1 / -1; }
+  .empty-note { padding: 60px 20px; text-align: center; color: #888; font-size: 14px; width: 100%; }
 
-  .card { cursor: pointer; }
+  .card { cursor: pointer; width: 25%; padding: 0 10px; margin-bottom: 26px; box-sizing: border-box; }
   .card-icon {
     width: 72px; height: 72px;
     border-radius: 10px;
@@ -225,7 +225,7 @@
   /* ===== MODAL OVERLAY (dettaglio / trailer / download) ===== */
   .overlay {
     display: none;
-    position: fixed; inset: 0;
+    position: fixed; top: 0; right: 0; bottom: 0; left: 0;
     background: rgba(0,0,0,0.6);
     z-index: 200;
     align-items: flex-start; justify-content: center;
@@ -269,8 +269,8 @@
 
   /* ===== PLAYER TRAILER MODAL ===== */
   #trailer-modal .modal { max-width: 860px; }
-  .video-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
-  .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
+  .video-wrap { position: relative; width: 100%; height: 0; padding-top: 56.25%; background: #000; }
+  .video-wrap iframe { position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
   .player-controls { display: flex; align-items: center; gap: 8px; background: linear-gradient(#e9e9e9, #b9b9b9 45%, #a3a3a3 46%, #cfcfcf); border-top: 1px solid #eee; padding: 8px 10px; }
   .pbtn { width: 30px; height: 28px; border-radius: 3px; background: linear-gradient(#fdfdfd, #d6d6d6 45%, #bcbcbc 46%, #e2e2e2); border: 1px solid #8f8f8f; box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
   .pbtn:active { background: linear-gradient(#c9c9c9, #b0b0b0); }
@@ -303,7 +303,7 @@
   @media (max-width: 900px) {
     .sidebar { display: none; }
     .cat-label { display: none; }
-    .grid { grid-template-columns: repeat(2, 1fr); }
+    .card { width: 50%; }
   }
 </style>
 </head>
@@ -453,32 +453,44 @@ document.getElementById('label-size').textContent = T.sizeLabel;
 document.getElementById('label-version').textContent = T.versionLabel;
 document.getElementById('label-category').textContent = T.categoryLabel;
 document.getElementById('download-history-title').textContent = T.downloadHistory;
-document.querySelectorAll('.close-label2').forEach(el => el.textContent = T.close);
+toArray(document.querySelectorAll('.close-label2')).forEach(function (el) { el.textContent = T.close; });
 document.getElementById('close-label').textContent = T.close;
 
-const grid = document.getElementById('game-grid');
-const navTabs = document.querySelectorAll('.nav-item');
-const subTabs = document.querySelectorAll('.view-tab');
-const genreListEl = document.getElementById('genre-list');
-const searchInput = document.getElementById('search-input');
+var grid = document.getElementById('game-grid');
+var navTabs = toArray(document.querySelectorAll('.nav-item'));
+var subTabs = toArray(document.querySelectorAll('.view-tab'));
+var genreListEl = document.getElementById('genre-list');
+var searchInput = document.getElementById('search-input');
 
-let currentTab = 'games';
-let currentSub = 'all';
-let currentGenre = null;
-let currentQuery = '';
-let currentApp = null;
+var currentTab = 'games';
+var currentSub = 'all';
+var currentGenre = null;
+var currentQuery = '';
+var currentApp = null;
 
 /* ===== SIDEBAR GENERI (generati dai giochi presenti) ===== */
+function uniqueGenres() {
+  var seen = {};
+  var out = [];
+  for (var i = 0; i < APPS.length; i++) {
+    var g = APPS[i].genre;
+    if (g && !seen[g]) { seen[g] = true; out.push(g); }
+  }
+  return out;
+}
+
 function buildGenreList() {
-  const genres = [...new Set(APPS.map(a => a.genre).filter(Boolean))];
-  let html = `<a data-genre="" class="active">Tutti i giochi <span class="chev">›</span></a>`;
-  genres.forEach(g => { html += `<a data-genre="${g}">${g} <span class="chev">›</span></a>`; });
+  var genres = uniqueGenres();
+  var html = '<a data-genre="" class="active">Tutti i giochi <span class="chev">\u203A</span></a>';
+  genres.forEach(function (g) {
+    html += '<a data-genre="' + escHtml(g) + '">' + escHtml(g) + ' <span class="chev">\u203A</span></a>';
+  });
   genreListEl.innerHTML = html;
-  genreListEl.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      genreListEl.querySelectorAll('a').forEach(x => x.classList.remove('active'));
+  toArray(genreListEl.querySelectorAll('a')).forEach(function (a) {
+    a.addEventListener('click', function () {
+      toArray(genreListEl.querySelectorAll('a')).forEach(function (x) { x.classList.remove('active'); });
       a.classList.add('active');
-      currentGenre = a.dataset.genre || null;
+      currentGenre = a.getAttribute('data-genre') || null;
       renderGrid();
     });
   });
@@ -486,18 +498,19 @@ function buildGenreList() {
 buildGenreList();
 
 /* ===== HERO CAROUSEL (usa gli screenshot dei giochi che ne hanno, con scorrimento animato) ===== */
-const heroTrack = document.getElementById('hero-track');
-const heroDots = document.getElementById('hero-dots');
-let heroSlides = [];
-APPS.forEach(app => {
-  (app.screenshots || []).forEach(src => heroSlides.push({ src, name: app.name }));
+var heroTrack = document.getElementById('hero-track');
+var heroDots = document.getElementById('hero-dots');
+var heroSlides = [];
+APPS.forEach(function (app) {
+  var shots = app.screenshots || [];
+  shots.forEach(function (src) { heroSlides.push({ src: src, name: app.name }); });
 });
-let heroIndex = 0;
-let heroAnimating = false;
+var heroIndex = 0;
+var heroAnimating = false;
 
 function slideHTML(item, cls) {
-  const captionHTML = cls === '' ? `<div class="hero-caption">${item.name}</div>` : '';
-  return `<div class="hero-slide ${cls}" style="background-image:url('${item.src}')">${captionHTML}</div>`;
+  var captionHTML = cls === '' ? ('<div class="hero-caption">' + escHtml(item.name) + '</div>') : '';
+  return '<div class="hero-slide ' + cls + '" style="background-image:url(\'' + item.src + '\')">' + captionHTML + '</div>';
 }
 
 function renderHero() {
@@ -506,18 +519,24 @@ function renderHero() {
     heroDots.innerHTML = '';
     return;
   }
-  const total = heroSlides.length;
-  const prev = heroSlides[(heroIndex - 1 + total) % total];
-  const cur = heroSlides[heroIndex];
-  const next = heroSlides[(heroIndex + 1) % total];
+  var total = heroSlides.length;
+  var prev = heroSlides[(heroIndex - 1 + total) % total];
+  var cur = heroSlides[heroIndex];
+  var next = heroSlides[(heroIndex + 1) % total];
 
   heroTrack.classList.remove('animate');
   heroTrack.style.transform = 'translateX(0%)';
   heroTrack.innerHTML = slideHTML(prev, 'side') + slideHTML(cur, '') + slideHTML(next, 'side');
 
-  heroDots.innerHTML = heroSlides.map((_, i) => `<span class="${i === heroIndex ? 'active' : ''}" data-i="${i}"></span>`).join('');
-  heroDots.querySelectorAll('span').forEach(dot => {
-    dot.addEventListener('click', () => { if (!heroAnimating) goToHero(parseInt(dot.dataset.i, 10)); });
+  var dotsHtml = '';
+  for (var i = 0; i < heroSlides.length; i++) {
+    dotsHtml += '<span class="' + (i === heroIndex ? 'active' : '') + '" data-i="' + i + '"></span>';
+  }
+  heroDots.innerHTML = dotsHtml;
+  toArray(heroDots.querySelectorAll('span')).forEach(function (dot) {
+    dot.addEventListener('click', function () {
+      if (!heroAnimating) goToHero(parseInt(dot.getAttribute('data-i'), 10));
+    });
   });
 }
 
@@ -525,11 +544,12 @@ function advanceHero() {
   if (heroSlides.length < 2 || heroAnimating) return;
   heroAnimating = true;
   // fa scorrere fisicamente il banner verso sinistra (l'immagine "next" entra da destra)
-  requestAnimationFrame(() => {
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+  raf(function () {
     heroTrack.classList.add('animate');
     heroTrack.style.transform = 'translateX(-15%)';
   });
-  setTimeout(() => {
+  setTimeout(function () {
     heroIndex = (heroIndex + 1) % heroSlides.length;
     heroAnimating = false;
     renderHero();
@@ -545,76 +565,79 @@ renderHero();
 setInterval(advanceHero, 4500);
 
 /* ===== NAV PRINCIPALE (Giochi / Trailer / Download) ===== */
-navTabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    navTabs.forEach(t => t.classList.remove('active'));
+navTabs.forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    navTabs.forEach(function (t) { t.classList.remove('active'); });
     tab.classList.add('active');
-    currentTab = tab.dataset.tab;
+    currentTab = tab.getAttribute('data-tab');
     document.querySelector('.cat-tabs-bar').style.display = currentTab === 'games' ? 'flex' : 'none';
     document.querySelector('.sidebar').style.display = currentTab === 'games' ? 'block' : 'none';
     renderGrid();
   });
 });
 
-subTabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    subTabs.forEach(t => t.classList.remove('active'));
+subTabs.forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    subTabs.forEach(function (t) { t.classList.remove('active'); });
     tab.classList.add('active');
-    currentSub = tab.dataset.sub;
+    currentSub = tab.getAttribute('data-sub');
     renderGrid();
   });
 });
 
-searchInput.addEventListener('input', (e) => {
+searchInput.addEventListener('input', function (e) {
   currentQuery = e.target.value;
   renderGrid();
 });
 
 /* ===== GRIGLIA GIOCHI ===== */
 function cardButtonMarkup(app, filter) {
-  if (filter === 'trailer') return `<span class="card-btn">▶ ${T.trailerBtn}</span>`;
-  if (app.price === 'FREE') return `<span class="card-btn free-btn">${T.install}</span>`;
-  if (app.price === 'Installed') return `<span class="card-btn">${T.installed}</span>`;
-  return `<span class="card-btn">${app.price}</span>`;
+  if (filter === 'trailer') return '<span class="card-btn">\u25B6 ' + escHtml(T.trailerBtn) + '</span>';
+  if (app.price === 'FREE') return '<span class="card-btn free-btn">' + escHtml(T.install) + '</span>';
+  if (app.price === 'Installed') return '<span class="card-btn">' + escHtml(T.installed) + '</span>';
+  return '<span class="card-btn">' + escHtml(app.price) + '</span>';
 }
 
 function renderGrid() {
   grid.innerHTML = '';
-  let items;
-  if (currentTab === 'downloads') items = APPS;
-  else if (currentTab === 'trailer') items = APPS.filter(a => a.trailer);
-  else items = APPS.filter(a => a.category === 'games');
-
-  if (currentTab === 'games') {
-    if (currentSub === 'paid') items = items.filter(a => a.price !== 'FREE');
-    if (currentSub === 'free') items = items.filter(a => a.price === 'FREE');
-    if (currentGenre) items = items.filter(a => a.genre === currentGenre);
+  var items;
+  if (currentTab === 'downloads') {
+    items = APPS;
+  } else if (currentTab === 'trailer') {
+    items = APPS.filter(function (a) { return !!a.trailer; });
+  } else {
+    items = APPS.filter(function (a) { return a.category === 'games'; });
   }
 
-  if (currentQuery.trim() !== '') {
-    const q = currentQuery.trim().toLowerCase();
-    items = items.filter(a => a.name.toLowerCase().includes(q) || a.dev.toLowerCase().includes(q));
+  if (currentTab === 'games') {
+    if (currentSub === 'paid') items = items.filter(function (a) { return a.price !== 'FREE'; });
+    if (currentSub === 'free') items = items.filter(function (a) { return a.price === 'FREE'; });
+    if (currentGenre) items = items.filter(function (a) { return a.genre === currentGenre; });
+  }
+
+  if (currentQuery.replace(/^\s+|\s+$/g, '') !== '') {
+    var q = currentQuery.replace(/^\s+|\s+$/g, '');
+    items = items.filter(function (a) { return stringContains(a.name, q) || stringContains(a.dev, q); });
   }
 
   if (items.length === 0) {
-    const msg = currentTab === 'trailer' ? T.noTrailers : T.noGames;
-    grid.innerHTML = `<div class="empty-note">${msg}</div>`;
+    var msg = currentTab === 'trailer' ? T.noTrailers : T.noGames;
+    grid.innerHTML = '<div class="empty-note">' + escHtml(msg) + '</div>';
     return;
   }
 
-  items.forEach(app => {
-    const card = document.createElement('div');
+  items.forEach(function (app) {
+    var card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = `
-      <div class="card-icon" style="background:${iconBg(app)};color:${iconFg(app)}">${iconMarkup(app)}</div>
-      <p class="card-name">${app.name}</p>
-      <p class="card-dev">${app.dev}</p>
-      ${cardButtonMarkup(app, currentTab)}
-    `;
-    card.addEventListener('click', (e) => {
+    card.innerHTML =
+      '<div class="card-icon" style="background:' + iconBg(app) + ';color:' + iconFg(app) + ';">' + iconMarkup(app) + '</div>' +
+      '<p class="card-name">' + escHtml(app.name) + '</p>' +
+      '<p class="card-dev">' + escHtml(app.dev) + '</p>' +
+      cardButtonMarkup(app, currentTab);
+    card.addEventListener('click', function (e) {
       if (currentTab === 'trailer') { openTrailer(app); return; }
       // click sul pulsante = azione diretta (installa), click sulla card = apre il dettaglio
-      if (e.target.closest('.card-btn')) {
+      if (closestByClass(e.target, 'card-btn')) {
         startDownload(app);
       } else {
         openDetail(app);
@@ -626,11 +649,11 @@ function renderGrid() {
 renderGrid();
 
 /* ===== MODAL DETTAGLIO ===== */
-const detailOverlay = document.getElementById('detail-overlay');
+var detailOverlay = document.getElementById('detail-overlay');
 
 function openDetail(app) {
   currentApp = app;
-  const iconEl = document.getElementById('d-icon');
+  var iconEl = document.getElementById('d-icon');
   iconEl.style.background = iconBg(app);
   iconEl.style.color = iconFg(app);
   iconEl.innerHTML = iconMarkup(app);
@@ -638,22 +661,24 @@ function openDetail(app) {
   document.getElementById('d-title').textContent = app.name;
   document.getElementById('d-dev').textContent = app.dev;
   document.getElementById('d-stars').innerHTML = starMarkup(app.rating);
-  document.getElementById('d-meta').innerHTML = app.price === 'FREE' ? '' : (app.price === 'Installed' ? T.installed : `<span class="price-badge">${app.price}</span>`);
+  document.getElementById('d-meta').innerHTML = app.price === 'FREE' ? '' : (app.price === 'Installed' ? T.installed : '<span class="price-badge">' + escHtml(app.price) + '</span>');
   document.getElementById('d-size').textContent = app.size;
   document.getElementById('d-version').textContent = app.version;
   document.getElementById('d-category').textContent = app.genre;
   document.getElementById('d-desc').textContent = app.desc;
 
-  const shotsEl = document.getElementById('d-screenshots');
+  var shotsEl = document.getElementById('d-screenshots');
   if (app.screenshots && app.screenshots.length) {
     shotsEl.style.display = 'flex';
-    shotsEl.innerHTML = app.screenshots.map(s => `<img src="${s}" alt="${app.name}">`).join('');
+    shotsEl.innerHTML = app.screenshots.map(function (s) {
+      return '<img src="' + escHtml(s) + '" alt="' + escHtml(app.name) + '">';
+    }).join('');
   } else {
     shotsEl.style.display = 'none';
     shotsEl.innerHTML = '';
   }
 
-  const btn = document.getElementById('d-download-btn');
+  var btn = document.getElementById('d-download-btn');
   if (!app.link || app.link === '#') {
     btn.classList.add('disabled');
     btn.textContent = T.noLink;
@@ -662,26 +687,26 @@ function openDetail(app) {
     btn.textContent = T.install;
   }
 
-  const trailerBtn = document.getElementById('d-trailer-btn');
+  var trailerBtn = document.getElementById('d-trailer-btn');
   trailerBtn.textContent = T.trailerBtn;
   trailerBtn.style.display = app.trailer ? 'inline-block' : 'none';
 
   detailOverlay.classList.add('active');
 }
-document.getElementById('detail-close').addEventListener('click', () => detailOverlay.classList.remove('active'));
-detailOverlay.addEventListener('click', (e) => { if (e.target === detailOverlay) detailOverlay.classList.remove('active'); });
-document.getElementById('d-download-btn').addEventListener('click', (e) => {
+document.getElementById('detail-close').addEventListener('click', function () { detailOverlay.classList.remove('active'); });
+detailOverlay.addEventListener('click', function (e) { if (e.target === detailOverlay) detailOverlay.classList.remove('active'); });
+document.getElementById('d-download-btn').addEventListener('click', function (e) {
   if (e.currentTarget.classList.contains('disabled')) return;
   startDownload(currentApp);
 });
-document.getElementById('d-trailer-btn').addEventListener('click', () => openTrailer(currentApp));
+document.getElementById('d-trailer-btn').addEventListener('click', function () { openTrailer(currentApp); });
 
 /* ===== MODAL TRAILER (stessa skin custom della versione mobile) ===== */
-const trailerModal = document.getElementById('trailer-modal');
-const trailerTitleBar = document.getElementById('trailer-title-bar');
-let ytPlayer = null, ytReady = false, progressTimer = null, pendingVideoId = null;
+var trailerModal = document.getElementById('trailer-modal');
+var trailerTitleBar = document.getElementById('trailer-title-bar');
+var ytPlayer = null, ytReady = false, progressTimer = null, pendingVideoId = null;
 
-const ytScript = document.createElement('script');
+var ytScript = document.createElement('script');
 ytScript.src = 'https://www.youtube.com/iframe_api';
 document.head.appendChild(ytScript);
 
@@ -690,8 +715,12 @@ function onYouTubeIframeAPIReady() {
     height: '100%', width: '100%',
     playerVars: { controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1 },
     events: {
-      onReady: () => { ytReady = true; if (pendingVideoId) { ytPlayer.loadVideoById(pendingVideoId); pendingVideoId = null; } setPlayIcon(false); },
-      onStateChange: (e) => {
+      onReady: function () {
+        ytReady = true;
+        if (pendingVideoId) { ytPlayer.loadVideoById(pendingVideoId); pendingVideoId = null; }
+        setPlayIcon(false);
+      },
+      onStateChange: function (e) {
         if (e.data === YT.PlayerState.PLAYING) { setPlayIcon(false); startProgressTimer(); }
         if (e.data === YT.PlayerState.PAUSED) { setPlayIcon(true); stopProgressTimer(); }
         if (e.data === YT.PlayerState.ENDED) { setPlayIcon(true); stopProgressTimer(); }
@@ -703,8 +732,8 @@ window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
 function fmtTime(sec) {
   if (!isFinite(sec) || sec < 0) sec = 0;
-  const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
-  return `${m}:${String(s).padStart(2, '0')}`;
+  var m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+  return m + ':' + padZero(s);
 }
 function setPlayIcon(showPlay) {
   document.getElementById('icon-play').style.display = showPlay ? 'block' : 'none';
@@ -712,10 +741,10 @@ function setPlayIcon(showPlay) {
 }
 function startProgressTimer() {
   stopProgressTimer();
-  progressTimer = setInterval(() => {
+  progressTimer = setInterval(function () {
     if (!ytPlayer || !ytPlayer.getCurrentTime) return;
-    const cur = ytPlayer.getCurrentTime(), dur = ytPlayer.getDuration();
-    document.getElementById('p-fill').style.width = dur ? `${(cur / dur) * 100}%` : '0%';
+    var cur = ytPlayer.getCurrentTime(), dur = ytPlayer.getDuration();
+    document.getElementById('p-fill').style.width = dur ? ((cur / dur) * 100) + '%' : '0%';
     document.getElementById('p-current').textContent = fmtTime(cur);
     document.getElementById('p-duration').textContent = fmtTime(dur);
   }, 500);
@@ -725,13 +754,13 @@ function stopProgressTimer() { clearInterval(progressTimer); }
 function openTrailer(app) {
   if (!app) return;
   detailOverlay.classList.remove('active');
-  trailerTitleBar.textContent = `${app.name} — ${T.trailerOfficial}`;
+  trailerTitleBar.textContent = app.name + ' \u2014 ' + T.trailerOfficial;
   document.getElementById('p-fill').style.width = '0%';
   document.getElementById('p-current').textContent = '0:00';
   document.getElementById('p-duration').textContent = '0:00';
 
   if (!app.trailer) {
-    trailerTitleBar.textContent = `${app.name} — ${T.trailerMissing}`;
+    trailerTitleBar.textContent = app.name + ' \u2014 ' + T.trailerMissing;
   } else if (ytReady) {
     ytPlayer.loadVideoById(app.trailer);
   } else {
@@ -739,43 +768,43 @@ function openTrailer(app) {
   }
   trailerModal.classList.add('active');
 }
-document.getElementById('trailer-close').addEventListener('click', () => {
+document.getElementById('trailer-close').addEventListener('click', function () {
   if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
   stopProgressTimer();
   trailerModal.classList.remove('active');
 });
-trailerModal.addEventListener('click', (e) => { if (e.target === trailerModal) document.getElementById('trailer-close').click(); });
+trailerModal.addEventListener('click', function (e) { if (e.target === trailerModal) document.getElementById('trailer-close').click(); });
 
-document.getElementById('p-playpause').addEventListener('click', () => {
+document.getElementById('p-playpause').addEventListener('click', function () {
   if (!ytPlayer || !ytPlayer.getPlayerState) return;
-  const state = ytPlayer.getPlayerState();
+  var state = ytPlayer.getPlayerState();
   if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
 });
-document.getElementById('p-restart').addEventListener('click', () => { if (ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(0, true); });
-document.getElementById('p-track').addEventListener('click', (e) => {
+document.getElementById('p-restart').addEventListener('click', function () { if (ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(0, true); });
+document.getElementById('p-track').addEventListener('click', function (e) {
   if (!ytPlayer || !ytPlayer.getDuration) return;
-  const rect = e.currentTarget.getBoundingClientRect();
-  const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+  var rect = e.currentTarget.getBoundingClientRect();
+  var ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
   ytPlayer.seekTo(ytPlayer.getDuration() * ratio, true);
 });
-let currentVolume = 70;
-const pVolFill = document.getElementById('p-volfill');
+var currentVolume = 70;
+var pVolFill = document.getElementById('p-volfill');
 pVolFill.style.width = currentVolume + '%';
-document.getElementById('p-voltrack').addEventListener('click', (e) => {
-  const rect = e.currentTarget.getBoundingClientRect();
-  const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+document.getElementById('p-voltrack').addEventListener('click', function (e) {
+  var rect = e.currentTarget.getBoundingClientRect();
+  var ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
   currentVolume = Math.round(ratio * 100);
   pVolFill.style.width = currentVolume + '%';
   if (ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(currentVolume);
 });
-document.getElementById('p-fullscreen').addEventListener('click', () => {
-  const wrap = document.querySelector('#trailer-modal .video-wrap');
+document.getElementById('p-fullscreen').addEventListener('click', function () {
+  var wrap = document.querySelector('#trailer-modal .video-wrap');
   if (wrap.requestFullscreen) wrap.requestFullscreen();
 });
 
 /* ===== MODAL DOWNLOAD (finta barra, basata sul campo "size") ===== */
-const downloadModal = document.getElementById('download-modal');
-let dlInterval = null;
+var downloadModal = document.getElementById('download-modal');
+var dlInterval = null;
 
 function startDownload(app) {
   if (!app || !app.link || app.link === '#') return;
@@ -787,47 +816,47 @@ function startDownload(app) {
   document.getElementById('dl-filename').textContent = guessFilename(app.link);
   document.getElementById('dl-source').textContent = guessDomain(app.link);
 
-  const fill = document.getElementById('dl-fill');
-  const status = document.getElementById('dl-status');
+  var fill = document.getElementById('dl-fill');
+  var status = document.getElementById('dl-status');
   fill.style.width = '0%';
   status.classList.remove('done');
 
-  const total = parseSizeToBytes(app.size) || (20 * 1024 * 1024);
+  var total = parseSizeToBytes(app.size) || (20 * 1024 * 1024);
   downloadModal.classList.add('active');
   clearInterval(dlInterval);
 
-  const speedBytesPerTick = (2 + Math.random() * 5) * 1024 * 1024 * 0.2;
-  let received = 0;
+  var speedBytesPerTick = (2 + Math.random() * 5) * 1024 * 1024 * 0.2;
+  var received = 0;
 
-  dlInterval = setInterval(() => {
+  dlInterval = setInterval(function () {
     received += speedBytesPerTick * (0.7 + Math.random() * 0.6);
     if (received >= total) {
       received = total;
       clearInterval(dlInterval);
       fill.style.width = '100%';
       status.classList.add('done');
-      status.textContent = `${T.completed} — ${fmtBytes(total)}`;
+      status.textContent = T.completed + ' \u2014 ' + fmtBytes(total);
 
-      const a = document.createElement('a');
+      var a = document.createElement('a');
       a.href = app.link;
       a.download = guessFilename(app.link);
       a.rel = 'noopener';
       document.body.appendChild(a);
       a.click();
-      a.remove();
+      removeNode(a);
       return;
     }
-    const pct = (received / total) * 100;
+    var pct = (received / total) * 100;
     fill.style.width = pct.toFixed(1) + '%';
-    status.textContent = `${T.downloading} ${Math.floor(pct)}% (${fmtBytes(received)} / ${fmtBytes(total)})`;
+    status.textContent = T.downloading + ' ' + Math.floor(pct) + '% (' + fmtBytes(received) + ' / ' + fmtBytes(total) + ')';
   }, 200);
 }
 
-document.getElementById('download-close').addEventListener('click', () => {
+document.getElementById('download-close').addEventListener('click', function () {
   clearInterval(dlInterval);
   downloadModal.classList.remove('active');
 });
-downloadModal.addEventListener('click', (e) => { if (e.target === downloadModal) document.getElementById('download-close').click(); });
+downloadModal.addEventListener('click', function (e) { if (e.target === downloadModal) document.getElementById('download-close').click(); });
 </script>
 
 </body>

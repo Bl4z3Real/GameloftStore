@@ -2,9 +2,16 @@
    FILE CONDIVISO: traduzioni + funzioni helper usate sia dalla
    versione mobile (index.html) che da quella desktop (desktop.html).
    Includilo sempre PRIMA di games-data.js e dello script della pagina.
+
+   NOTA SULLA COMPATIBILITÀ: questo file è scritto volutamente in
+   JavaScript "vecchio stile" (ES5: var, function, niente arrow
+   function/template literal/let/const/Set) così da funzionare anche
+   sui browser di Android meno recenti (a partire da Android 4.4
+   KitKat), che hanno un motore JavaScript molto più limitato dei
+   browser moderni.
    ============================================================ */
 
-const translations = {
+var translations = {
   it: {
     storeWord: "store", searchPlaceholder: "Cerca giochi...",
     tabGames: "Giochi", tabTrailer: "Trailer", tabDownloads: "Download",
@@ -91,52 +98,117 @@ const translations = {
   }
 };
 
-const detectedLang = (navigator.language || 'it').slice(0, 2).toLowerCase();
-const LANG = translations[detectedLang] ? detectedLang : 'en';
-const T = translations[LANG];
+var detectedLang = ((navigator.language || 'it').slice(0, 2)).toLowerCase();
+var LANG = translations[detectedLang] ? detectedLang : 'en';
+var T = translations[LANG];
 document.documentElement.lang = LANG;
 
+/* piccola utility al posto di String.prototype.startsWith (non disponibile
+   nei motori JS più vecchi, es. WebView di Android 4.4) */
+function startsWithHttp(str) {
+  return !!str && str.indexOf('http') === 0;
+}
+
+/* piccola utility al posto di String.prototype.includes */
+function stringContains(haystack, needle) {
+  return String(haystack).toLowerCase().indexOf(String(needle).toLowerCase()) !== -1;
+}
+
 function starMarkup(n) {
-  let s = '';
-  for (let i = 0; i < 5; i++) s += i < n ? '★' : '<span class="empty">★</span>';
+  var s = '';
+  for (var i = 0; i < 5; i++) s += i < n ? '\u2605' : '<span class="empty">\u2605</span>';
   return s;
 }
 
+function escHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function iconMarkup(app) {
-  if (app.icon && app.icon.startsWith('http')) {
-    return `<img src="${app.icon}" alt="${app.name}">`;
+  if (app.icon && startsWithHttp(app.icon)) {
+    return '<img src="' + escHtml(app.icon) + '" alt="' + escHtml(app.name) + '">';
   }
   return app.icon;
 }
 function iconBg(app) {
-  if (app.icon && app.icon.startsWith('http')) return '#e6e6e6';
+  if (app.icon && startsWithHttp(app.icon)) return '#e6e6e6';
   return app.color === '#ffffff' ? '#ffffff' : app.color;
 }
 function iconFg(app) {
   return app.color === '#ffffff' ? '#4caf50' : '#fff';
 }
 
+/* estrae il nome del file da un URL senza usare l'oggetto URL
+   (non disponibile in alcuni WebView datati) */
 function guessFilename(url) {
   try {
-    const clean = url.split('?')[0].split('#')[0];
-    const parts = clean.split('/').filter(Boolean);
-    return decodeURIComponent(parts[parts.length - 1] || 'file.apk');
+    var clean = url.split('?')[0].split('#')[0];
+    var parts = clean.split('/');
+    var last = '';
+    for (var i = 0; i < parts.length; i++) {
+      if (parts[i]) last = parts[i];
+    }
+    return decodeURIComponent(last || 'file.apk');
   } catch (e) { return 'file.apk'; }
 }
+
+/* estrae il dominio da un URL senza usare l'oggetto URL nativo */
 function guessDomain(url) {
-  try { return new URL(url).hostname; } catch (e) { return url; }
+  try {
+    var rest = url.replace(/^https?:\/\//i, '');
+    var slashIndex = rest.indexOf('/');
+    if (slashIndex !== -1) rest = rest.substring(0, slashIndex);
+    return rest || url;
+  } catch (e) { return url; }
 }
+
 function fmtBytes(n) {
   if (!n || n <= 0) return '0 KB';
   if (n < 1024 * 1024) return (n / 1024).toFixed(0) + ' KB';
   return (n / (1024 * 1024)).toFixed(1) + ' MB';
 }
+
 function parseSizeToBytes(str) {
   if (!str) return 0;
-  const m = String(str).match(/([\d.]+)\s*(KB|MB|GB)/i);
+  var m = String(str).match(/([\d.]+)\s*(KB|MB|GB)/i);
   if (!m) return 0;
-  const num = parseFloat(m[1]);
-  const unit = m[2].toUpperCase();
-  const mult = unit === 'GB' ? 1024 ** 3 : unit === 'MB' ? 1024 ** 2 : 1024;
+  var num = parseFloat(m[1]);
+  var unit = m[2].toUpperCase();
+  var mult = unit === 'GB' ? (1024 * 1024 * 1024) : unit === 'MB' ? (1024 * 1024) : 1024;
   return Math.round(num * mult);
+}
+
+/* utility al posto di String.prototype.padStart (non disponibile nei
+   motori JS più vecchi, es. WebView di Android 4.4) */
+function padZero(n) {
+  n = String(n);
+  return n.length < 2 ? '0' + n : n;
+}
+
+/* converte una NodeList in array "vero" senza usare Array.from o
+   NodeList.prototype.forEach (non disponibili in browser datati) */
+function toArray(nodeList) {
+  var arr = [];
+  for (var i = 0; i < nodeList.length; i++) arr.push(nodeList[i]);
+  return arr;
+}
+
+/* equivalente di Element.prototype.closest (non disponibile prima
+   di Chrome 41 / vecchi WebView Android) */
+function closestByClass(el, className) {
+  while (el && el !== document) {
+    if (el.className && (' ' + el.className + ' ').indexOf(' ' + className + ' ') !== -1) return el;
+    el = el.parentNode;
+  }
+  return null;
+}
+
+/* rimuove un nodo dal DOM senza usare Element.prototype.remove()
+   (supporto limitato sui browser datati) */
+function removeNode(el) {
+  if (el && el.parentNode) el.parentNode.removeChild(el);
 }
